@@ -19,9 +19,13 @@
     
     .btn-wa { background: #25D366; } .btn-maps { background: #EA4335; }
     .btn-fb { background: #1877F2; } .btn-ig { background: #E4405F; }
-    .btn-tiktok { background: #000000; }  /* 🔴 TikTok Color */
+    .btn-tiktok { background: #000000; } 
     .btn-web { background: #333333; } .btn-email { background: #FBBC05; color: #333; }
     .btn-menu { background: #673AB7; } 
+    
+    /* 🏦 බැංකු බොත්තමේ පාට (Dark Teal) */
+    .btn-bank { background: #00695c; }
+    
     .btn-loyalty { background: #ff9800; animation: pulse 2s infinite;}
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 152, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); } }
 
@@ -34,6 +38,7 @@
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
     .modal-content { width: 90%; max-width: 350px; background: white; border-radius: 15px; padding: 20px; box-sizing: border-box; text-align: center; position: relative; max-height: 90vh; overflow-y: auto;}
     .close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; color: #aaa; border: none; background: none;}
+    
     .loyalty-input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; text-align: center;}
     .loyalty-btn { background: #d32f2f; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px;}
     .link-text { color: #d32f2f; font-size: 14px; text-decoration: underline; cursor: pointer; margin-top: 15px; display: inline-block;}
@@ -41,6 +46,9 @@
     .stamp-circle { width: 45px; height: 45px; border-radius: 50%; background: #eee; border: 2px dashed #ccc; display: flex; justify-content: center; align-items: center; font-size: 20px; margin: 0 auto;}
     .stamp-filled { background: #ff9800; border: 2px solid #e68a00; color: white; }
     .menu-iframe { width: 100%; height: 75vh; border: none; border-radius: 10px;}
+    
+    /* Bank Info Display */
+    .bank-info-box { background: #e0f2f1; padding: 15px; border-radius: 10px; border: 1px solid #b2dfdb; text-align: left; font-family: monospace; font-size: 15px; color: #004d40; white-space: pre-wrap; line-height: 1.6; }
   </style>
 </head>
 <body>
@@ -57,14 +65,14 @@
     <div class="links-section">
       <button class="btn btn-loyalty" id="btnLoyalty" onclick="openLoyaltyModal('viewLogin')">🎁 My Loyalty Card</button>
       
+      <!-- 🏦 Bank Details බොත්තම -->
+      <button id="btnBank" class="btn btn-bank" onclick="document.getElementById('bankModal').style.display='flex'">🏦 Bank Details (ගෙවීම් සඳහා)</button>
+      
       <a href="#" id="btnWa" target="_blank" class="btn btn-wa">💬 WhatsApp</a>
       <a href="#" id="btnMaps" target="_blank" class="btn btn-maps">📍 Google Maps</a>
       <a href="#" id="btnFb" target="_blank" class="btn btn-fb">📘 Facebook</a>
       <a href="#" id="btnIg" target="_blank" class="btn btn-ig">📸 Instagram</a>
-      
-      <!-- 🔴 TikTok බොත්තම -->
       <a href="#" id="btnTiktok" target="_blank" class="btn btn-tiktok">🎵 TikTok</a>
-      
       <a href="#" id="btnWeb" target="_blank" class="btn btn-web">🌐 Website</a>
       <a href="#" id="btnEmail" class="btn btn-email">✉️ Email Us</a>
       <button id="btnMenu" class="btn btn-menu" onclick="openMenu()">📄 View Menu</button>
@@ -72,6 +80,17 @@
     <div class="footer">Powered by Mapa Solutions - Social Map</div>
   </div>
 
+  <!-- 🏦 Bank Modal -->
+  <div id="bankModal" class="modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="document.getElementById('bankModal').style.display='none'">&times;</button>
+      <h2 style="margin-top: 10px; color: #00695c;">🏦 Bank Details</h2>
+      <p style="font-size: 13px; color: #555;">මුදල් තැන්පත් කිරීම සඳහා පහත ගිණුම් විස්තර භාවිතා කරන්න.</p>
+      <div id="bankInfoDisplay" class="bank-info-box">Loading...</div>
+    </div>
+  </div>
+
+  <!-- Menu Modal -->
   <div id="menuModal" class="modal">
     <div class="modal-content" style="width: 95%; max-width: 500px; padding: 10px; height: 85%;">
       <button class="close-btn" onclick="closeModal('menuModal')">&times;</button>
@@ -79,6 +98,7 @@
     </div>
   </div>
 
+  <!-- Loyalty Modals -->
   <div id="loyaltyModal" class="modal">
     <div class="modal-content" id="viewLogin" style="display: none;">
       <button class="close-btn" onclick="closeModal('loyaltyModal')">&times;</button>
@@ -143,43 +163,28 @@
 
               setupButton('btnWa', p.WhatsApp); setupButton('btnMaps', p.Maps);
               setupButton('btnFb', p.Facebook); setupButton('btnIg', p.Instagram);
-              
-              // 🔴 TikTok බොත්තම ක්‍රියාත්මක කිරීම
-              setupButton('btnTiktok', p.TikTok);
-              
-              setupButton('btnWeb', p.Website);
+              setupButton('btnTiktok', p.TikTok); setupButton('btnWeb', p.Website);
 
               if (p.Email) { document.getElementById('btnEmail').href = "mailto:" + p.Email; document.getElementById('btnEmail').style.display = "block"; }
               if (p.MenuPDF) { menuPdfLink = p.MenuPDF; document.getElementById('btnMenu').style.display = "block"; }
+              
+              // 🏦 Bank Details පෙන්වීම
+              if (p.BankDetails && p.BankDetails.trim() !== "") {
+                  document.getElementById('btnBank').style.display = "block";
+                  document.getElementById('bankInfoDisplay').innerText = p.BankDetails;
+              }
               
               if (p.LoyaltyStatus === "Active") {
                 document.getElementById('btnLoyalty').style.display = "block";
                 globalStampTarget = parseInt(p.StampTarget) || 10;
               }
-            } else {
-              document.getElementById('bName').innerText = "Profile Not Found";
-            }
+            } else { document.getElementById('bName').innerText = "Profile Not Found"; }
           }).catch(err => { document.getElementById('loader').style.display = 'none'; document.getElementById('bName').innerText = "Connection Error"; });
-      } else {
-        document.getElementById('loader').style.display = 'none';
-        document.getElementById('bName').innerText = "Invalid Link";
-      }
+      } else { document.getElementById('loader').style.display = 'none'; document.getElementById('bName').innerText = "Invalid Link"; }
     };
 
-    function setupButton(btnId, link) {
-      if(link && link.trim() !== "" && link !== "undefined") {
-        document.getElementById(btnId).href = link;
-        document.getElementById(btnId).style.display = "block";
-      }
-    }
-
-    function openMenu() {
-      let finalUrl = menuPdfLink;
-      if(finalUrl.includes("drive.google.com") && finalUrl.includes("/view")) finalUrl = finalUrl.replace(/\/view.*$/, "/preview");
-      document.getElementById('menuIframe').src = finalUrl;
-      document.getElementById('menuModal').style.display = "flex";
-    }
-
+    function setupButton(btnId, link) { if(link && link.trim() !== "" && link !== "undefined") { document.getElementById(btnId).href = link; document.getElementById(btnId).style.display = "block"; } }
+    function openMenu() { let finalUrl = menuPdfLink; if(finalUrl.includes("drive.google.com") && finalUrl.includes("/view")) finalUrl = finalUrl.replace(/\/view.*$/, "/preview"); document.getElementById('menuIframe').src = finalUrl; document.getElementById('menuModal').style.display = "flex"; }
     function openLoyaltyModal(view) { document.getElementById('loyaltyModal').style.display = "flex"; switchView(view); }
     function closeModal(modalId) { document.getElementById(modalId).style.display = "none"; if(modalId === 'menuModal') document.getElementById('menuIframe').src = ""; }
     function switchView(viewId) { document.getElementById('viewLogin').style.display = "none"; document.getElementById('viewSetup').style.display = "none"; document.getElementById('viewForgot').style.display = "none"; document.getElementById('viewCard').style.display = "none"; const targetView = document.getElementById(viewId); if(targetView) targetView.style.display = "block"; }
@@ -189,24 +194,21 @@
       const phone = document.getElementById('lPhone').value; const pin = document.getElementById('lPin').value;
       if(phone.length !== 10) return showMsg('msgLogin', "හරියට අංකය ගහන්න (ඉලක්කම් 10)");
       document.getElementById('btnCheck').innerText = "Checking...";
-      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltyGet', shopId: currentShopId, phone: phone, pin: pin }) })
-      .then(res => res.json()).then(data => { document.getElementById('btnCheck').innerText = "බලන්න"; if(data.success) { if(data.requiresSetup) { document.getElementById('sPhone').value = phone; switchView('viewSetup'); } else { drawStampCard(data.stamps); switchView('viewCard'); } } else { showMsg('msgLogin', data.error); } });
+      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltyGet', shopId: currentShopId, phone: phone, pin: pin }) }).then(res => res.json()).then(data => { document.getElementById('btnCheck').innerText = "බලන්න"; if(data.success) { if(data.requiresSetup) { document.getElementById('sPhone').value = phone; switchView('viewSetup'); } else { drawStampCard(data.stamps); switchView('viewCard'); } } else { showMsg('msgLogin', data.error); } });
     }
 
     function setupLoyalty() {
       const phone = document.getElementById('sPhone').value; const pin = document.getElementById('sPin').value; const year = document.getElementById('sYear').value;
       if(phone.length!==10 || pin.length!==4 || year.length!==4) return showMsg('msgSetup', "සියලු විස්තර නිවැරදිව පුරවන්න.");
       document.getElementById('btnSetup').innerText = "Saving...";
-      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltySetup', shopId: currentShopId, phone: phone, pin: pin, birthYear: year }) })
-      .then(res => res.json()).then(data => { document.getElementById('btnSetup').innerText = "සුරකින්න (Save)"; if(data.success) { document.getElementById('lPhone').value = phone; showMsg('msgLogin', "ගිණුම හැදුවා! දැන් ලොග් වෙන්න.", "green"); switchView('viewLogin'); } else { showMsg('msgSetup', data.error); } });
+      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltySetup', shopId: currentShopId, phone: phone, pin: pin, birthYear: year }) }).then(res => res.json()).then(data => { document.getElementById('btnSetup').innerText = "සුරකින්න (Save)"; if(data.success) { document.getElementById('lPhone').value = phone; showMsg('msgLogin', "ගිණුම හැදුවා! දැන් ලොග් වෙන්න.", "green"); switchView('viewLogin'); } else { showMsg('msgSetup', data.error); } });
     }
 
     function resetPin() {
       const phone = document.getElementById('fPhone').value; const year = document.getElementById('fYear').value; const newPin = document.getElementById('fNewPin').value;
       if(phone.length!==10 || year.length!==4 || newPin.length!==4) return showMsg('msgForgot', "සියලු විස්තර නිවැරදිව පුරවන්න.");
       document.getElementById('btnReset').innerText = "Resetting...";
-      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltyResetPinSelf', shopId: currentShopId, phone: phone, birthYear: year, newPin: newPin }) })
-      .then(res => res.json()).then(data => { document.getElementById('btnReset').innerText = "Reset PIN"; if(data.success) { showMsg('msgLogin', "PIN එක වෙනස් කළා. ලොග් වෙන්න.", "green"); switchView('viewLogin'); } else { showMsg('msgForgot', data.error); } });
+      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltyResetPinSelf', shopId: currentShopId, phone: phone, birthYear: year, newPin: newPin }) }).then(res => res.json()).then(data => { document.getElementById('btnReset').innerText = "Reset PIN"; if(data.success) { showMsg('msgLogin', "PIN එක වෙනස් කළා. ලොග් වෙන්න.", "green"); switchView('viewLogin'); } else { showMsg('msgForgot', data.error); } });
     }
 
     function drawStampCard(stamps) {

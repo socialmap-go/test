@@ -27,7 +27,6 @@
   </div>
   
   <div class="container">
-    <!-- Form Section -->
     <div class="card">
       <h3 style="margin-top:0;">Customer Setup</h3>
       <div id="msg" style="display:none; padding:10px; margin-bottom:10px; font-weight:bold; border-radius:5px;"></div>
@@ -41,11 +40,11 @@
       <div class="grid-2">
         <div><label>WhatsApp</label><input type="text" id="c_wa"></div><div><label>Maps</label><input type="text" id="c_maps"></div>
         <div><label>Facebook</label><input type="text" id="c_fb"></div><div><label>Instagram</label><input type="text" id="c_ig"></div>
-        <div><label>Website</label><input type="text" id="c_web"></div><div><label>Email</label><input type="text" id="c_email"></div>
+        <!-- 🔴 TikTok බොත්තම මෙතනට දැම්මා -->
+        <div><label>TikTok</label><input type="text" id="c_tiktok"></div><div><label>Website</label><input type="text" id="c_web"></div>
+        <div><label>Email</label><input type="text" id="c_email"></div><div><label>Menu PDF Link</label><input type="text" id="c_menu"></div>
       </div>
-      <div><label>Menu PDF Link</label><input type="text" id="c_menu" style="margin-bottom:15px;"></div>
       
-      <!-- 🌟 PREMIUM LOYALTY BOX -->
       <div class="premium-box">
         <h4 style="margin:0 0 10px 0; color:#e65100;">💎 Premium Loyalty Program</h4>
         <div class="grid-2" style="margin-bottom:0;">
@@ -54,7 +53,6 @@
         </div>
       </div>
 
-      <!-- 📱 CLIENT APP ACCESS BOX -->
       <div class="app-box">
         <h4 style="margin:0 0 10px 0; color:#1565c0;">📱 Client App Access (Dashboard)</h4>
         <div class="grid-2" style="margin-bottom:0;">
@@ -70,7 +68,6 @@
       <button class="btn-save" onclick="saveData()">Save / Update Customer</button>
     </div>
 
-    <!-- Table Section -->
     <div class="card" style="flex: 2;">
       <h3 style="margin-top:0;">Customer List</h3>
       <table>
@@ -81,7 +78,6 @@
   </div>
 
   <script>
-    // 👇 ඔයාගේ Web App URL එක හරියටම මෙතනට දාන්න 👇
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUNv3bLJX2yfMmxfoWtDyETRQ3r0yLkC5eSA9kI4DTccE-UXV471luYE7_ZXB9sLfy/exec";
 
     function loadCustomers() {
@@ -90,7 +86,8 @@
         data.data.forEach(c => {
           const safeStr = (str) => (str||'').toString().replace(/'/g, "\\'");
           
-          let btnHtml = `<button class="btn-edit" onclick="editCust('${safeStr(c.ID)}','${safeStr(c.BusinessName)}','${safeStr(c.Type)}','${safeStr(c.WhatsApp)}','${safeStr(c.Maps)}','${safeStr(c.Facebook)}','${safeStr(c.Instagram)}','${safeStr(c.Website)}','${safeStr(c.Email)}','${safeStr(c.MenuPDF)}','${safeStr(c.ThemeColor)}','${safeStr(c.Package)}','${safeStr(c.ExpiryDate)}','${safeStr(c.Status)}','${safeStr(c.LoyaltyStatus)}','${safeStr(c.StampTarget)}','${safeStr(c.ClientPhone)}','${safeStr(c.Password)}')">Edit</button>`;
+          // TikTok එකත් ඇතුළත් කළා
+          let btnHtml = `<button class="btn-edit" onclick="editCust('${safeStr(c.ID)}','${safeStr(c.BusinessName)}','${safeStr(c.Type)}','${safeStr(c.WhatsApp)}','${safeStr(c.Maps)}','${safeStr(c.Facebook)}','${safeStr(c.Instagram)}','${safeStr(c.TikTok)}','${safeStr(c.Website)}','${safeStr(c.Email)}','${safeStr(c.MenuPDF)}','${safeStr(c.ThemeColor)}','${safeStr(c.Package)}','${safeStr(c.ExpiryDate)}','${safeStr(c.Status)}','${safeStr(c.LoyaltyStatus)}','${safeStr(c.StampTarget)}','${safeStr(c.ClientPhone)}','${safeStr(c.Password)}')">Edit</button>`;
           
           let lBadge = c.LoyaltyStatus === 'Active' ? `<span style="color:green;font-weight:bold;">ON (${c.StampTarget||10})</span>` : `<span style="color:red;">OFF</span>`;
           let appBadge = (c.ClientPhone && c.Password) ? `<span style="color:blue;font-weight:bold;">Granted</span>` : `<span style="color:gray;">No Access</span>`;
@@ -106,9 +103,9 @@
         customerData: {
           ID: document.getElementById('c_id').value, Type: document.getElementById('c_type').value, BusinessName: document.getElementById('c_name').value,
           WhatsApp: document.getElementById('c_wa').value, Maps: document.getElementById('c_maps').value, Facebook: document.getElementById('c_fb').value,
-          Instagram: document.getElementById('c_ig').value, Website: document.getElementById('c_web').value, Email: document.getElementById('c_email').value,
-          MenuPDF: document.getElementById('c_menu').value, ThemeColor: document.getElementById('c_theme').value, Package: document.getElementById('c_package').value,
-          ExpiryDate: document.getElementById('c_expiry').value, Status: document.getElementById('c_status').value,
+          Instagram: document.getElementById('c_ig').value, TikTok: document.getElementById('c_tiktok').value, Website: document.getElementById('c_web').value, 
+          Email: document.getElementById('c_email').value, MenuPDF: document.getElementById('c_menu').value, ThemeColor: document.getElementById('c_theme').value, 
+          Package: document.getElementById('c_package').value, ExpiryDate: document.getElementById('c_expiry').value, Status: document.getElementById('c_status').value,
           LoyaltyStatus: document.getElementById('c_loyaltyStatus').value, StampTarget: document.getElementById('c_stampTarget').value,
           ClientPhone: document.getElementById('c_clientPhone').value, Password: document.getElementById('c_password').value
         }
@@ -123,27 +120,22 @@
         m.style.background = data.success ? "#d4edda" : "#f8d7da";
         m.style.color = data.success ? "green" : "red"; 
         if(data.success) loadCustomers();
-      }).catch(err => {
-        document.querySelector('.btn-save').innerText = "Save / Update Customer";
-        alert("Error saving data!");
       });
     }
 
-    function editCust(id, name, type, wa, maps, fb, ig, web, email, menu, theme, pkg, expiry, status, lStatus, lTarget, cPhone, cPass) {
+    // TikTok එකත් ඇතුළත් කළා
+    function editCust(id, name, type, wa, maps, fb, ig, tiktok, web, email, menu, theme, pkg, expiry, status, lStatus, lTarget, cPhone, cPass) {
       document.getElementById('c_id').value = id; document.getElementById('c_name').value = name; document.getElementById('c_type').value = type;
       document.getElementById('c_wa').value = wa; document.getElementById('c_maps').value = maps; document.getElementById('c_fb').value = fb;
-      document.getElementById('c_ig').value = ig; document.getElementById('c_web').value = web; document.getElementById('c_email').value = email;
-      document.getElementById('c_menu').value = menu; document.getElementById('c_theme').value = theme; document.getElementById('c_package').value = pkg;
-      document.getElementById('c_status').value = status; 
-      document.getElementById('c_loyaltyStatus').value = lStatus || 'Inactive'; 
-      document.getElementById('c_stampTarget').value = lTarget || '10';
-      document.getElementById('c_clientPhone').value = cPhone || '';
-      document.getElementById('c_password').value = cPass || '';
+      document.getElementById('c_ig').value = ig; document.getElementById('c_tiktok').value = tiktok; document.getElementById('c_web').value = web; 
+      document.getElementById('c_email').value = email; document.getElementById('c_menu').value = menu; document.getElementById('c_theme').value = theme; 
+      document.getElementById('c_package').value = pkg; document.getElementById('c_status').value = status; 
+      document.getElementById('c_loyaltyStatus').value = lStatus || 'Inactive'; document.getElementById('c_stampTarget').value = lTarget || '10';
+      document.getElementById('c_clientPhone').value = cPhone || ''; document.getElementById('c_password').value = cPass || '';
       
       if(expiry && expiry!=="undefined" && expiry!=="") { try { document.getElementById('c_expiry').value = new Date(expiry).toISOString().split('T')[0]; }catch(e){} }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    
     window.onload = loadCustomers;
   </script>
 </body>

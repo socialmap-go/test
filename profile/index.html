@@ -22,10 +22,11 @@
     .btn-tiktok { background: #000000; } 
     .btn-web { background: #333333; } .btn-email { background: #FBBC05; color: #333; }
     .btn-menu { background: #673AB7; } 
-    
-    /* 🏦 බැංකු බොත්තමේ පාට (Dark Teal) */
     .btn-bank { background: #00695c; }
     
+    /* ⭐ Google Review බොත්තමේ පාට */
+    .btn-review { background: #fbbc04; color: #333; border: 1px solid #f2a500;}
+
     .btn-loyalty { background: #ff9800; animation: pulse 2s infinite;}
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 152, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); } }
 
@@ -46,8 +47,6 @@
     .stamp-circle { width: 45px; height: 45px; border-radius: 50%; background: #eee; border: 2px dashed #ccc; display: flex; justify-content: center; align-items: center; font-size: 20px; margin: 0 auto;}
     .stamp-filled { background: #ff9800; border: 2px solid #e68a00; color: white; }
     .menu-iframe { width: 100%; height: 75vh; border: none; border-radius: 10px;}
-    
-    /* Bank Info Display */
     .bank-info-box { background: #e0f2f1; padding: 15px; border-radius: 10px; border: 1px solid #b2dfdb; text-align: left; font-family: monospace; font-size: 15px; color: #004d40; white-space: pre-wrap; line-height: 1.6; }
   </style>
 </head>
@@ -65,7 +64,9 @@
     <div class="links-section">
       <button class="btn btn-loyalty" id="btnLoyalty" onclick="openLoyaltyModal('viewLogin')">🎁 My Loyalty Card</button>
       
-      <!-- 🏦 Bank Details බොත්තම -->
+      <!-- ⭐ Google Review බොත්තම -->
+      <a href="#" id="btnReview" target="_blank" class="btn btn-review">⭐ Rate Us on Google</a>
+
       <button id="btnBank" class="btn btn-bank" onclick="document.getElementById('bankModal').style.display='flex'">🏦 Bank Details (ගෙවීම් සඳහා)</button>
       
       <a href="#" id="btnWa" target="_blank" class="btn btn-wa">💬 WhatsApp</a>
@@ -164,11 +165,13 @@
               setupButton('btnWa', p.WhatsApp); setupButton('btnMaps', p.Maps);
               setupButton('btnFb', p.Facebook); setupButton('btnIg', p.Instagram);
               setupButton('btnTiktok', p.TikTok); setupButton('btnWeb', p.Website);
+              
+              // ⭐ Review බොත්තම සක්‍රිය කිරීම
+              setupButton('btnReview', p.GoogleReview);
 
               if (p.Email) { document.getElementById('btnEmail').href = "mailto:" + p.Email; document.getElementById('btnEmail').style.display = "block"; }
               if (p.MenuPDF) { menuPdfLink = p.MenuPDF; document.getElementById('btnMenu').style.display = "block"; }
               
-              // 🏦 Bank Details පෙන්වීම
               if (p.BankDetails && p.BankDetails.trim() !== "") {
                   document.getElementById('btnBank').style.display = "block";
                   document.getElementById('bankInfoDisplay').innerText = p.BankDetails;

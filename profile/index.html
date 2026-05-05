@@ -7,29 +7,25 @@
   <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f9f9; margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; }
     .profile-container { background: white; width: 100%; max-width: 400px; box-shadow: 0 0 20px rgba(0,0,0,0.05); min-height: 100vh; position: relative; display: flex; flex-direction: column; }
-    
     .theme-banner { height: 120px; background-color: #d32f2f; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; display: flex; justify-content: center; align-items: flex-end; padding-bottom: 20px; transition: background-color 0.5s;}
     .profile-img-placeholder { width: 80px; height: 80px; background: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: -40px; border: 4px solid white; }
-    
     .info-section { text-align: center; padding: 50px 20px 20px 20px; }
     h1 { margin: 0; font-size: 24px; color: #333; }
     p { color: #777; font-size: 14px; margin-top: 5px; }
 
     .links-section { padding: 0 20px 30px 20px; display: flex; flex-direction: column; gap: 15px; }
-    
     .btn { display: none; width: 100%; padding: 15px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 16px; text-align: center; color: white; box-sizing: border-box; transition: transform 0.2s; border: none; cursor: pointer; }
     .btn:active { transform: scale(0.98); }
     
     .btn-wa { background: #25D366; } .btn-maps { background: #EA4335; }
     .btn-fb { background: #1877F2; } .btn-ig { background: #E4405F; }
+    .btn-tiktok { background: #000000; }  /* 🔴 TikTok Color */
     .btn-web { background: #333333; } .btn-email { background: #FBBC05; color: #333; }
     .btn-menu { background: #673AB7; } 
     .btn-loyalty { background: #ff9800; animation: pulse 2s infinite;}
-    
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 152, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); } }
 
     .footer { margin-top: auto; padding: 20px; text-align: center; font-size: 12px; color: #aaa; }
-    
     #loader { position: absolute; top:0; left:0; width:100%; height:100%; background:white; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index: 100; }
     .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #d32f2f; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -38,11 +34,9 @@
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
     .modal-content { width: 90%; max-width: 350px; background: white; border-radius: 15px; padding: 20px; box-sizing: border-box; text-align: center; position: relative; max-height: 90vh; overflow-y: auto;}
     .close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; color: #aaa; border: none; background: none;}
-    
     .loyalty-input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; text-align: center;}
     .loyalty-btn { background: #d32f2f; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px;}
     .link-text { color: #d32f2f; font-size: 14px; text-decoration: underline; cursor: pointer; margin-top: 15px; display: inline-block;}
-    
     .stamp-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0; }
     .stamp-circle { width: 45px; height: 45px; border-radius: 50%; background: #eee; border: 2px dashed #ccc; display: flex; justify-content: center; align-items: center; font-size: 20px; margin: 0 auto;}
     .stamp-filled { background: #ff9800; border: 2px solid #e68a00; color: white; }
@@ -61,22 +55,23 @@
     </div>
 
     <div class="links-section">
-      <!-- 🔴 Loyalty Button -->
       <button class="btn btn-loyalty" id="btnLoyalty" onclick="openLoyaltyModal('viewLogin')">🎁 My Loyalty Card</button>
       
       <a href="#" id="btnWa" target="_blank" class="btn btn-wa">💬 WhatsApp</a>
       <a href="#" id="btnMaps" target="_blank" class="btn btn-maps">📍 Google Maps</a>
       <a href="#" id="btnFb" target="_blank" class="btn btn-fb">📘 Facebook</a>
       <a href="#" id="btnIg" target="_blank" class="btn btn-ig">📸 Instagram</a>
+      
+      <!-- 🔴 TikTok බොත්තම -->
+      <a href="#" id="btnTiktok" target="_blank" class="btn btn-tiktok">🎵 TikTok</a>
+      
       <a href="#" id="btnWeb" target="_blank" class="btn btn-web">🌐 Website</a>
       <a href="#" id="btnEmail" class="btn btn-email">✉️ Email Us</a>
       <button id="btnMenu" class="btn btn-menu" onclick="openMenu()">📄 View Menu</button>
     </div>
-
     <div class="footer">Powered by Mapa Solutions - Social Map</div>
   </div>
 
-  <!-- Menu Modal -->
   <div id="menuModal" class="modal">
     <div class="modal-content" style="width: 95%; max-width: 500px; padding: 10px; height: 85%;">
       <button class="close-btn" onclick="closeModal('menuModal')">&times;</button>
@@ -84,13 +79,10 @@
     </div>
   </div>
 
-  <!-- Loyalty Modals Container -->
   <div id="loyaltyModal" class="modal">
-    
     <div class="modal-content" id="viewLogin" style="display: none;">
       <button class="close-btn" onclick="closeModal('loyaltyModal')">&times;</button>
       <h2 style="margin-top: 10px;">🎁 My Stamps</h2>
-      <p style="font-size: 14px; color: #555;">ඔබගේ මුද්දර බලාගැනීමට ලොග් වන්න</p>
       <input type="tel" id="lPhone" class="loyalty-input" placeholder="Phone (07XXXXXXXX)" maxlength="10">
       <input type="password" id="lPin" class="loyalty-input" placeholder="4-Digit PIN" maxlength="4">
       <button class="loyalty-btn" onclick="checkLoyalty()" id="btnCheck">බලන්න</button>
@@ -102,24 +94,20 @@
     <div class="modal-content" id="viewSetup" style="display: none;">
       <button class="close-btn" onclick="closeModal('loyaltyModal')">&times;</button>
       <h2 style="margin-top: 10px;">🛡️ ආරක්ෂිත ගිණුම</h2>
-      <p style="font-size: 13px; color: #555;">ඔබගේ මුද්දර වෙනත් අයෙකු ගැනීම වැළැක්වීමට PIN අංකයක් සහ උපන් වර්ෂය ලබාදෙන්න.</p>
       <input type="tel" id="sPhone" class="loyalty-input" placeholder="Phone (07XXXXXXXX)" maxlength="10">
       <input type="number" id="sPin" class="loyalty-input" placeholder="New 4-Digit PIN" maxlength="4">
       <input type="number" id="sYear" class="loyalty-input" placeholder="Birth Year (e.g. 1995)" maxlength="4">
       <button class="loyalty-btn" onclick="setupLoyalty()" id="btnSetup">සුරකින්න (Save)</button>
-      <span class="link-text" onclick="switchView('viewLogin')">Back to Login</span>
       <p id="msgSetup" style="color: red; font-size: 13px; font-weight: bold; display: none;"></p>
     </div>
 
     <div class="modal-content" id="viewForgot" style="display: none;">
       <button class="close-btn" onclick="closeModal('loyaltyModal')">&times;</button>
       <h2 style="margin-top: 10px;">🔄 Reset PIN</h2>
-      <p style="font-size: 13px; color: #555;">ඔබ කලින් ලබාදුන් උපන් වර්ෂය ඇතුළත් කර නව PIN අංකයක් සාදාගන්න.</p>
       <input type="tel" id="fPhone" class="loyalty-input" placeholder="Phone (07XXXXXXXX)" maxlength="10">
       <input type="number" id="fYear" class="loyalty-input" placeholder="Birth Year (e.g. 1995)" maxlength="4">
       <input type="number" id="fNewPin" class="loyalty-input" placeholder="New 4-Digit PIN" maxlength="4">
       <button class="loyalty-btn" onclick="resetPin()" id="btnReset">Reset PIN</button>
-      <span class="link-text" onclick="switchView('viewLogin')">Back to Login</span>
       <p id="msgForgot" style="color: red; font-size: 13px; font-weight: bold; display: none;"></p>
     </div>
 
@@ -130,13 +118,10 @@
       <div class="stamp-grid" id="stampGrid"></div>
       <p id="targetMsg" style="font-size: 13px; color: #555; margin-bottom: 0;"></p>
     </div>
-
   </div>
 
   <script>
-    // 👇 ඔයාගේ Web App URL එක හරියටම මෙතනට දාන්න 👇
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUNv3bLJX2yfMmxfoWtDyETRQ3r0yLkC5eSA9kI4DTccE-UXV471luYE7_ZXB9sLfy/exec";
-
     let currentShopId = "";
     let menuPdfLink = "";
     let globalStampTarget = 10;
@@ -158,12 +143,15 @@
 
               setupButton('btnWa', p.WhatsApp); setupButton('btnMaps', p.Maps);
               setupButton('btnFb', p.Facebook); setupButton('btnIg', p.Instagram);
+              
+              // 🔴 TikTok බොත්තම ක්‍රියාත්මක කිරීම
+              setupButton('btnTiktok', p.TikTok);
+              
               setupButton('btnWeb', p.Website);
 
               if (p.Email) { document.getElementById('btnEmail').href = "mailto:" + p.Email; document.getElementById('btnEmail').style.display = "block"; }
               if (p.MenuPDF) { menuPdfLink = p.MenuPDF; document.getElementById('btnMenu').style.display = "block"; }
               
-              // Loyalty Status Check (Premium Logic)
               if (p.LoyaltyStatus === "Active") {
                 document.getElementById('btnLoyalty').style.display = "block";
                 globalStampTarget = parseInt(p.StampTarget) || 10;
@@ -192,99 +180,39 @@
       document.getElementById('menuModal').style.display = "flex";
     }
 
-    function openLoyaltyModal(view) {
-      document.getElementById('loyaltyModal').style.display = "flex";
-      switchView(view);
-    }
-
-    function closeModal(modalId) {
-      document.getElementById(modalId).style.display = "none";
-      if(modalId === 'menuModal') document.getElementById('menuIframe').src = "";
-    }
-
-    function switchView(viewId) {
-      document.getElementById('viewLogin').style.display = "none";
-      document.getElementById('viewSetup').style.display = "none";
-      document.getElementById('viewForgot').style.display = "none";
-      document.getElementById('viewCard').style.display = "none";
-      
-      const targetView = document.getElementById(viewId);
-      if(targetView) targetView.style.display = "block";
-    }
-
-    function showMsg(id, text, color="red") {
-      const el = document.getElementById(id);
-      el.innerText = text; el.style.color = color; el.style.display = "block";
-    }
+    function openLoyaltyModal(view) { document.getElementById('loyaltyModal').style.display = "flex"; switchView(view); }
+    function closeModal(modalId) { document.getElementById(modalId).style.display = "none"; if(modalId === 'menuModal') document.getElementById('menuIframe').src = ""; }
+    function switchView(viewId) { document.getElementById('viewLogin').style.display = "none"; document.getElementById('viewSetup').style.display = "none"; document.getElementById('viewForgot').style.display = "none"; document.getElementById('viewCard').style.display = "none"; const targetView = document.getElementById(viewId); if(targetView) targetView.style.display = "block"; }
+    function showMsg(id, text, color="red") { const el = document.getElementById(id); el.innerText = text; el.style.color = color; el.style.display = "block"; }
 
     function checkLoyalty() {
-      const phone = document.getElementById('lPhone').value;
-      const pin = document.getElementById('lPin').value;
+      const phone = document.getElementById('lPhone').value; const pin = document.getElementById('lPin').value;
       if(phone.length !== 10) return showMsg('msgLogin', "හරියට අංකය ගහන්න (ඉලක්කම් 10)");
-      if(pin.length !== 4) return showMsg('msgLogin', "PIN එක ඉලක්කම් 4ක් විය යුතුය");
-
       document.getElementById('btnCheck').innerText = "Checking...";
       fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltyGet', shopId: currentShopId, phone: phone, pin: pin }) })
-      .then(res => res.json()).then(data => {
-        document.getElementById('btnCheck').innerText = "බලන්න";
-        if(data.success) {
-          if(data.requiresSetup) {
-             document.getElementById('sPhone').value = phone;
-             switchView('viewSetup');
-          } else {
-             drawStampCard(data.stamps);
-             switchView('viewCard');
-          }
-        } else { showMsg('msgLogin', data.error); }
-      }).catch(err => showMsg('msgLogin', "Network error"));
+      .then(res => res.json()).then(data => { document.getElementById('btnCheck').innerText = "බලන්න"; if(data.success) { if(data.requiresSetup) { document.getElementById('sPhone').value = phone; switchView('viewSetup'); } else { drawStampCard(data.stamps); switchView('viewCard'); } } else { showMsg('msgLogin', data.error); } });
     }
 
     function setupLoyalty() {
-      const phone = document.getElementById('sPhone').value;
-      const pin = document.getElementById('sPin').value;
-      const year = document.getElementById('sYear').value;
+      const phone = document.getElementById('sPhone').value; const pin = document.getElementById('sPin').value; const year = document.getElementById('sYear').value;
       if(phone.length!==10 || pin.length!==4 || year.length!==4) return showMsg('msgSetup', "සියලු විස්තර නිවැරදිව පුරවන්න.");
-
       document.getElementById('btnSetup').innerText = "Saving...";
       fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltySetup', shopId: currentShopId, phone: phone, pin: pin, birthYear: year }) })
-      .then(res => res.json()).then(data => {
-        document.getElementById('btnSetup').innerText = "සුරකින්න (Save)";
-        if(data.success) {
-          document.getElementById('lPhone').value = phone;
-          showMsg('msgLogin', "ගිණුම හැදුවා! දැන් ලොග් වෙන්න.", "green");
-          switchView('viewLogin');
-        } else { showMsg('msgSetup', data.error); }
-      }).catch(err => showMsg('msgSetup', "Network error"));
+      .then(res => res.json()).then(data => { document.getElementById('btnSetup').innerText = "සුරකින්න (Save)"; if(data.success) { document.getElementById('lPhone').value = phone; showMsg('msgLogin', "ගිණුම හැදුවා! දැන් ලොග් වෙන්න.", "green"); switchView('viewLogin'); } else { showMsg('msgSetup', data.error); } });
     }
 
     function resetPin() {
-      const phone = document.getElementById('fPhone').value;
-      const year = document.getElementById('fYear').value;
-      const newPin = document.getElementById('fNewPin').value;
+      const phone = document.getElementById('fPhone').value; const year = document.getElementById('fYear').value; const newPin = document.getElementById('fNewPin').value;
       if(phone.length!==10 || year.length!==4 || newPin.length!==4) return showMsg('msgForgot', "සියලු විස්තර නිවැරදිව පුරවන්න.");
-
       document.getElementById('btnReset').innerText = "Resetting...";
       fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltyResetPinSelf', shopId: currentShopId, phone: phone, birthYear: year, newPin: newPin }) })
-      .then(res => res.json()).then(data => {
-        document.getElementById('btnReset').innerText = "Reset PIN";
-        if(data.success) {
-          showMsg('msgLogin', "PIN එක වෙනස් කළා. ලොග් වෙන්න.", "green");
-          switchView('viewLogin');
-        } else { showMsg('msgForgot', data.error); }
-      }).catch(err => showMsg('msgForgot', "Network error"));
+      .then(res => res.json()).then(data => { document.getElementById('btnReset').innerText = "Reset PIN"; if(data.success) { showMsg('msgLogin', "PIN එක වෙනස් කළා. ලොග් වෙන්න.", "green"); switchView('viewLogin'); } else { showMsg('msgForgot', data.error); } });
     }
 
     function drawStampCard(stamps) {
       document.getElementById('stampText').innerText = `ඔබට මුද්දර ${stamps} ක් ඇත!`;
-      const grid = document.getElementById('stampGrid');
-      grid.innerHTML = "";
-      for(let i=1; i<=globalStampTarget; i++) {
-        if(i <= stamps) {
-           grid.innerHTML += `<div class="stamp-circle stamp-filled">🎁</div>`;
-        } else {
-           grid.innerHTML += `<div class="stamp-circle">${i}</div>`;
-        }
-      }
+      const grid = document.getElementById('stampGrid'); grid.innerHTML = "";
+      for(let i=1; i<=globalStampTarget; i++) { if(i <= stamps) { grid.innerHTML += `<div class="stamp-circle stamp-filled">🎁</div>`; } else { grid.innerHTML += `<div class="stamp-circle">${i}</div>`; } }
       document.getElementById('targetMsg').innerText = `මුද්දර ${globalStampTarget}ක් එකතු කර නොමිලේ තෑග්ගක් ලබාගන්න!`;
     }
   </script>

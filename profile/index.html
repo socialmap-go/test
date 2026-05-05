@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Profile | Social Map</title>
+  
+  <!-- 🔴 ඇත්තම ලෝගෝ ගෙනෙන FontAwesome පුස්තකාලය -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f9f9; margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; }
     .profile-container { background: white; width: 100%; max-width: 400px; box-shadow: 0 0 20px rgba(0,0,0,0.05); min-height: 100vh; position: relative; display: flex; flex-direction: column; }
@@ -14,18 +18,24 @@
     p { color: #777; font-size: 14px; margin-top: 5px; }
 
     .links-section { padding: 0 20px 30px 20px; display: flex; flex-direction: column; gap: 15px; }
-    .btn { display: none; width: 100%; padding: 15px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 16px; text-align: center; color: white; box-sizing: border-box; transition: transform 0.2s; border: none; cursor: pointer; }
-    .btn:active { transform: scale(0.98); }
     
-    .btn-wa { background: #25D366; } .btn-maps { background: #EA4335; }
-    .btn-fb { background: #1877F2; } .btn-ig { background: #E4405F; }
+    /* 🔴 බොත්තම් වල අලුත් ඩිසයින් එක */
+    .btn { display: none; width: 100%; padding: 15px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 16px; color: white; box-sizing: border-box; transition: transform 0.2s; border: none; cursor: pointer; align-items: center; justify-content: center; gap: 10px; }
+    .btn:active { transform: scale(0.98); }
+    .btn i { font-size: 20px; } /* ලෝගෝ එකේ සයිස් එක */
+    
+    /* සමාජ මාධ්‍ය පාට (Official Colors) */
+    .btn-wa { background: #25D366; } 
+    .btn-maps { background: #EA4335; }
+    .btn-fb { background: #1877F2; } 
+    .btn-ig { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
     .btn-tiktok { background: #000000; } 
-    .btn-web { background: #333333; } .btn-email { background: #FBBC05; color: #333; }
+    .btn-web { background: #333333; } 
+    .btn-email { background: #ea4335; } 
     .btn-menu { background: #673AB7; } 
     .btn-bank { background: #00695c; }
-    
-    /* ⭐ Google Review බොත්තමේ පාට */
-    .btn-review { background: #fbbc04; color: #333; border: 1px solid #f2a500;}
+    .btn-review { background: white; color: #333; border: 2px solid #fbbc04; box-shadow: 0 4px 6px rgba(0,0,0,0.05);}
+    .btn-review i { color: #fbbc04; }
 
     .btn-loyalty { background: #ff9800; animation: pulse 2s infinite;}
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 152, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); } }
@@ -62,21 +72,21 @@
     </div>
 
     <div class="links-section">
-      <button class="btn btn-loyalty" id="btnLoyalty" onclick="openLoyaltyModal('viewLogin')">🎁 My Loyalty Card</button>
+      <!-- 🔴 Emojis වෙනුවට ඇත්තම ලෝගෝ භාවිතා කිරීම -->
+      <button class="btn btn-loyalty" id="btnLoyalty" onclick="openLoyaltyModal('viewLogin')"><i class="fas fa-gift"></i> My Loyalty Card</button>
       
-      <!-- ⭐ Google Review බොත්තම -->
-      <a href="#" id="btnReview" target="_blank" class="btn btn-review">⭐ Rate Us on Google</a>
+      <a href="#" id="btnReview" target="_blank" class="btn btn-review"><i class="fab fa-google"></i> Rate Us on Google</a>
 
-      <button id="btnBank" class="btn btn-bank" onclick="document.getElementById('bankModal').style.display='flex'">🏦 Bank Details (ගෙවීම් සඳහා)</button>
+      <button id="btnBank" class="btn btn-bank" onclick="document.getElementById('bankModal').style.display='flex'"><i class="fas fa-university"></i> Bank Details</button>
       
-      <a href="#" id="btnWa" target="_blank" class="btn btn-wa">💬 WhatsApp</a>
-      <a href="#" id="btnMaps" target="_blank" class="btn btn-maps">📍 Google Maps</a>
-      <a href="#" id="btnFb" target="_blank" class="btn btn-fb">📘 Facebook</a>
-      <a href="#" id="btnIg" target="_blank" class="btn btn-ig">📸 Instagram</a>
-      <a href="#" id="btnTiktok" target="_blank" class="btn btn-tiktok">🎵 TikTok</a>
-      <a href="#" id="btnWeb" target="_blank" class="btn btn-web">🌐 Website</a>
-      <a href="#" id="btnEmail" class="btn btn-email">✉️ Email Us</a>
-      <button id="btnMenu" class="btn btn-menu" onclick="openMenu()">📄 View Menu</button>
+      <a href="#" id="btnWa" target="_blank" class="btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      <a href="#" id="btnMaps" target="_blank" class="btn btn-maps"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+      <a href="#" id="btnFb" target="_blank" class="btn btn-fb"><i class="fab fa-facebook-f"></i> Facebook</a>
+      <a href="#" id="btnIg" target="_blank" class="btn btn-ig"><i class="fab fa-instagram"></i> Instagram</a>
+      <a href="#" id="btnTiktok" target="_blank" class="btn btn-tiktok"><i class="fab fa-tiktok"></i> TikTok</a>
+      <a href="#" id="btnWeb" target="_blank" class="btn btn-web"><i class="fas fa-globe"></i> Website</a>
+      <a href="#" id="btnEmail" class="btn btn-email"><i class="fas fa-envelope"></i> Email Us</a>
+      <button id="btnMenu" class="btn btn-menu" onclick="openMenu()"><i class="fas fa-file-pdf"></i> View Menu</button>
     </div>
     <div class="footer">Powered by Mapa Solutions - Social Map</div>
   </div>
@@ -85,7 +95,7 @@
   <div id="bankModal" class="modal">
     <div class="modal-content">
       <button class="close-btn" onclick="document.getElementById('bankModal').style.display='none'">&times;</button>
-      <h2 style="margin-top: 10px; color: #00695c;">🏦 Bank Details</h2>
+      <h2 style="margin-top: 10px; color: #00695c;"><i class="fas fa-university"></i> Bank Details</h2>
       <p style="font-size: 13px; color: #555;">මුදල් තැන්පත් කිරීම සඳහා පහත ගිණුම් විස්තර භාවිතා කරන්න.</p>
       <div id="bankInfoDisplay" class="bank-info-box">Loading...</div>
     </div>
@@ -103,7 +113,7 @@
   <div id="loyaltyModal" class="modal">
     <div class="modal-content" id="viewLogin" style="display: none;">
       <button class="close-btn" onclick="closeModal('loyaltyModal')">&times;</button>
-      <h2 style="margin-top: 10px;">🎁 My Stamps</h2>
+      <h2 style="margin-top: 10px;"><i class="fas fa-gift" style="color:#d32f2f;"></i> My Stamps</h2>
       <input type="tel" id="lPhone" class="loyalty-input" placeholder="Phone (07XXXXXXXX)" maxlength="10">
       <input type="password" id="lPin" class="loyalty-input" placeholder="4-Digit PIN" maxlength="4">
       <button class="loyalty-btn" onclick="checkLoyalty()" id="btnCheck">බලන්න</button>
@@ -134,7 +144,7 @@
 
     <div class="modal-content" id="viewCard" style="display: none;">
       <button class="close-btn" onclick="closeModal('loyaltyModal')">&times;</button>
-      <h2 style="margin-top: 10px; color: #d32f2f;">🎁 Loyalty Card</h2>
+      <h2 style="margin-top: 10px; color: #d32f2f;"><i class="fas fa-gift"></i> Loyalty Card</h2>
       <p id="stampText" style="font-size: 15px; font-weight: bold;"></p>
       <div class="stamp-grid" id="stampGrid"></div>
       <p id="targetMsg" style="font-size: 13px; color: #555; margin-bottom: 0;"></p>
@@ -142,7 +152,9 @@
   </div>
 
   <script>
+    // 👇 ඔයාගේ Web App URL එක මෙතනට දාන්න 👇
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUNv3bLJX2yfMmxfoWtDyETRQ3r0yLkC5eSA9kI4DTccE-UXV471luYE7_ZXB9sLfy/exec";
+    
     let currentShopId = "";
     let menuPdfLink = "";
     let globalStampTarget = 10;
@@ -162,23 +174,29 @@
               if(p.ThemeColor && p.ThemeColor.trim() !== "") document.getElementById('themeBanner').style.backgroundColor = p.ThemeColor;
               document.getElementById('profileIcon').innerText = p.BusinessName.charAt(0).toUpperCase();
 
-              setupButton('btnWa', p.WhatsApp); setupButton('btnMaps', p.Maps);
-              setupButton('btnFb', p.Facebook); setupButton('btnIg', p.Instagram);
-              setupButton('btnTiktok', p.TikTok); setupButton('btnWeb', p.Website);
-              
-              // ⭐ Review බොත්තම සක්‍රිය කිරීම
-              setupButton('btnReview', p.GoogleReview);
+              // බොත්තම් වලට display:flex දෙන function එක
+              const setupBtn = (id, link) => {
+                if(link && link.trim() !== "" && link !== "undefined") {
+                  document.getElementById(id).href = link;
+                  document.getElementById(id).style.display = "flex";
+                }
+              };
 
-              if (p.Email) { document.getElementById('btnEmail').href = "mailto:" + p.Email; document.getElementById('btnEmail').style.display = "block"; }
-              if (p.MenuPDF) { menuPdfLink = p.MenuPDF; document.getElementById('btnMenu').style.display = "block"; }
+              setupBtn('btnWa', p.WhatsApp); setupBtn('btnMaps', p.Maps);
+              setupBtn('btnFb', p.Facebook); setupBtn('btnIg', p.Instagram);
+              setupBtn('btnTiktok', p.TikTok); setupBtn('btnWeb', p.Website);
+              setupBtn('btnReview', p.GoogleReview);
+
+              if (p.Email) { document.getElementById('btnEmail').href = "mailto:" + p.Email; document.getElementById('btnEmail').style.display = "flex"; }
+              if (p.MenuPDF) { menuPdfLink = p.MenuPDF; document.getElementById('btnMenu').style.display = "flex"; }
               
               if (p.BankDetails && p.BankDetails.trim() !== "") {
-                  document.getElementById('btnBank').style.display = "block";
+                  document.getElementById('btnBank').style.display = "flex";
                   document.getElementById('bankInfoDisplay').innerText = p.BankDetails;
               }
               
               if (p.LoyaltyStatus === "Active") {
-                document.getElementById('btnLoyalty').style.display = "block";
+                document.getElementById('btnLoyalty').style.display = "flex";
                 globalStampTarget = parseInt(p.StampTarget) || 10;
               }
             } else { document.getElementById('bName').innerText = "Profile Not Found"; }
@@ -186,7 +204,6 @@
       } else { document.getElementById('loader').style.display = 'none'; document.getElementById('bName').innerText = "Invalid Link"; }
     };
 
-    function setupButton(btnId, link) { if(link && link.trim() !== "" && link !== "undefined") { document.getElementById(btnId).href = link; document.getElementById(btnId).style.display = "block"; } }
     function openMenu() { let finalUrl = menuPdfLink; if(finalUrl.includes("drive.google.com") && finalUrl.includes("/view")) finalUrl = finalUrl.replace(/\/view.*$/, "/preview"); document.getElementById('menuIframe').src = finalUrl; document.getElementById('menuModal').style.display = "flex"; }
     function openLoyaltyModal(view) { document.getElementById('loyaltyModal').style.display = "flex"; switchView(view); }
     function closeModal(modalId) { document.getElementById(modalId).style.display = "none"; if(modalId === 'menuModal') document.getElementById('menuIframe').src = ""; }
@@ -217,7 +234,7 @@
     function drawStampCard(stamps) {
       document.getElementById('stampText').innerText = `ඔබට මුද්දර ${stamps} ක් ඇත!`;
       const grid = document.getElementById('stampGrid'); grid.innerHTML = "";
-      for(let i=1; i<=globalStampTarget; i++) { if(i <= stamps) { grid.innerHTML += `<div class="stamp-circle stamp-filled">🎁</div>`; } else { grid.innerHTML += `<div class="stamp-circle">${i}</div>`; } }
+      for(let i=1; i<=globalStampTarget; i++) { if(i <= stamps) { grid.innerHTML += `<div class="stamp-circle stamp-filled"><i class="fas fa-gift"></i></div>`; } else { grid.innerHTML += `<div class="stamp-circle">${i}</div>`; } }
       document.getElementById('targetMsg').innerText = `මුද්දර ${globalStampTarget}ක් එකතු කර නොමිලේ තෑග්ගක් ලබාගන්න!`;
     }
   </script>

@@ -7,16 +7,14 @@
   <style>
     body { font-family: 'Segoe UI', sans-serif; background: #f4f7f9; margin: 0; padding: 0; display: flex; justify-content: center;}
     .container { width: 100%; max-width: 400px; margin: 20px; padding: 25px; background: white; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; box-sizing: border-box;}
-    input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; text-align: center; }
+    input, select { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; text-align: center; }
     .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; margin-bottom: 10px; color: white; transition: 0.2s;}
     .btn:active { transform: scale(0.98); }
     
-    /* Tabs */
-    .tab-container { display: flex; background: #eee; border-radius: 10px; margin-bottom: 20px; overflow: hidden; font-size: 14px;}
-    .tab { flex: 1; padding: 12px 5px; font-weight: bold; color: #777; cursor: pointer; transition: 0.3s; }
+    .tab-container { display: flex; background: #eee; border-radius: 10px; margin-bottom: 20px; overflow: hidden; font-size: 13px;}
+    .tab { flex: 1; padding: 12px 2px; font-weight: bold; color: #777; cursor: pointer; transition: 0.3s; }
     .tab.active { background: #d32f2f; color: white; }
 
-    /* Stats Cards */
     .stat-card { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
     .stat-number { font-size: 32px; font-weight: bold; color: #d32f2f; margin: 5px 0; }
     .stat-label { color: #777; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
@@ -24,7 +22,6 @@
     .input-label { text-align: left; font-size: 13px; font-weight: bold; color: #555; display: block; margin-top: 10px;}
     .msg { padding: 15px; border-radius: 8px; font-weight: bold; display: none; margin-top: 10px; font-size: 14px;}
     
-    /* Product Item Style */
     .product-item { background: #fafafa; border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: left;}
     .product-title { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 5px;}
     .price-update-row { display: flex; gap: 10px; align-items: center; margin-top: 10px;}
@@ -54,32 +51,21 @@
 
     <div class="tab-container">
       <div class="tab active" id="tab-stats" onclick="switchTab('stats')">📊 Dash</div>
-      <div class="tab" id="tab-cashier" onclick="switchTab('cashier')">🎁 Cashier</div>
-      <div class="tab" id="tab-products" onclick="switchTab('products')">📦 Products</div>
+      <div class="tab" id="tab-cashier" onclick="switchTab('cashier')">🎁 Loyalty</div>
+      <div class="tab" id="tab-products" onclick="switchTab('products')">📦 Store</div>
+      <div class="tab" id="tab-feedback" onclick="switchTab('feedback')">📝 Inbox</div>
     </div>
 
     <div id="view-stats">
-      <div class="stat-card">
-        <div class="stat-label">මුළු ස්කෑන් වාර ගණන</div>
-        <div class="stat-number" id="scans">...</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Loyalty පාරිභෝගිකයින්</div>
-        <div class="stat-number" id="loyaltyUsers">...</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">මුළු මුද්දර ලබාදීම්</div>
-        <div class="stat-number" id="stamps">...</div>
-      </div>
+      <div class="stat-card"><div class="stat-label">මුළු ස්කෑන් වාර ගණන</div><div class="stat-number" id="scans">...</div></div>
+      <div class="stat-card"><div class="stat-label">Loyalty පාරිභෝගිකයින්</div><div class="stat-number" id="loyaltyUsers">...</div></div>
+      <div class="stat-card"><div class="stat-label">මුළු මුද්දර ලබාදීම්</div><div class="stat-number" id="stamps">...</div></div>
       <button class="btn" style="background:#555; padding:10px;" onclick="fetchStats()">🔄 Refresh Data</button>
     </div>
 
     <div id="view-cashier" style="display: none;">
-      <span class="input-label">පාරිභෝගික දුරකථන අංකය</span>
-      <input type="tel" id="cPhone" placeholder="07XXXXXXXX" maxlength="10">
-      <span class="input-label">ලබාදෙන මුද්දර ගණන</span>
-      <input type="number" id="cStampCount" value="1" min="1">
-
+      <span class="input-label">පාරිභෝගික දුරකථන අංකය</span><input type="tel" id="cPhone" placeholder="07XXXXXXXX" maxlength="10">
+      <span class="input-label">ලබාදෙන මුද්දර ගණන</span><input type="number" id="cStampCount" value="1" min="1">
       <button class="btn" style="background:#2e7d32;" onclick="processAction('loyaltyAddStamp')">+ Add Stamps (මුද්දර දෙන්න)</button>
       <button class="btn" style="background:#ff9800;" onclick="processAction('loyaltyRedeem')">🎁 Redeem Reward</button>
       <button class="btn" style="background:#757575;" onclick="processAction('loyaltyCashierReset')">🔄 Reset PIN</button>
@@ -87,131 +73,112 @@
     </div>
 
     <div id="view-products" style="display: none;">
-      <h4 style="text-align:left; color:#555; margin-top:0;">භාණ්ඩ / සේවා මිල වෙනස් කරන්න</h4>
+      <div style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:20px; border: 1px dashed #ccc;">
+        <h4 style="margin-top:0;">➕ අලුත් අයිතමයක් එක් කරන්න</h4>
+        <select id="new_p_type" style="margin-top:0;"><option value="Product">🍽️ Product / Food</option><option value="Room">🛏️ Hotel Room</option><option value="Package">🎁 Special Package</option></select>
+        <input type="text" id="new_p_name" placeholder="නම (උදා: Fried Rice)">
+        <input type="number" id="new_p_price" placeholder="මිල (උදා: 1200)">
+        <button class="btn" style="background:#2e7d32;" onclick="addProductClient()">Add Item</button>
+      </div>
       <div id="productMsg" class="msg" style="padding:10px; font-size:13px;"></div>
       <div id="productsList">Loading products...</div>
+    </div>
+
+    <div id="view-feedback" style="display: none;">
+      <h4 style="text-align:left; color:#555; margin-top:0;">පාරිභෝගික අදහස් හා යෝජනා</h4>
+      <div id="feedbackList">Loading feedbacks...</div>
     </div>
 
   </div>
 
   <script>
-    // 👇 ඔයාගේ Web App URL එක මෙතනට දාන්න 👇
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUNv3bLJX2yfMmxfoWtDyETRQ3r0yLkC5eSA9kI4DTccE-UXV471luYE7_ZXB9sLfy/exec";
 
     function login() {
-      const phone = document.getElementById('uPhone').value;
-      const pass = document.getElementById('uPass').value;
-      document.getElementById('loginMsg').style.display="none";
-      document.querySelector('#loginBox .btn').innerText = "Loading...";
-      
-      fetch(`${APPS_SCRIPT_URL}?action=clientLogin&phone=${phone}&password=${pass}`)
-        .then(res => res.json()).then(data => {
+      const phone = document.getElementById('uPhone').value; const pass = document.getElementById('uPass').value;
+      document.getElementById('loginMsg').style.display="none"; document.querySelector('#loginBox .btn').innerText = "Loading...";
+      fetch(`${APPS_SCRIPT_URL}?action=clientLogin&phone=${phone}&password=${pass}`).then(res => res.json()).then(data => {
           document.querySelector('#loginBox .btn').innerText = "Login";
-          if(data.success) {
-            localStorage.setItem('shopId', data.shopId);
-            localStorage.setItem('bName', data.businessName);
-            initApp();
-          } else {
-            const m = document.getElementById('loginMsg'); m.innerText = data.error; m.style.display="block";
-          }
+          if(data.success) { localStorage.setItem('shopId', data.shopId); localStorage.setItem('bName', data.businessName); initApp(); } 
+          else { const m = document.getElementById('loginMsg'); m.innerText = data.error; m.style.display="block"; }
         }).catch(err => { document.querySelector('#loginBox .btn').innerText = "Login"; alert("Network Error!"); });
     }
 
     function logout() { localStorage.clear(); location.reload(); }
 
     function initApp() {
-      document.getElementById('loginBox').style.display = 'none';
-      document.getElementById('mainApp').style.display = 'block';
-      document.getElementById('shopName').innerText = localStorage.getItem('bName');
-      document.getElementById('shopIdDisplay').innerText = "ID: " + localStorage.getItem('shopId');
-      fetchStats();
-      fetchProducts(); // ලොග් වුණ ගමන් Products ටිකත් ලෝඩ් කරනවා
+      document.getElementById('loginBox').style.display = 'none'; document.getElementById('mainApp').style.display = 'block';
+      document.getElementById('shopName').innerText = localStorage.getItem('bName'); document.getElementById('shopIdDisplay').innerText = "ID: " + localStorage.getItem('shopId');
+      fetchStats(); fetchProducts(); fetchFeedback();
     }
 
     if(localStorage.getItem('shopId')) initApp();
 
     function switchTab(tab) {
-      document.getElementById('tab-stats').className = "tab";
-      document.getElementById('tab-cashier').className = "tab";
-      document.getElementById('tab-products').className = "tab";
-      document.getElementById('view-stats').style.display = "none";
-      document.getElementById('view-cashier').style.display = "none";
-      document.getElementById('view-products').style.display = "none";
-
-      document.getElementById('tab-' + tab).className = "tab active";
-      document.getElementById('view-' + tab).style.display = "block";
+      ['stats', 'cashier', 'products', 'feedback'].forEach(t => {
+        document.getElementById('tab-' + t).className = "tab"; document.getElementById('view-' + t).style.display = "none";
+      });
+      document.getElementById('tab-' + tab).className = "tab active"; document.getElementById('view-' + tab).style.display = "block";
     }
 
-    function fetchStats() {
-      const shopId = localStorage.getItem('shopId');
-      fetch(`${APPS_SCRIPT_URL}?action=getClientStats&shopId=${shopId}`)
-        .then(res => res.json()).then(data => {
-          if(data.success) {
-            document.getElementById('scans').innerText = data.totalScans;
-            document.getElementById('loyaltyUsers').innerText = data.loyaltyCustomers;
-            document.getElementById('stamps').innerText = data.totalStamps;
-          }
-        });
-    }
+    function fetchStats() { fetch(`${APPS_SCRIPT_URL}?action=getClientStats&shopId=${localStorage.getItem('shopId')}`).then(res => res.json()).then(data => { if(data.success) { document.getElementById('scans').innerText = data.totalScans; document.getElementById('loyaltyUsers').innerText = data.loyaltyCustomers; document.getElementById('stamps').innerText = data.totalStamps; } }); }
 
     function processAction(actionType) {
-      const shopId = localStorage.getItem('shopId');
-      const phone = document.getElementById('cPhone').value;
-      const count = document.getElementById('cStampCount').value;
-      const msgBox = document.getElementById('actionMsg');
-      
+      const shopId = localStorage.getItem('shopId'); const phone = document.getElementById('cPhone').value; const count = document.getElementById('cStampCount').value; const msgBox = document.getElementById('actionMsg');
       if(phone.length !== 10) { showMsg('actionMsg', "කරුණාකර නිවැරදි අංකයක් දෙන්න.", false); return; }
       msgBox.innerText = "Processing..."; msgBox.style.display="block"; msgBox.style.background="#eee"; msgBox.style.color="black";
-      
-      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: actionType, shopId: shopId, phone: phone, stampCount: count }) })
-      .then(res => res.json()).then(data => {
-        if(data.success) { showMsg('actionMsg', data.message, true); document.getElementById('cPhone').value = ""; document.getElementById('cStampCount').value = 1; fetchStats(); } 
-        else { showMsg('actionMsg', data.error, false); }
-      }).catch(err => showMsg('actionMsg', "Network Error!", false));
+      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: actionType, shopId: shopId, phone: phone, stampCount: count }) }).then(res => res.json()).then(data => { if(data.success) { showMsg('actionMsg', data.message, true); document.getElementById('cPhone').value = ""; document.getElementById('cStampCount').value = 1; fetchStats(); } else { showMsg('actionMsg', data.error, false); } }).catch(err => showMsg('actionMsg', "Network Error!", false));
     }
 
-    function showMsg(id, text, success) {
-      let m = document.getElementById(id); m.innerText = text; 
-      m.style.background = success ? "#d4edda" : "#f8d7da"; m.style.color = success ? "#155724" : "#721c24";
-      m.style.display = "block";
-    }
+    function showMsg(id, text, success) { let m = document.getElementById(id); m.innerText = text; m.style.background = success ? "#d4edda" : "#f8d7da"; m.style.color = success ? "#155724" : "#721c24"; m.style.display = "block"; }
 
-    // --- 📦 PRODUCT LOGIC ---
     function fetchProducts() {
-      const shopId = localStorage.getItem('shopId');
-      fetch(`${APPS_SCRIPT_URL}?action=getProducts&shopId=${shopId}`)
-        .then(res => res.json()).then(data => {
+      fetch(`${APPS_SCRIPT_URL}?action=getProducts&shopId=${localStorage.getItem('shopId')}`).then(res => res.json()).then(data => {
           const list = document.getElementById('productsList'); list.innerHTML = "";
           if(data.success && data.data.length > 0) {
             data.data.forEach(p => {
-              list.innerHTML += `
-                <div class="product-item">
-                  <div class="product-title">${p.ProductName}</div>
+              let pName = p.ProductName || p['Product Name'] || "No Name"; let pId = p.ProductID || p['Product ID'] || ""; let pPrice = p.Price || p['Product Price'] || 0; let pType = p.Type || "Product";
+              list.innerHTML += `<div class="product-item">
+                  <div style="font-size:11px; background:#ddd; padding:2px 5px; border-radius:3px; display:inline-block; margin-bottom:5px;">${pType}</div>
+                  <div class="product-title">${pName}</div>
                   <div class="price-update-row">
                     <span style="font-weight:bold; color:#777;">රු.</span>
-                    <input type="number" id="price_${p.ProductID}" value="${p.Price}" style="margin:0; padding:10px; flex:1;">
-                    <button class="btn" style="background:#1976d2; margin:0; padding:10px 15px; font-size:14px; width:auto;" onclick="updatePrice('${p.ProductID}')">Update</button>
-                  </div>
-                </div>
-              `;
+                    <input type="number" id="price_${pId}" value="${pPrice}" style="margin:0; padding:10px; flex:1;">
+                    <button class="btn" style="background:#1976d2; margin:0; padding:10px 15px; font-size:14px; width:auto;" onclick="updatePrice('${pId}')">Update</button>
+                  </div></div>`;
             });
           } else { list.innerHTML = "<p style='color:gray;'>භාණ්ඩ කිසිවක් තවම ඇතුළත් කර නැත.</p>"; }
-        }).catch(err => { document.getElementById('productsList').innerHTML = "Error loading products."; });
+        });
     }
 
     function updatePrice(productId) {
-      const shopId = localStorage.getItem('shopId');
-      const newPrice = document.getElementById('price_' + productId).value;
-      const msgBox = document.getElementById('productMsg');
+      const msgBox = document.getElementById('productMsg'); msgBox.innerText = "Updating..."; msgBox.style.display="block"; msgBox.style.background="#eee"; msgBox.style.color="black";
+      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updatePrice', shopId: localStorage.getItem('shopId'), productId: productId, price: document.getElementById('price_' + productId).value }) }).then(res => res.json()).then(data => { if(data.success) { showMsg('productMsg', "මිල යාවත්කාලීන කළා!", true); } else { showMsg('productMsg', data.error || "Error", false); } setTimeout(() => msgBox.style.display="none", 3000); });
+    }
 
-      msgBox.innerText = "Updating..."; msgBox.style.display="block"; msgBox.style.background="#eee"; msgBox.style.color="black";
+    function addProductClient() {
+      const name = document.getElementById('new_p_name').value; const price = document.getElementById('new_p_price').value; const type = document.getElementById('new_p_type').value;
+      if(!name || !price) { alert("විස්තර පුරවන්න"); return; }
+      fetch(APPS_SCRIPT_URL, {method:"POST", body:JSON.stringify({action:"addProduct", shopId:localStorage.getItem('shopId'), type:type, name:name, price:price})}).then(res=>res.json()).then(d=>{ alert(d.message); document.getElementById('new_p_name').value = ""; document.getElementById('new_p_price').value = ""; fetchProducts(); });
+    }
 
-      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updatePrice', shopId: shopId, productId: productId, price: newPrice }) })
-      .then(res => res.json()).then(data => {
-        if(data.success) { showMsg('productMsg', "මිල යාවත්කාලීන කළා!", true); } 
-        else { showMsg('productMsg', data.error || "Error updating price", false); }
-        setTimeout(() => msgBox.style.display="none", 3000);
-      }).catch(err => { showMsg('productMsg', "Network Error", false); });
+    // 📝 අලුත්: Feedbacks ලෝඩ් කරන කොටස
+    function fetchFeedback() {
+      fetch(`${APPS_SCRIPT_URL}?action=getFeedback&shopId=${localStorage.getItem('shopId')}`).then(res => res.json()).then(data => {
+          const list = document.getElementById('feedbackList'); list.innerHTML = "";
+          if(data.success && data.data.length > 0) {
+            data.data.reverse().forEach(f => {
+              let imgHtml = (f.ImageURL && f.ImageURL !== "No Image" && f.ImageURL !== "Image Upload Error") ? `<br><a href="${f.ImageURL}" target="_blank" style="color:#1976d2; font-size:13px; font-weight:bold; text-decoration:none;"><i class="fas fa-image"></i> 🖼️ View Uploaded Photo</a>` : '';
+              let dateStr = new Date(f.Date).toLocaleDateString();
+              list.innerHTML += `<div style="background: #fafafa; border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: left;">
+                  <div style="font-size:12px; color:gray;">📅 ${dateStr}</div>
+                  <div style="font-weight:bold; color:#333; margin:5px 0;">👤 ${f.CustomerName} <span style="font-weight:normal; color:#555;">(${f.Phone || '-'})</span></div>
+                  <div style="color:#444; font-size:14px; background:#eef2f5; padding:10px; border-radius:5px;">💬 ${f.Message}</div>
+                  ${imgHtml}
+                </div>`;
+            });
+          } else { list.innerHTML = "<p style='color:gray;'>තවම කිසිදු අදහසක් හෝ යෝජනාවක් ලැබී නැත.</p>"; }
+        });
     }
   </script>
 </body>

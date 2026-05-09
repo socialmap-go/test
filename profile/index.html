@@ -29,14 +29,17 @@
     .btn-bank { background: #00695c; }
     .btn-review { background: white; color: #333; border: 2px solid #fbbc04; box-shadow: 0 4px 6px rgba(0,0,0,0.05);} .btn-review i { color: #fbbc04; }
     .btn-loyalty { background: #ff9800; animation: pulse 2s infinite;}
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 152, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); } }
+    
+    /* අලුත් Option බොත්තම් */
+    .btn-products { background: #1976d2; display: flex !important; }
+    .btn-feedback { background: #607d8b; display: flex !important; }
 
-    /* 📦 Products Section Styling */
-    .products-container { padding: 0 20px 20px 20px; display: none; }
-    .products-title { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 5px; }
-    .product-card { background: white; border: 1px solid #eee; border-radius: 10px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-    .product-name { font-weight: bold; color: #444; font-size: 15px; flex: 1; }
-    .product-price { color: #d32f2f; font-weight: bold; font-size: 16px; white-space: nowrap; margin-left: 10px; }
+    /* Products Modal CSS (පින්තූර පෙන්වීමට) */
+    .product-card { background: #fdfdfd; border: 1px solid #eee; border-radius: 10px; padding: 15px; margin-bottom: 15px; display: flex; flex-direction: column; box-shadow: 0 2px 5px rgba(0,0,0,0.02); text-align: left; }
+    .product-name { font-weight: bold; color: #444; font-size: 16px; }
+    .product-price { color: #d32f2f; font-weight: bold; font-size: 16px; margin-top: 5px; }
+    .product-gallery { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 5px; }
+    .product-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
 
     .footer { margin-top: auto; padding: 20px; text-align: center; font-size: 12px; color: #aaa; }
     #loader { position: absolute; top:0; left:0; width:100%; height:100%; background:white; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index: 100; }
@@ -44,7 +47,7 @@
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-    .modal-content { width: 90%; max-width: 350px; background: white; border-radius: 15px; padding: 20px; box-sizing: border-box; text-align: center; position: relative; max-height: 90vh; overflow-y: auto;}
+    .modal-content { width: 90%; max-width: 400px; background: white; border-radius: 15px; padding: 20px; box-sizing: border-box; text-align: center; position: relative; max-height: 90vh; overflow-y: auto;}
     .close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; color: #aaa; border: none; background: none;}
     .loyalty-input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; text-align: center;}
     .loyalty-btn { background: #d32f2f; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px;}
@@ -67,12 +70,11 @@
       <p>Welcome to our Smart Profile</p>
     </div>
 
-    <div class="products-container" id="productsSection">
-      <div class="products-title"><i class="fas fa-box-open"></i> අපගේ සේවා / භාණ්ඩ</div>
-      <div id="productsList">Loading products...</div>
-    </div>
-
     <div class="links-section">
+      <button class="btn btn-products" id="btnProducts" onclick="document.getElementById('productsModal').style.display='flex'" style="display:none;"><i class="fas fa-box-open"></i> අපගේ සේවා හා භාණ්ඩ</button>
+
+      <button class="btn btn-feedback" id="btnFeedback" onclick="document.getElementById('feedbackModal').style.display='flex'"><i class="fas fa-comment-dots"></i> අදහස් හා යෝජනා</button>
+
       <button class="btn btn-loyalty" id="btnLoyalty" onclick="openLoyaltyModal('viewLogin')"><i class="fas fa-gift"></i> My Loyalty Card</button>
       <a href="#" id="btnReview" target="_blank" class="btn btn-review"><i class="fab fa-google"></i> Rate Us on Google</a>
       <button id="btnBank" class="btn btn-bank" onclick="document.getElementById('bankModal').style.display='flex'"><i class="fas fa-university"></i> Bank Details</button>
@@ -89,6 +91,33 @@
     <div class="footer">Powered by Mapa Solutions - Social Map</div>
   </div>
 
+  <div id="productsModal" class="modal">
+    <div class="modal-content" style="background:#f4f6f8;">
+      <button class="close-btn" onclick="document.getElementById('productsModal').style.display='none'">&times;</button>
+      <h2 style="margin-top: 10px; color: #1976d2;"><i class="fas fa-box-open"></i> සේවා හා භාණ්ඩ</h2>
+      <div id="productsListModal" style="margin-top: 20px;">Loading...</div>
+    </div>
+  </div>
+
+  <div id="feedbackModal" class="modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="document.getElementById('feedbackModal').style.display='none'">&times;</button>
+      <h2 style="margin-top: 10px; color: #607d8b;"><i class="fas fa-comment-dots"></i> අදහස් හා යෝජනා</h2>
+      <p style="font-size: 13px; color: #555;">අපගේ සේවාවන් පිළිබඳව ඔබගේ වටිනා අදහස් හා යෝජනා අපට එවන්න.</p>
+      
+      <input type="text" id="fName" class="loyalty-input" placeholder="ඔබගේ නම">
+      <input type="tel" id="fPhone" class="loyalty-input" placeholder="දුරකථන අංකය (අත්‍යවශ්‍ය නැත)">
+      <textarea id="fMsg" class="loyalty-input" rows="4" placeholder="ඔබගේ අදහස හෝ පැමිණිල්ල ලියන්න..."></textarea>
+      
+      <div style="text-align:left; margin-top:10px;">
+        <label style="font-size:13px; font-weight:bold; color:#d32f2f;"><i class="fas fa-camera"></i> පින්තූරයක් ඇතුළත් කරන්න (Photo Upload):</label>
+        <input type="file" id="fFile" accept="image/*" style="margin-top:5px; font-size:12px;">
+      </div>
+
+      <button class="loyalty-btn" style="background:#607d8b;" id="btnSubmitFeedback" onclick="submitFeedback()">Submit (යවන්න)</button>
+    </div>
+  </div>
+
   <div id="bankModal" class="modal">
     <div class="modal-content">
       <button class="close-btn" onclick="document.getElementById('bankModal').style.display='none'">&times;</button>
@@ -97,13 +126,7 @@
       <div id="bankInfoDisplay" class="bank-info-box">Loading...</div>
     </div>
   </div>
-
-  <div id="menuModal" class="modal">
-    <div class="modal-content" style="width: 95%; max-width: 500px; padding: 10px; height: 85%;">
-      <button class="close-btn" onclick="closeModal('menuModal')">&times;</button>
-      <iframe id="menuIframe" class="menu-iframe" src=""></iframe>
-    </div>
-  </div>
+  <div id="menuModal" class="modal"><div class="modal-content" style="width: 95%; max-width: 500px; padding: 10px; height: 85%;"><button class="close-btn" onclick="closeModal('menuModal')">&times;</button><iframe id="menuIframe" class="menu-iframe" src=""></iframe></div></div>
 
   <div id="loyaltyModal" class="modal">
     <div class="modal-content" id="viewLogin" style="display: none;">
@@ -147,7 +170,7 @@
   </div>
 
   <script>
-    // 👇 ඔයාගේ Web App URL එක මෙතනට දාන්න (අනිවාර්යයි) 👇
+    // 👇 ඔයාගේ Web App URL එක මෙතනට දාන්න 👇
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUNv3bLJX2yfMmxfoWtDyETRQ3r0yLkC5eSA9kI4DTccE-UXV471luYE7_ZXB9sLfy/exec";
     
     let currentShopId = "";
@@ -159,7 +182,6 @@
       currentShopId = urlParams.get('id');
 
       if(currentShopId) {
-        // 1. ප්‍රොෆයිල් දත්ත ගෙන්වා ගැනීම
         fetch(`${APPS_SCRIPT_URL}?action=profile&id=${currentShopId}`)
           .then(res => res.json())
           .then(data => {
@@ -199,42 +221,86 @@
                   document.getElementById('btnBank').style.display = "flex";
                   document.getElementById('bankInfoDisplay').innerText = p.BankDetails;
               }
-              
               if (p.LoyaltyStatus === "Active") {
                 document.getElementById('btnLoyalty').style.display = "flex";
                 globalStampTarget = parseInt(p.StampTarget) || 10;
               }
 
-              // 2. භාණ්ඩ ලැයිස්තුව (Products) ගෙන්වා ගැනීම
-              fetchProductsList(currentShopId);
+              // 📦 භාණ්ඩ ලැයිස්තුව ලෝඩ් කර, පින්තූර සමඟ Modal එකට සෙට් කිරීම
+              fetch(`${APPS_SCRIPT_URL}?action=getProducts&shopId=${currentShopId}`)
+                .then(res => res.json())
+                .then(prodData => {
+                  if(prodData.success && prodData.data.length > 0) {
+                    document.getElementById('btnProducts').style.display = 'flex'; // භාණ්ඩ තියෙනවා නම් බොත්තම පෙන්වයි
+                    let pList = document.getElementById('productsListModal');
+                    pList.innerHTML = '';
+                    
+                    prodData.data.forEach(p => {
+                      let typeBadge = p.Type ? `<span style="font-size:11px; background:#ddd; padding:2px 5px; border-radius:3px;">${p.Type}</span>` : '';
+                      
+                      // පින්තූර තියෙනවා නම් ඒවා Gallery එකක් විදිහට හදනවා
+                      let imgs = "";
+                      if(p.Image1) imgs += `<img src="${p.Image1}" class="product-img">`;
+                      if(p.Image2) imgs += `<img src="${p.Image2}" class="product-img">`;
+                      if(p.Image3) imgs += `<img src="${p.Image3}" class="product-img">`;
+                      let imgHtml = imgs ? `<div class="product-gallery">${imgs}</div>` : '';
+
+                      pList.innerHTML += `
+                        <div class="product-card">
+                          <div>${typeBadge}</div>
+                          <div class="product-name">${p.ProductName || 'Item'}</div>
+                          <div class="product-price">Rs. ${p.Price || 0}</div>
+                          ${imgHtml}
+                        </div>`;
+                    });
+                  }
+                });
 
             } else { document.getElementById('bName').innerText = "Profile Not Found"; }
           }).catch(err => { document.getElementById('loader').style.display = 'none'; document.getElementById('bName').innerText = "Connection Error"; });
       } else { document.getElementById('loader').style.display = 'none'; document.getElementById('bName').innerText = "Invalid Link"; }
     };
 
-    // භාණ්ඩ ගෙන්වා ගැනීමේ අලුත් Function එක
-    function fetchProductsList(shopId) {
-      fetch(`${APPS_SCRIPT_URL}?action=getProducts&shopId=${shopId}`)
-        .then(res => res.json())
-        .then(prodData => {
-          if(prodData.success && prodData.data.length > 0) {
-            document.getElementById('productsSection').style.display = 'block';
-            let pList = document.getElementById('productsList');
-            pList.innerHTML = '';
-            
-            prodData.data.forEach(p => {
-              pList.innerHTML += `
-                <div class="product-card">
-                  <div class="product-name">${p.ProductName}</div>
-                  <div class="product-price">Rs. ${p.Price}</div>
-                </div>`;
-            });
-          } else {
-             // භාණ්ඩ නැත්නම් Products කොටස පෙන්වන්නේ නැහැ
-             document.getElementById('productsSection').style.display = 'none';
-          }
-        }).catch(err => console.error("Error loading products"));
+    // 📝 අදහස් හා යෝජනා (Feedback + Photo Upload) යැවීමේ Function එක
+    function submitFeedback() {
+      const name = document.getElementById('fName').value;
+      const phone = document.getElementById('fPhone').value;
+      const msg = document.getElementById('fMsg').value;
+      const fileInput = document.getElementById('fFile');
+
+      if(!name || !msg) { alert("කරුණාකර ඔබගේ නම සහ අදහස ඇතුළත් කරන්න."); return; }
+
+      document.getElementById('btnSubmitFeedback').innerText = "Uploading... කරුණාකර රැඳී සිටින්න";
+
+      let payload = { action: 'submitFeedback', shopId: currentShopId, name: name, phone: phone, message: msg };
+
+      if(fileInput.files.length > 0) {
+        let file = fileInput.files[0];
+        let reader = new FileReader();
+        reader.onload = function(e) {
+          let base64Data = e.target.result.split(',')[1];
+          payload.imageBase64 = base64Data;
+          payload.mimeType = file.type;
+          sendFeedbackReq(payload);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        sendFeedbackReq(payload);
+      }
+    }
+
+    function sendFeedbackReq(payload) {
+      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
+      .then(res => res.json())
+      .then(data => {
+         alert(data.message);
+         document.getElementById('feedbackModal').style.display='none';
+         document.getElementById('btnSubmitFeedback').innerText = "Submit (යවන්න)";
+         document.getElementById('fName').value = ""; document.getElementById('fMsg').value = ""; document.getElementById('fFile').value = "";
+      }).catch(err => {
+         alert("Network Error!");
+         document.getElementById('btnSubmitFeedback').innerText = "Submit (යවන්න)";
+      });
     }
 
     function openMenu() { let finalUrl = menuPdfLink; if(finalUrl.includes("drive.google.com") && finalUrl.includes("/view")) finalUrl = finalUrl.replace(/\/view.*$/, "/preview"); document.getElementById('menuIframe').src = finalUrl; document.getElementById('menuModal').style.display = "flex"; }
@@ -243,33 +309,10 @@
     function switchView(viewId) { document.getElementById('viewLogin').style.display = "none"; document.getElementById('viewSetup').style.display = "none"; document.getElementById('viewForgot').style.display = "none"; document.getElementById('viewCard').style.display = "none"; const targetView = document.getElementById(viewId); if(targetView) targetView.style.display = "block"; }
     function showMsg(id, text, color="red") { const el = document.getElementById(id); el.innerText = text; el.style.color = color; el.style.display = "block"; }
 
-    function checkLoyalty() {
-      const phone = document.getElementById('lPhone').value; const pin = document.getElementById('lPin').value;
-      if(phone.length !== 10) return showMsg('msgLogin', "හරියට අංකය ගහන්න (ඉලක්කම් 10)");
-      document.getElementById('btnCheck').innerText = "Checking...";
-      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltyGet', shopId: currentShopId, phone: phone, pin: pin }) }).then(res => res.json()).then(data => { document.getElementById('btnCheck').innerText = "බලන්න"; if(data.success) { if(data.requiresSetup) { document.getElementById('sPhone').value = phone; switchView('viewSetup'); } else { drawStampCard(data.stamps); switchView('viewCard'); } } else { showMsg('msgLogin', data.error); } });
-    }
-
-    function setupLoyalty() {
-      const phone = document.getElementById('sPhone').value; const pin = document.getElementById('sPin').value; const year = document.getElementById('sYear').value;
-      if(phone.length!==10 || pin.length!==4 || year.length!==4) return showMsg('msgSetup', "සියලු විස්තර නිවැරදිව පුරවන්න.");
-      document.getElementById('btnSetup').innerText = "Saving...";
-      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltySetup', shopId: currentShopId, phone: phone, pin: pin, birthYear: year }) }).then(res => res.json()).then(data => { document.getElementById('btnSetup').innerText = "සුරකින්න (Save)"; if(data.success) { document.getElementById('lPhone').value = phone; showMsg('msgLogin', "ගිණුම හැදුවා! දැන් ලොග් වෙන්න.", "green"); switchView('viewLogin'); } else { showMsg('msgSetup', data.error); } });
-    }
-
-    function resetPin() {
-      const phone = document.getElementById('fPhone').value; const year = document.getElementById('fYear').value; const newPin = document.getElementById('fNewPin').value;
-      if(phone.length!==10 || year.length!==4 || newPin.length!==4) return showMsg('msgForgot', "සියලු විස්තර නිවැරදිව පුරවන්න.");
-      document.getElementById('btnReset').innerText = "Resetting...";
-      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltyResetPinSelf', shopId: currentShopId, phone: phone, birthYear: year, newPin: newPin }) }).then(res => res.json()).then(data => { document.getElementById('btnReset').innerText = "Reset PIN"; if(data.success) { showMsg('msgLogin', "PIN එක වෙනස් කළා. ලොග් වෙන්න.", "green"); switchView('viewLogin'); } else { showMsg('msgForgot', data.error); } });
-    }
-
-    function drawStampCard(stamps) {
-      document.getElementById('stampText').innerText = `ඔබට මුද්දර ${stamps} ක් ඇත!`;
-      const grid = document.getElementById('stampGrid'); grid.innerHTML = "";
-      for(let i=1; i<=globalStampTarget; i++) { if(i <= stamps) { grid.innerHTML += `<div class="stamp-circle stamp-filled"><i class="fas fa-gift"></i></div>`; } else { grid.innerHTML += `<div class="stamp-circle">${i}</div>`; } }
-      document.getElementById('targetMsg').innerText = `මුද්දර ${globalStampTarget}ක් එකතු කර නොමිලේ තෑග්ගක් ලබාගන්න!`;
-    }
+    function checkLoyalty() { const phone = document.getElementById('lPhone').value; const pin = document.getElementById('lPin').value; if(phone.length !== 10) return showMsg('msgLogin', "හරියට අංකය ගහන්න (ඉලක්කම් 10)"); document.getElementById('btnCheck').innerText = "Checking..."; fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltyGet', shopId: currentShopId, phone: phone, pin: pin }) }).then(res => res.json()).then(data => { document.getElementById('btnCheck').innerText = "බලන්න"; if(data.success) { if(data.requiresSetup) { document.getElementById('sPhone').value = phone; switchView('viewSetup'); } else { drawStampCard(data.stamps); switchView('viewCard'); } } else { showMsg('msgLogin', data.error); } }); }
+    function setupLoyalty() { const phone = document.getElementById('sPhone').value; const pin = document.getElementById('sPin').value; const year = document.getElementById('sYear').value; if(phone.length!==10 || pin.length!==4 || year.length!==4) return showMsg('msgSetup', "සියලු විස්තර නිවැරදිව පුරවන්න."); document.getElementById('btnSetup').innerText = "Saving..."; fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltySetup', shopId: currentShopId, phone: phone, pin: pin, birthYear: year }) }).then(res => res.json()).then(data => { document.getElementById('btnSetup').innerText = "සුරකින්න (Save)"; if(data.success) { document.getElementById('lPhone').value = phone; showMsg('msgLogin', "ගිණුම හැදුවා! දැන් ලොග් වෙන්න.", "green"); switchView('viewLogin'); } else { showMsg('msgSetup', data.error); } }); }
+    function resetPin() { const phone = document.getElementById('fPhone').value; const year = document.getElementById('fYear').value; const newPin = document.getElementById('fNewPin').value; if(phone.length!==10 || year.length!==4 || newPin.length!==4) return showMsg('msgForgot', "සියලු විස්තර නිවැරදිව පුරවන්න."); document.getElementById('btnReset').innerText = "Resetting..."; fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltyResetPinSelf', shopId: currentShopId, phone: phone, birthYear: year, newPin: newPin }) }).then(res => res.json()).then(data => { document.getElementById('btnReset').innerText = "Reset PIN"; if(data.success) { showMsg('msgLogin', "PIN එක වෙනස් කළා. ලොග් වෙන්න.", "green"); switchView('viewLogin'); } else { showMsg('msgForgot', data.error); } }); }
+    function drawStampCard(stamps) { document.getElementById('stampText').innerText = `ඔබට මුද්දර ${stamps} ක් ඇත!`; const grid = document.getElementById('stampGrid'); grid.innerHTML = ""; for(let i=1; i<=globalStampTarget; i++) { if(i <= stamps) { grid.innerHTML += `<div class="stamp-circle stamp-filled"><i class="fas fa-gift"></i></div>`; } else { grid.innerHTML += `<div class="stamp-circle">${i}</div>`; } } document.getElementById('targetMsg').innerText = `මුද්දර ${globalStampTarget}ක් එකතු කර නොමිලේ තෑග්ගක් ලබාගන්න!`; }
   </script>
 </body>
 </html>

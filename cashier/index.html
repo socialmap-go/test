@@ -21,7 +21,10 @@
 
     <div class="input-group">
       <label>Customer Phone Number</label>
-      <input type="tel" id="phone" placeholder="07XXXXXXXX" maxlength="10">
+      <div style="display:flex; gap:10px;">
+        <input type="tel" id="phone" placeholder="07XXXXXXXX" maxlength="10" style="margin:0; flex:1;">
+        <button class="btn" style="background:#1976d2; margin:0; width:auto; padding:0 20px;" onclick="checkCustomerLoyalty()">🔍 Check</button>
+      </div>
     </div>
     
     <div class="input-group">
@@ -48,6 +51,18 @@
         });
       }
     };
+
+    function checkCustomerLoyalty() {
+      const phone = document.getElementById('phone').value;
+      const msgBox = document.getElementById('msgBox');
+      if(!currentShopId || phone.length !== 10) return showMsg("Please enter a valid 10-digit number.", false);
+      msgBox.innerText = "Checking..."; msgBox.style.display="block"; msgBox.style.background="#e3f2fd"; msgBox.style.color="#1565c0";
+      fetch(`${APPS_SCRIPT_URL}?action=getCashierLoyalty&shopId=${currentShopId}&phone=${phone}`).then(res=>res.json()).then(data => {
+        if(data.success) {
+           msgBox.innerHTML = `Current Stamps: <span style="font-size:18px; font-weight:bold; color:#d32f2f;">${data.stamps}</span> <br> Total Redeemed Rewards: <span style="font-size:18px; font-weight:bold; color:#2e7d32;">${data.redeemed}</span>`;
+        } else { showMsg(data.error, false); }
+      }).catch(err => showMsg("Network Error", false));
+    }
 
     function processAction(actionType) {
       const phone = document.getElementById('phone').value;

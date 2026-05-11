@@ -90,29 +90,23 @@
             document.getElementById('loader').style.display = 'none';
             if(data.success) {
               const p = data.data; document.getElementById('bName').innerText = p.BusinessName;
-              
               if(p.ThemeColor && p.ThemeColor.trim() !== "") document.getElementById('themeBanner').style.backgroundColor = p.ThemeColor;
-              
-              // Load Cover Image
               if (p.CoverImage && p.CoverImage.trim() !== "") {
                 let covUrl = p.CoverImage; let covFileIdMatch = covUrl.match(/[-\w]{25,}/); 
                 if (covUrl.includes("drive.google.com") && covFileIdMatch) { covUrl = "https://drive.google.com/uc?export=view&id=" + covFileIdMatch[0]; }
                 document.getElementById('themeBanner').style.backgroundImage = `url('${covUrl}')`;
               }
-              
               if (p.ProfileImage && p.ProfileImage.trim() !== "") {
                 let imgUrl = p.ProfileImage; let fileIdMatch = imgUrl.match(/[-\w]{25,}/); 
                 if (imgUrl.includes("drive.google.com") && fileIdMatch) { imgUrl = "https://drive.google.com/uc?export=view&id=" + fileIdMatch[0]; }
                 document.getElementById('profileIcon').innerHTML = `<img src="${imgUrl}" style="width:100%; height:100%; object-fit:cover;">`;
               } else { document.getElementById('profileIcon').innerText = p.BusinessName.charAt(0).toUpperCase(); }
-              
               const setupBtn = (id, link) => { if(link && link.trim() !== "" && link !== "undefined") { document.getElementById(id).href = link; document.getElementById(id).style.display = "flex"; } };
               setupBtn('btnWa', p.WhatsApp); setupBtn('btnMaps', p.Maps); setupBtn('btnFb', p.Facebook); setupBtn('btnIg', p.Instagram); setupBtn('btnTiktok', p.TikTok); setupBtn('btnWeb', p.Website); setupBtn('btnReview', p.GoogleReview);
               if (p.Email) { document.getElementById('btnEmail').href = "mailto:" + p.Email; document.getElementById('btnEmail').style.display = "flex"; }
               if (p.MenuPDF) { menuPdfLink = p.MenuPDF; document.getElementById('btnMenu').style.display = "flex"; }
               if (p.BankDetails && p.BankDetails.trim() !== "") { document.getElementById('btnBank').style.display = "flex"; document.getElementById('bankInfoDisplay').innerText = p.BankDetails; }
               if (p.LoyaltyStatus === "Active") { document.getElementById('btnLoyalty').style.display = "flex"; globalStampTarget = parseInt(p.StampTarget) || 10; }
-              
               fetch(`${APPS_SCRIPT_URL}?action=getProducts&shopId=${currentShopId}`).then(res => res.json()).then(prodData => {
                   if(prodData.success && prodData.data.length > 0) {
                     document.getElementById('btnProducts').style.display = 'flex'; let pList = document.getElementById('productsListModal'); pList.innerHTML = '';
@@ -146,8 +140,20 @@
     function closeModal(modalId) { document.getElementById(modalId).style.display = "none"; if(modalId === 'menuModal') document.getElementById('menuIframe').src = ""; }
     function switchView(viewId) { document.getElementById('viewLogin').style.display = "none"; document.getElementById('viewSetup').style.display = "none"; document.getElementById('viewForgot').style.display = "none"; document.getElementById('viewCard').style.display = "none"; const targetView = document.getElementById(viewId); if(targetView) targetView.style.display = "block"; }
     function showMsg(id, text, color="red") { const el = document.getElementById(id); el.innerText = text; el.style.color = color; el.style.display = "block"; }
-    function checkLoyalty() { const phone = document.getElementById('lPhone').value; const pin = document.getElementById('lPin').value; if(phone.length !== 10) return showMsg('msgLogin', "Please enter a valid 10-digit number"); document.getElementById('btnCheck').innerText = "Checking..."; fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltyGet', shopId: currentShopId, phone: phone, pin: pin }) }).then(res => res.json()).then(data => { document.getElementById('btnCheck').innerText = "Check"; if(data.success) { if(data.requiresSetup) { document.getElementById('sPhone').value = phone; switchView('viewSetup'); } else { drawStampCard(data.stamps); switchView('viewCard'); } } else { showMsg('msgLogin', data.error); } }); }
+    
+    function checkLoyalty() { const phone = document.getElementById('lPhone').value; const pin = document.getElementById('lPin').value; if(phone.length !== 10) return showMsg('msgLogin', "Please enter a valid 10-digit number"); document.getElementById('btnCheck').innerText = "Checking..."; fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltyGet', shopId: currentShopId, phone: phone, pin: pin }) }).then(res => res.json()).then(data => { document.getElementById('btnCheck').innerText = "Check"; if(data.success) { if(data.requiresSetup) { document.getElementById('sPhone').value = phone; switchView('viewSetup'); } else { drawStampCard(data.stamps, data.redeemed); switchView('viewCard'); } } else { showMsg('msgLogin', data.error); } }); }
+    
     function setupLoyalty() { const phone = document.getElementById('sPhone').value; const pin = document.getElementById('sPin').value; const year = document.getElementById('sYear').value; if(phone.length!==10 || pin.length!==4 || year.length!==4) return showMsg('msgSetup', "Please fill all details correctly."); document.getElementById('btnSetup').innerText = "Saving..."; fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltySetup', shopId: currentShopId, phone: phone, pin: pin, birthYear: year }) }).then(res => res.json()).then(data => { document.getElementById('btnSetup').innerText = "Save"; if(data.success) { document.getElementById('lPhone').value = phone; showMsg('msgLogin', "Account created! Please log in.", "green"); switchView('viewLogin'); } else { showMsg('msgSetup', data.error); } }); }
+    
     function resetPin() { const phone = document.getElementById('fPhone').value; const year = document.getElementById('fYear').value; const newPin = document.getElementById('fNewPin').value; if(phone.length!==10 || year.length!==4 || newPin.length!==4) return showMsg('msgForgot', "Please fill all details correctly."); document.getElementById('btnReset').innerText = "Resetting..."; fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loyaltyResetPinSelf', shopId: currentShopId, phone: phone, birthYear: year, newPin: newPin }) }).then(res => res.json()).then(data => { document.getElementById('btnReset').innerText = "Reset PIN"; if(data.success) { showMsg('msgLogin', "PIN changed. Please log in.", "green"); switchView('viewLogin'); } else { showMsg('msgForgot', data.error); } }); }
-    function drawStampCard(stamps) { document.getElementById('stampText').innerText = `You have ${stamps} stamps!`; const grid = document.getElementById('stampGrid'); grid.innerHTML = ""; for(let i=1; i<=globalStampTarget; i++) { if(i <= stamps) { grid.innerHTML += `<div class="stamp-circle stamp-filled"><i class="fas fa-gift"></i></div>`; } else { grid.innerHTML += `<div class="stamp-circle">${i}</div>`; } } document.getElementById('targetMsg').innerText = `Collect ${globalStampTarget} stamps to get a free reward!`; }
+    
+    function drawStampCard(stamps, redeemed) { 
+      document.getElementById('stampText').innerText = `You have ${stamps} stamps!`; 
+      const grid = document.getElementById('stampGrid'); grid.innerHTML = ""; 
+      for(let i=1; i<=globalStampTarget; i++) { 
+         if(i <= stamps) { grid.innerHTML += `<div class="stamp-circle stamp-filled"><i class="fas fa-gift"></i></div>`; } 
+         else { grid.innerHTML += `<div class="stamp-circle">${i}</div>`; } 
+      } 
+      document.getElementById('targetMsg').innerHTML = `Collect ${globalStampTarget} stamps to get a free reward!<br><br><span style="background:#e8f5e9; color:#2e7d32; padding:8px 12px; border-radius:8px; font-weight:bold; display:inline-block; margin-top:15px; border:1px solid #c8e6c9;">🏆 Total Redeemed Rewards: ${redeemed || 0}</span>`; 
+    }
   </script></body></html>

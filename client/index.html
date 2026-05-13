@@ -15,6 +15,11 @@
     .tab-container { display: flex; background: #eee; border-radius: 10px; margin-bottom: 20px; overflow: hidden; font-size: 13px;}
     .tab { flex: 1; padding: 12px 2px; font-weight: bold; color: #777; cursor: pointer; transition: 0.3s; }
     .tab.active { background: #d32f2f; color: white; }
+    
+    /* Disabled Tab Styles */
+    .tab.disabled { color: #b0bec5; cursor: not-allowed; opacity: 0.7; }
+    .upgrade-box { background: #fff3e0; border: 1px dashed #ff9800; padding: 30px 20px; border-radius: 10px; margin-top: 20px; color: #e65100; font-weight: bold; }
+    .upgrade-box i { font-size: 40px; margin-bottom: 15px; color: #ff9800; }
 
     .stat-card { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
     .stat-number { font-size: 32px; font-weight: bold; color: #d32f2f; margin: 5px 0; }
@@ -55,6 +60,15 @@
       <div class="tab" id="tab-cashier" onclick="switchTab('cashier')">🎁 Loyalty</div>
       <div class="tab" id="tab-products" onclick="switchTab('products')">📦 Store</div>
       <div class="tab" id="tab-feedback" onclick="switchTab('feedback')">📝 Inbox</div>
+    </div>
+
+    <!-- UPGRADE MESSAGE VIEW -->
+    <div id="view-upgrade" style="display: none;">
+      <div class="upgrade-box">
+        <i class="fas fa-lock"></i>
+        <div id="upgrade-text" style="font-size: 16px;">Upgrade to use this feature</div>
+        <p style="font-size: 12px; color: #777; margin-top: 10px; font-weight: normal;">Please contact your Social Map administrator to unlock this feature for your business.</p>
+      </div>
     </div>
 
     <div id="view-stats">
@@ -106,7 +120,14 @@
       document.getElementById('loginMsg').style.display="none"; document.querySelector('#loginBox .btn').innerText = "Loading...";
       fetch(`${APPS_SCRIPT_URL}?action=clientLogin&phone=${phone}&password=${pass}`).then(res => res.json()).then(data => {
           document.querySelector('#loginBox .btn').innerText = "Login";
-          if(data.success) { localStorage.setItem('shopId', data.shopId); localStorage.setItem('bName', data.businessName); initApp(); } 
+          if(data.success) { 
+            localStorage.setItem('shopId', data.shopId); 
+            localStorage.setItem('bName', data.businessName); 
+            localStorage.setItem('loyaltyStatus', data.loyaltyStatus);
+            localStorage.setItem('storeStatus', data.storeStatus);
+            localStorage.setItem('inboxStatus', data.inboxStatus);
+            initApp(); 
+          } 
           else { const m = document.getElementById('loginMsg'); m.innerText = data.error; m.style.display="block"; }
         }).catch(err => { document.querySelector('#loginBox .btn').innerText = "Login"; alert("Network Error!"); });
     }
@@ -116,16 +137,43 @@
     function initApp() {
       document.getElementById('loginBox').style.display = 'none'; document.getElementById('mainApp').style.display = 'block';
       document.getElementById('shopName').innerText = localStorage.getItem('bName'); document.getElementById('shopIdDisplay').innerText = "ID: " + localStorage.getItem('shopId');
+      
+      applyTabStyles(); // Gray out unpurchased tabs
       fetchStats(); fetchProducts(); fetchFeedback();
+    }
+
+    function applyTabStyles() {
+      if(localStorage.getItem('loyaltyStatus') === 'Inactive') document.getElementById('tab-cashier').classList.add('disabled');
+      if(localStorage.getItem('storeStatus') === 'Inactive') document.getElementById('tab-products').classList.add('disabled');
+      if(localStorage.getItem('inboxStatus') === 'Inactive') document.getElementById('tab-feedback').classList.add('disabled');
     }
 
     if(localStorage.getItem('shopId')) initApp();
 
     function switchTab(tab) {
+      const statuses = {
+         'cashier': localStorage.getItem('loyaltyStatus') || 'Inactive',
+         'products': localStorage.getItem('storeStatus') || 'Active',
+         'feedback': localStorage.getItem('inboxStatus') || 'Active'
+      };
+
+      // Reset all views and tabs
       ['stats', 'cashier', 'products', 'feedback'].forEach(t => {
-        document.getElementById('tab-' + t).className = "tab"; document.getElementById('view-' + t).style.display = "none";
+        document.getElementById('tab-' + t).classList.remove('active');
+        document.getElementById('view-' + t).style.display = "none";
       });
-      document.getElementById('tab-' + tab).className = "tab active"; document.getElementById('view-' + tab).style.display = "block";
+      document.getElementById('view-upgrade').style.display = "none";
+
+      // Check if feature is inactive
+      if(tab !== 'stats' && statuses[tab] === 'Inactive') {
+         document.getElementById('tab-' + tab).classList.add('active');
+         document.getElementById('view-upgrade').style.display = "block";
+         document.getElementById('upgrade-text').innerText = `🔒 Upgrade for use this feature!`;
+         return;
+      }
+
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('view-' + tab).style.display = "block";
     }
 
     function fetchStats() { fetch(`${APPS_SCRIPT_URL}?action=getClientStats&shopId=${localStorage.getItem('shopId')}`).then(res => res.json()).then(data => { if(data.success) { document.getElementById('scans').innerText = data.totalScans; document.getElementById('loyaltyUsers').innerText = data.loyaltyCustomers; document.getElementById('stamps').innerText = data.totalStamps; } }); }

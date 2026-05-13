@@ -58,15 +58,16 @@
       </div>
 
       <div class="app-box">
-        <h4 style="margin:0 0 10px 0; color:#1565c0;">📱 Client Login</h4>
+        <h4 style="margin:0 0 10px 0; color:#1565c0;">📱 Client Login & Status</h4>
         <div class="grid-2">
           <div><label>Phone</label><input type="tel" id="c_clientPhone"></div>
           <div><label>Password</label><input type="text" id="c_password"></div>
+          <div><label>Expiry Date (Demo/Sub)</label><input type="date" id="c_expiryDate"></div>
+          <div><label>System Status</label><select id="c_status"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
         </div>
       </div>
-      <div class="grid-2">
-        <div><label>Theme Color</label><input type="text" id="c_theme"></div><div><label>Status</label><select id="c_status"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
-      </div>
+      <div style="margin-bottom: 15px;"><label>Theme Color</label><input type="text" id="c_theme"></div>
+      
       <button class="btn-save" onclick="saveData()">Save / Update Customer</button>
     </div>
 
@@ -99,7 +100,6 @@
       <div id="adminProductsList" style="margin-top:20px;">Shop ID එක ගසා Load බොත්තම ඔබන්න.</div>
     </div>
     
-    <!-- Feedback Viewer Section -->
     <div class="card" style="flex: 100%; margin-top: 10px;">
       <h3 style="margin-top:0; color:#607d8b;">💬 Customer Feedbacks & Suggestions</h3>
       <div class="grid-2" style="max-width: 600px; background:#e0f7fa; padding:15px; border-radius:10px;">
@@ -112,25 +112,30 @@
 
   <script>
     // WEB APP URL HERE
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZDd2mzWCngML7o1fHPokQtclB3Rx-Gnru6TDjRlEK9mpwHmaRGIbZMecziTnWdExT/exec";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU8NQF6m62kbDwCr6ol48LEVl8-veggT_bR5Lue7sIrJWlgpiI7GzosU_PqZzzV0JP/exec";
 
     function loadCustomers() {
       fetch(`${APPS_SCRIPT_URL}?action=getAll`).then(res => res.json()).then(data => {
         let tbody = document.getElementById('tableBody'); tbody.innerHTML = "";
         data.data.forEach(c => {
           const safeStr = (s) => { if (!s) return ''; return s.toString().replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/\n/g, "\\n").replace(/\r/g, ""); };
+          
+          let safeExp = '';
+          if(c.ExpiryDate) { try { let d = new Date(c.ExpiryDate); if(!isNaN(d)) safeExp = d.toISOString().split('T')[0]; } catch(e){} }
+          
           let lBadge = c.LoyaltyStatus === 'Active' ? `<span style="color:green;font-weight:bold;">ON</span>` : `<span style="color:red;">OFF</span>`;
           let appBadge = (c.ClientPhone && c.Password) ? `<span style="color:blue;font-weight:bold;">Granted</span>` : `<span style="color:gray;">No Access</span>`;
+          
           tbody.innerHTML += `<tr><td>${c.ID}</td><td>${c.BusinessName}</td><td>${appBadge}</td><td>${lBadge}</td>
             <td style="min-width: 130px;">
-              <button class="btn-edit" onclick="editCust('${safeStr(c.ID)}','${safeStr(c.BusinessName)}','${safeStr(c.Type)}','${safeStr(c.WhatsApp)}','${safeStr(c.Maps)}','${safeStr(c.Facebook)}','${safeStr(c.Instagram)}','${safeStr(c.TikTok)}','${safeStr(c.Website)}','${safeStr(c.Email)}','${safeStr(c.MenuPDF)}','${safeStr(c.ThemeColor)}','${safeStr(c.Status)}','${safeStr(c.LoyaltyStatus)}','${safeStr(c.StampTarget)}','${safeStr(c.ClientPhone)}','${safeStr(c.Password)}','${safeStr(c.BankDetails)}','${safeStr(c.GoogleReview)}','${safeStr(c.ProfileImage)}','${safeStr(c.CoverImage)}','${safeStr(c.StoreStatus)}','${safeStr(c.InboxStatus)}')">Select</button>
+              <button class="btn-edit" onclick="editCust('${safeStr(c.ID)}','${safeStr(c.BusinessName)}','${safeStr(c.Type)}','${safeStr(c.WhatsApp)}','${safeStr(c.Maps)}','${safeStr(c.Facebook)}','${safeStr(c.Instagram)}','${safeStr(c.TikTok)}','${safeStr(c.Website)}','${safeStr(c.Email)}','${safeStr(c.MenuPDF)}','${safeStr(c.ThemeColor)}','${safeStr(c.Status)}','${safeStr(c.LoyaltyStatus)}','${safeStr(c.StampTarget)}','${safeStr(c.ClientPhone)}','${safeStr(c.Password)}','${safeStr(c.BankDetails)}','${safeStr(c.GoogleReview)}','${safeStr(c.ProfileImage)}','${safeStr(c.CoverImage)}','${safeStr(c.StoreStatus)}','${safeStr(c.InboxStatus)}','${safeExp}')">Select</button>
               <button class="btn-edit" style="background:#d32f2f; margin-left:5px;" onclick="deleteCustomer('${safeStr(c.ID)}')"><i class="fas fa-trash"></i> Delete</button>
             </td></tr>`;
         });
       });
     }
 
-    function editCust(id, name, type, wa, maps, fb, ig, tiktok, web, email, menu, theme, status, lStat, lTarg, cPh, cPas, cBank, cRev, cImg, cCover, sStat, iStat) {
+    function editCust(id, name, type, wa, maps, fb, ig, tiktok, web, email, menu, theme, status, lStat, lTarg, cPh, cPas, cBank, cRev, cImg, cCover, sStat, iStat, expDate) {
       document.getElementById('c_id').value = id; document.getElementById('c_name').value = name; document.getElementById('c_type').value = type;
       document.getElementById('c_wa').value = wa; document.getElementById('c_maps').value = maps; document.getElementById('c_fb').value = fb;
       document.getElementById('c_ig').value = ig; document.getElementById('c_tiktok').value = tiktok; document.getElementById('c_web').value = web;
@@ -140,7 +145,9 @@
       document.getElementById('c_stampTarget').value = lTarg || 10; document.getElementById('c_clientPhone').value = cPh;
       document.getElementById('c_password').value = cPas; document.getElementById('c_bank').value = cBank;
       document.getElementById('c_review').value = cRev; document.getElementById('c_image').value = cImg;
-      document.getElementById('c_cover').value = cCover || '';
+      document.getElementById('c_cover').value = cCover || ''; 
+      document.getElementById('c_expiryDate').value = expDate || ''; // Set Expiry Date correctly
+      
       document.getElementById('p_shop_id').value = id; adminFetchProducts();
       document.getElementById('f_shop_id').value = id; adminFetchFeedback();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -159,7 +166,7 @@
           StampTarget: document.getElementById('c_stampTarget').value, ClientPhone: document.getElementById('c_clientPhone').value,
           Password: document.getElementById('c_password').value, BankDetails: document.getElementById('c_bank').value,
           GoogleReview: document.getElementById('c_review').value, ProfileImage: document.getElementById('c_image').value,
-          CoverImage: document.getElementById('c_cover').value
+          CoverImage: document.getElementById('c_cover').value, ExpiryDate: document.getElementById('c_expiryDate').value // Save Expiry Date
         }
       };
       fetch(APPS_SCRIPT_URL, {method: "POST", body: JSON.stringify(payload)}).then(res=>res.json()).then(d=>{alert(d.message); loadCustomers();});

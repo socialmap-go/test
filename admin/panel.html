@@ -3,37 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | Mapa Solutions</title>
+  <title>Admin Dashboard | Combined Panel - Mapa Solutions & Social Map</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f6f8; margin: 0; padding: 0; }
-    .header { background: #d32f2f; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
-    .container { padding: 20px; max-width: 1200px; margin: 0 auto; }
+    .header { background: #d32f2f; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .container { padding: 20px; max-width: 1400px; margin: 0 auto; }
     .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
-    input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: inherit; margin-bottom: 10px;}
-    label { font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px; color: #555;}
-    .btn { padding: 12px 15px; border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; font-size: 14px; text-align: center; text-decoration: none; display: inline-block;}
+    input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: inherit; margin-bottom: 10px; }
+    label { font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px; color: #555; }
+    .btn { padding: 12px 15px; border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; font-size: 14px; text-align: center; text-decoration: none; display: inline-block; }
     .btn-blue { background: #1976d2; }
     .btn-green { background: #2e7d32; }
     .btn-red { background: #d32f2f; }
     .btn-dark { background: #333; }
+    .btn-save { background: #2e7d32; color: white; padding: 15px; border: none; border-radius: 5px; width: 100%; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; }
     .search-box { display: flex; gap: 10px; margin-bottom: 15px; }
-    .customer-list { max-height: 300px; overflow-y: auto; border: 1px solid #eee; border-radius: 5px; }
-    .customer-item { padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; justify-content: space-between; align-items: center;}
+    .customer-list { max-height: 400px; overflow-y: auto; border: 1px solid #eee; border-radius: 5px; }
+    .customer-item { padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
     .customer-item:hover { background: #f9f9f9; }
-    .qr-box { text-align: center; padding: 15px; border: 1px dashed #ccc; border-radius: 10px; background: #fafafa;}
-    .qr-box img { max-width: 200px; height: auto; border: 5px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 10px;}
+    .qr-box { text-align: center; padding: 15px; border: 1px dashed #ccc; border-radius: 10px; background: #fafafa; }
+    .qr-box img { max-width: 200px; height: auto; border: 5px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 10px; }
     .stat-box { background: #e3f2fd; padding: 15px; border-radius: 8px; text-align: center; }
     .stat-box h2 { margin: 0; color: #1976d2; font-size: 28px; }
-    .link-stat-row { display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 5px 0; font-size: 14px;}
+    .link-stat-row { display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 5px 0; font-size: 14px; }
+    .premium-box { background: #fff3e0; padding: 15px; border: 1px solid #ffb74d; border-radius: 8px; margin-bottom: 15px; }
+    .app-box { background: #e3f2fd; padding: 15px; border: 1px solid #90caf9; border-radius: 8px; margin-bottom: 15px; }
+    .product-row { background: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 10px; border-left: 5px solid #d32f2f; }
+    .badge { font-size: 11px; padding: 3px 6px; border-radius: 4px; font-weight: bold; color: white; margin-right: 5px; }
+    .b-Product { background: #ff9800; } .b-Room { background: #2196f3; } .b-Package { background: #9c27b0; }
+    #msg { display:none; padding:10px; margin-bottom:10px; font-weight:bold; border-radius:5px; }
   </style>
 </head>
 <body>
 
   <div class="header">
-    <div style="font-size: 20px; font-weight: 900;"><i class="fas fa-shield-alt"></i> Mapa Solutions - Admin</div>
+    <div style="font-size: 20px; font-weight: 900;"><i class="fas fa-shield-alt"></i> Combined Admin Panel</div>
     <div>
       <span id="staffNameDisplay" style="margin-right: 15px; font-weight: bold;"></span>
       <button class="btn btn-dark" onclick="logout()" style="padding: 8px 12px;"><i class="fas fa-sign-out-alt"></i> Logout</button>
@@ -59,7 +66,7 @@
           <button class="btn btn-blue" onclick="loadAllCustomers()"><i class="fas fa-sync"></i> Refresh</button>
         </div>
         <div class="customer-list" id="customerList">
-          <div style="padding: 20px; text-align: center; color: gray;">Loading customers...</div>
+          <div style="padding: 20px; text-align: center; color: gray;"><i class="fas fa-spinner fa-spin"></i> Loading customers...</div>
         </div>
       </div>
 
@@ -67,7 +74,7 @@
         <h3 style="margin-top:0;"><i class="fas fa-chart-pie"></i> Global / Shop Analytics</h3>
         <select id="analyticsShopId" onchange="loadAnalytics()">
           <option value="ALL">All Shops (Global)</option>
-          </select>
+        </select>
         
         <div class="grid-2" style="margin-top: 15px;">
           <div class="stat-box">
@@ -89,9 +96,67 @@
       </div>
     </div>
 
+    <div class="card" id="customerFormCard">
+      <h3 style="margin-top:0;"><i class="fas fa-edit"></i> Customer / Shop Detailed Setup</h3>
+      <div id="msg"></div>
+      
+      <div class="grid-2">
+        <div><label>Shop ID</label><input type="text" id="c_id" placeholder="Ex: SHOP001"></div>
+        <div><label>Type</label><select id="c_type"><option value="profile">Profile</option><option value="redirect">Redirect</option></select></div>
+      </div>
+      <div><label>Business Name</label><input type="text" id="c_name" style="margin-bottom:15px;"></div>
+ 
+     <div class="grid-2">
+        <div><label><i class="fab fa-whatsapp"></i> WhatsApp</label><input type="text" id="c_wa"></div>
+        <div><label><i class="fas fa-map-marker-alt"></i> Maps</label><input type="text" id="c_maps"></div>
+        <div><label><i class="fab fa-facebook"></i> Facebook</label><input type="text" id="c_fb"></div>
+        <div><label><i class="fab fa-instagram"></i> Instagram</label><input type="text" id="c_ig"></div>
+        <div><label><i class="fab fa-tiktok"></i> TikTok</label><input type="text" id="c_tiktok"></div>
+        <div><label><i class="fas fa-globe"></i> Website</label><input type="text" id="c_web"></div>
+        <div><label><i class="fas fa-envelope"></i> Email</label><input type="text" id="c_email"></div>
+        <div><label><i class="fas fa-file-pdf"></i> Menu PDF Link</label><input type="text" id="c_menu"></div>
+        <div><label><i class="fas fa-star"></i> Review Link</label><input type="text" id="c_review"></div>
+        <div><label><i class="fas fa-image"></i> Profile Img</label><input type="text" id="c_image"></div>
+        <div style="grid-column: 1 / -1;"><label><i class="fas fa-images"></i> Cover Image (Background)</label><input type="text" id="c_cover" placeholder="Image Direct Link"></div>
+      </div>
+  
+    <div style="margin-bottom: 15px;">
+        <label><i class="fas fa-piggy-bank"></i> Bank Details</label>
+        <textarea id="c_bank" rows="3"></textarea>
+      </div>
+      
+      <div class="grid-2">
+          <div class="premium-box">
+            <h4 style="margin:0 0 10px 0; color:#e65100;"><i class="fas fa-gem"></i> Access Control (Features)</h4>
+            <div class="grid-2">
+              <div><label>Loyalty System</label><select id="c_loyaltyStatus"><option value="Inactive">Inactive</option><option value="Active">Active</option></select></div>
+              <div><label>Store Access</label><select id="c_storeStatus"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
+              <div><label>Inbox Access</label><select id="c_inboxStatus"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
+              <div><label>Stamp Target</label><input type="number" id="c_stampTarget" value="10"></div>
+            </div>
+          </div>
+
+          <div class="app-box">
+            <h4 style="margin:0 0 10px 0; color:#1565c0;"><i class="fas fa-mobile-alt"></i> Client Login & Status</h4>
+            <div class="grid-2">
+              <div><label>Phone</label><input type="tel" id="c_clientPhone"></div>
+              <div><label>Password</label><input type="text" id="c_password"></div>
+              <div><label>Expiry Date</label><input type="date" id="c_expiryDate"></div>
+              <div><label>System Status</label><select id="c_status"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
+            </div>
+          </div>
+      </div>
+      <div style="margin-bottom: 15px;"><label>Theme Color</label><input type="text" id="c_theme" placeholder="#hexcolor"></div>
+      
+      <div class="grid-2">
+        <button class="btn-save" onclick="saveCustomerData()"><i class="fas fa-save"></i> Save / Update Customer</button>
+        <button class="btn-red btn-save" style="background:#d32f2f;" onclick="deleteCustomerFromForm()"><i class="fas fa-trash"></i> Delete Customer</button>
+      </div>
+    </div>
+
     <div class="card">
       <h3 style="margin-top:0;"><i class="fas fa-qrcode"></i> High Quality QR Generator</h3>
-      <p style="font-size: 13px; color: gray;">අදාළ කඩහිමියා තෝරා ඔවුන්ගේ QRs සහ Links ලබාගන්න. (System URL එක Save කර තිබීම අනිවාර්යයි).</p>
+      <p style="font-size: 13px; color: gray;">අදාළ කඩහිමියා තෝරා ඔවුන්ගේ QRs සහ Links ලබාගන්න. (System URL එක Save කර තිබීම අනිවාර්යයි). </p>
       
       <select id="qrShopSelect" onchange="generateQRs()">
         <option value="">-- Select a Shop to Generate QRs --</option>
@@ -131,8 +196,42 @@
             <a id="dlCashierQr" href="#" target="_blank" class="btn btn-blue" style="padding: 8px;"><i class="fas fa-download"></i> HQ Download</a>
           </div>
         </div>
-
       </div>
+    </div>
+
+    <div class="card" style="flex: 100%;">
+      <h3 style="margin-top:0; color:#d32f2f;"><i class="fas fa-box-open"></i> Manage Products, Rooms & Packages</h3>
+      <p style="font-size:13px; color:gray;">භාණ්ඩ, කාමර හෝ පැකේජ කළමනාකරණය සඳහා Shop ID එක ඇතුළත් කර Load බොත්තම ඔබන්න. (පාරිභෝගිකයෙකු Select කළ විට මෙය ස්වයංක්‍රීයව පිරවේ).</p>
+      
+      <div class="grid-2" style="max-width: 600px; background:#f0f0f0; padding:15px; border-radius:10px;">
+        <div><label>Shop ID</label><input type="text" id="p_shop_id"></div>
+        <div style="display:flex; align-items:flex-end;"><button class="btn btn-dark btn-save" style="margin:0;" onclick="adminFetchProducts()">Load List</button></div>
+      </div>
+      
+      <div id="adminAddProductArea" style="margin-top:20px; border: 1px dashed #ccc; padding:15px; border-radius:10px;">
+        <h4 style="margin-top:0;">➕ අලුත් භාණ්ඩයක් / කාමරයක් / පැකේජයක් එක් කරන්න</h4>
+        <div class="grid-2">
+          <div><label>වර්ගය තෝරන්න</label><select id="new_p_type"><option value="Product">🍽️ Product / Food</option><option value="Room">🛏️ Hotel Room</option><option value="Package">🎁 Special Package</option></select></div>
+          <div><label>නම</label><input type="text" id="new_p_name" placeholder="උදා: Deluxe Double Room"></div>
+        </div>
+        <div class="grid-2">
+          <div><label>මිල (රු.)</label><div style="display:flex; align-items:center; gap:5px;"><span style="font-weight:bold; color:#777; font-size:16px;">රු.</span><input type="number" id="new_p_price" placeholder="උදා: 4500"></div></div>
+        </div>
+        <div style="margin-top:10px;"><label>පින්තූර Links (Direct Links)</label><div class="grid-3"><input type="text" id="new_p_img1" placeholder="🖼️ පින්තූර 1 Link"><input type="text" id="new_p_img2" placeholder="🖼️ පින්තූර 2 Link"><input type="text" id="new_p_img3" placeholder="🖼️ පින්තූර 3 Link"></div></div>
+        <button class="btn-green btn-save" style="width:200px; padding:10px;" onclick="adminAddProduct()">Save Item</button>
+      </div>
+      
+      <div id="adminProductsList" style="margin-top:20px;"></div>
+    </div>
+    
+    <div class="card" style="flex: 100%; margin-top: 10px;">
+      <h3 style="margin-top:0; color:#607d8b;"><i class="fas fa-comment-alt"></i> Customer Feedbacks & Suggestions</h3>
+      
+      <div class="grid-2" style="max-width: 600px; background:#e0f7fa; padding:15px; border-radius:10px;">
+        <div><label>Shop ID</label><input type="text" id="f_shop_id"></div>
+        <div style="display:flex; align-items:flex-end;"><button class="btn btn-green btn-save" style="margin:0; background:#00796b;" onclick="adminFetchFeedback()">Load Feedbacks</button></div>
+      </div>
+      <div id="adminFeedbackList" style="margin-top:20px;"></div>
     </div>
 
   </div>
@@ -142,31 +241,40 @@
     let allCustomersData = [];
 
     window.onload = () => {
-      const staffName = sessionStorage.getItem('loggedInStaff');
+   
+   const staffName = sessionStorage.getItem('loggedInStaff');
       if(!staffName) {
-        window.location.href = "index.html";
+        window.location.href = "index.html"; // Ensure index.html exists
         return;
       }
       document.getElementById('staffNameDisplay').innerText = `Logged in as: ${staffName}`;
       
       const savedBase = localStorage.getItem('sysBaseUrl');
       if(savedBase) document.getElementById('sysBaseUrl').value = savedBase;
-
-      loadAllCustomers();
+loadAllCustomers();
       loadAnalytics();
     };
 
     function saveBaseUrl() {
       let url = document.getElementById('sysBaseUrl').value.trim();
       if(!url.endsWith('/')) url += '/';
-      localStorage.setItem('sysBaseUrl', url);
+localStorage.setItem('sysBaseUrl', url);
       document.getElementById('sysBaseUrl').value = url;
       alert("Base URL Saved! Now you can generate accurate QRs.");
       generateQRs();
+}
+
+    function logout() {
+      sessionStorage.clear();
+window.location.href = "index.html";
     }
 
+    // --- Customer List & Core CRUD ---
+
     function loadAllCustomers() {
-      document.getElementById('customerList').innerHTML = `<div style="padding: 20px; text-align: center; color: gray;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>`;
+      const container = document.getElementById('customerList');
+      container.innerHTML = `<div style="padding: 20px; text-align: center; color: gray;"><i class="fas fa-spinner fa-spin"></i> Loading customers...</div>`;
+      
       fetch(`${APPS_SCRIPT_URL}?action=getAll`)
         .then(res => res.json())
         .then(data => {
@@ -174,66 +282,165 @@
             allCustomersData = data.data;
             renderCustomerList(allCustomersData);
             populateDropdowns(allCustomersData);
+          } else {
+            container.innerHTML = `<div style="padding: 20px; text-align: center; color: red;">Failed to load customers.</div>`;
           }
         });
-    }
+}
 
     function renderCustomerList(list) {
       const container = document.getElementById('customerList');
       container.innerHTML = "";
-      if(list.length === 0) {
+if(list.length === 0) {
         container.innerHTML = `<div style="padding: 20px; text-align: center; color: gray;">No customers found.</div>`;
-        return;
+return;
       }
       list.forEach(c => {
         container.innerHTML += `
-          <div class="customer-item" onclick="selectCustomerForAnalytics('${c.ID}')">
+          <div class="customer-item" onclick="selectCustomer('${c.ID}')">
             <div>
-              <strong>${c.BusinessName}</strong> <br>
-              <small style="color:gray;">ID: ${c.ID} | Ph: ${c.ClientPhone}</small>
+              <strong>${c.BusinessName || 'No Name'}</strong> <br>
+              <small style="color:gray;">ID: ${c.ID} | Ph: ${c.ClientPhone || 'N/A'}</small>
             </div>
-            <div>
-              <span style="font-size:12px; padding:3px 8px; border-radius:10px; background:${c.Status==='Active'?'#e8f5e9':'#ffebee'}; color:${c.Status==='Active'?'green':'red'};">${c.Status}</span>
+           
+ <div>
+              <span class="badge" style="background:${c.Status==='Active'?'#e8f5e9':'#ffebee'}; color:${c.Status==='Active'?'green':'red'};">${c.Status}</span>
+              <span class="badge" style="background:${c.LoyaltyStatus==='Active'?'#2e7d32':'#777'}; color:white;"><i class="fas fa-gem"></i> Loyalty: ${c.LoyaltyStatus}</span>
             </div>
           </div>
         `;
       });
-    }
+}
 
     function filterCustomers() {
       const term = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = allCustomersData.filter(c => 
+const filtered = allCustomersData.filter(c => 
         (c.ID && c.ID.toLowerCase().includes(term)) || 
         (c.BusinessName && c.BusinessName.toLowerCase().includes(term)) || 
         (c.ClientPhone && c.ClientPhone.toString().includes(term))
       );
-      renderCustomerList(filtered);
+renderCustomerList(filtered);
     }
 
+    function selectCustomer(shopId) {
+        // Find customer data
+        const customer = allCustomersData.find(c => c.ID === shopId);
+        if(!customer) return;
+
+        // 1. Populate the Setup Form
+        const safe = (s) => s ? s.toString() : '';
+        const safeDate = (dt) => {
+          if(!dt) return '';
+          try { 
+              let d = new Date(dt); 
+              return isNaN(d) ? '' : d.toISOString().split('T')[0]; 
+          } catch(e){ return ''; }
+        };
+
+        document.getElementById('c_id').value = safe(customer.ID);
+        document.getElementById('c_type').value = customer.Type || 'profile';
+        document.getElementById('c_name').value = safe(customer.BusinessName);
+        document.getElementById('c_wa').value = safe(customer.WhatsApp);
+        document.getElementById('c_maps').value = safe(customer.Maps);
+        document.getElementById('c_fb').value = safe(customer.Facebook);
+        document.getElementById('c_ig').value = safe(customer.Instagram);
+        document.getElementById('c_tiktok').value = safe(customer.TikTok);
+        document.getElementById('c_web').value = safe(customer.Website);
+        document.getElementById('c_email').value = safe(customer.Email);
+        document.getElementById('c_menu').value = safe(customer.MenuPDF);
+        document.getElementById('c_review').value = safe(customer.GoogleReview);
+        document.getElementById('c_image').value = safe(customer.ProfileImage);
+        document.getElementById('c_cover').value = safe(customer.CoverImage);
+        document.getElementById('c_bank').value = safe(customer.BankDetails);
+        document.getElementById('c_loyaltyStatus').value = customer.LoyaltyStatus || 'Inactive';
+        document.getElementById('c_storeStatus').value = customer.StoreStatus || 'Active';
+        document.getElementById('c_inboxStatus').value = customer.InboxStatus || 'Active';
+        document.getElementById('c_stampTarget').value = customer.StampTarget || 10;
+        document.getElementById('c_clientPhone').value = safe(customer.ClientPhone);
+        document.getElementById('c_password').value = safe(customer.Password);
+        document.getElementById('c_expiryDate').value = safeDate(customer.ExpiryDate);
+        document.getElementById('c_status').value = customer.Status || 'Active';
+        document.getElementById('c_theme').value = safe(customer.ThemeColor);
+
+        // 2. Load Products and Feedback IDs
+        document.getElementById('p_shop_id').value = safe(customer.ID);
+        document.getElementById('f_shop_id').value = safe(customer.ID);
+        adminFetchProducts(); // Optional auto-load
+        adminFetchFeedback(); // Optional auto-load
+
+        // 3. Set Dropdowns and trigger Analytics/QR
+        document.getElementById('analyticsShopId').value = shopId;
+        document.getElementById('qrShopSelect').value = shopId;
+        loadAnalytics();
+        generateQRs();
+
+        // Scroll to form
+        document.getElementById('customerFormCard').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function saveCustomerData() {
+        const id = document.getElementById('c_id').value;
+        if(!id) { alert("සැලකිය යුතුයි: Shop ID එක අනිවාර්යයි."); return; }
+
+        const payload = {
+            action: "saveCustomer", staffId: sessionStorage.getItem('loggedInStaff'), staffName: sessionStorage.getItem('loggedInStaff'),
+            customerData: {
+                ID: id, Type: document.getElementById('c_type').value, BusinessName: document.getElementById('c_name').value,
+                WhatsApp: document.getElementById('c_wa').value, Maps: document.getElementById('c_maps').value, Facebook: document.getElementById('c_fb').value,
+                Instagram: document.getElementById('c_ig').value, TikTok: document.getElementById('c_tiktok').value, Website: document.getElementById('c_web').value,
+                Email: document.getElementById('c_email').value, MenuPDF: document.getElementById('c_menu').value, ThemeColor: document.getElementById('c_theme').value,
+                Status: document.getElementById('c_status').value, LoyaltyStatus: document.getElementById('c_loyaltyStatus').value,
+                StoreStatus: document.getElementById('c_storeStatus').value, InboxStatus: document.getElementById('c_inboxStatus').value,
+                StampTarget: document.getElementById('c_stampTarget').value, ClientPhone: document.getElementById('c_clientPhone').value,
+                Password: document.getElementById('c_password').value, BankDetails: document.getElementById('c_bank').value,
+                GoogleReview: document.getElementById('c_review').value, ProfileImage: document.getElementById('c_image').value,
+                CoverImage: document.getElementById('c_cover').value, ExpiryDate: document.getElementById('c_expiryDate').value
+            }
+        };
+
+        const msg = document.getElementById('msg'); msg.style.display = 'block'; msg.style.background = '#e3f2fd'; msg.innerHTML = "Processing...";
+
+        fetch(APPS_SCRIPT_URL, {method: "POST", body: JSON.stringify(payload)})
+            .then(res => res.json())
+            .then(d => {
+                alert(d.message);
+                loadAllCustomers();
+                msg.style.display = 'none';
+            })
+            .catch(e => {
+                alert("Error saving data.");
+                msg.style.display = 'none';
+            });
+    }
+
+    function deleteCustomerFromForm() {
+        const id = document.getElementById('c_id').value;
+        if(!id) return;
+        if(!confirm(`ඔබ සහතිකද? ID ${id} සහිත පාරිභෝගිකයා සදහටම මැකීමට අවශ්‍යද? මෙය ආපසු හැරවිය නොහැක.`)) return;
+
+        fetch(APPS_SCRIPT_URL, {method: "POST", body: JSON.stringify({action: "deleteCustomer", id: id, staffId: sessionStorage.getItem('loggedInStaff'), staffName: sessionStorage.getItem('loggedInStaff')})})
+            .then(res => res.json())
+            .then(d => { alert(d.message); loadAllCustomers(); });
+    }
+
+    // --- Dropdowns ---
     function populateDropdowns(list) {
       const analyticsSelect = document.getElementById('analyticsShopId');
-      const qrSelect = document.getElementById('qrShopSelect');
+const qrSelect = document.getElementById('qrShopSelect');
       
       // Keep "ALL" for analytics
       analyticsSelect.innerHTML = `<option value="ALL">All Shops (Global)</option>`;
-      qrSelect.innerHTML = `<option value="">-- Select a Shop to Generate QRs --</option>`;
-      
-      list.forEach(c => {
-        analyticsSelect.innerHTML += `<option value="${c.ID}">${c.BusinessName} (${c.ID})</option>`;
-        qrSelect.innerHTML += `<option value="${c.ID}">${c.BusinessName} (${c.ID})</option>`;
+qrSelect.innerHTML = `<option value="">-- Select a Shop to Generate QRs --</option>`;
+list.forEach(c => {
+        analyticsSelect.innerHTML += `<option value="${c.ID}">${c.BusinessName || 'No Name'} (${c.ID})</option>`;
+        qrSelect.innerHTML += `<option value="${c.ID}">${c.BusinessName || 'No Name'} (${c.ID})</option>`;
       });
-    }
+}
 
-    function selectCustomerForAnalytics(shopId) {
-      document.getElementById('analyticsShopId').value = shopId;
-      document.getElementById('qrShopSelect').value = shopId;
-      loadAnalytics();
-      generateQRs();
-    }
-
+    // --- Analytics ---
     function loadAnalytics() {
       const shopId = document.getElementById('analyticsShopId').value;
-      fetch(`${APPS_SCRIPT_URL}?action=getClientStats&shopId=${shopId}`)
+fetch(`${APPS_SCRIPT_URL}?action=getClientStats&shopId=${shopId}`)
         .then(res => res.json())
         .then(data => {
           if(data.success) {
@@ -241,73 +448,178 @@
             document.getElementById('a_emails').innerText = data.totalEmails || 0;
             
             const linkContainer = document.getElementById('linkStatsContainer');
-            linkContainer.innerHTML = "";
+          
+  linkContainer.innerHTML = "";
             if(data.linkStats && Object.keys(data.linkStats).length > 0) {
               for (const [dest, count] of Object.entries(data.linkStats)) {
                 let showName = dest;
                 if(dest.includes("wa.me") || dest.includes("whatsapp")) showName = "<i class='fab fa-whatsapp' style='color:#25D366;'></i> WhatsApp Direct";
-                linkContainer.innerHTML += `
+              
+  linkContainer.innerHTML += `
                   <div class="link-stat-row">
                     <span>${showName}</span>
                     <strong>${count} Scans</strong>
                   </div>`;
-              }
+}
             } else {
               linkContainer.innerHTML = `<div style="font-size:13px; color:gray;">No scan destinations recorded yet.</div>`;
-            }
+}
           }
         });
-    }
+}
 
+    // --- QR Generation ---
     function generateQRs() {
       const shopId = document.getElementById('qrShopSelect').value;
       const baseUrl = localStorage.getItem('sysBaseUrl');
-      
-      if(!shopId) {
+if(!shopId) {
         document.getElementById('qrDisplayArea').style.display = 'none';
         return;
-      }
+}
       if(!baseUrl) {
         alert("කරුණාකර පළමුව System Base URL එක ඇතුළත් කර Save කරන්න.");
+document.getElementById('qrDisplayArea').style.display = 'none';
         return;
       }
 
       document.getElementById('qrDisplayArea').style.display = 'grid';
-
-      // 1. Main QR (Goes to Root Index Redirector)
+// 1. Main QR (Goes to Root Index Redirector)
       const mainUrl = `${baseUrl}index.html?id=${shopId}`;
       setQrBox('Main', mainUrl);
-
-      // 2. Client Portal
+// 2. Client Portal
       const clientUrl = `${baseUrl}client/index.html`;
       setQrBox('Client', clientUrl);
-
-      // 3. Cashier Portal
+// 3. Cashier Portal
       const cashierUrl = `${baseUrl}cashier/index.html`;
       setQrBox('Cashier', cashierUrl);
-    }
+}
 
     function setQrBox(type, url) {
       // Using API for High-Quality 500x500 QR generation
       const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(url)}&margin=10`;
-      
-      document.getElementById(`link${type}`).value = url;
+document.getElementById(`link${type}`).value = url;
       document.getElementById(`img${type}Qr`).src = qrApiUrl;
       document.getElementById(`dl${type}Qr`).href = qrApiUrl;
     }
 
     function copyLink(elementId) {
       const copyText = document.getElementById(elementId);
-      copyText.select();
+copyText.select();
       copyText.setSelectionRange(0, 99999); 
       navigator.clipboard.writeText(copyText.value);
       alert("Link copied to clipboard!");
     }
 
-    function logout() {
-      sessionStorage.clear();
-      window.location.href = "index.html";
+    // --- Product Management ---
+
+    function adminFetchProducts() {
+      const sid = document.getElementById('p_shop_id').value;
+if (!sid) { alert("කරුණාකර Shop ID එක ඇතුළත් කරන්න."); return; }
+      document.getElementById('adminProductsList').innerHTML = `<i class="fas fa-spinner fa-spin"></i> Loading...`;
+fetch(`${APPS_SCRIPT_URL}?action=getProducts&shopId=${sid}`)
+        .then(res=>res.json())
+        .then(d=>{
+            let h = "";
+            if(d.success && d.data && d.data.length > 0) {
+              d.data.forEach(p => {
+                let pType = p.Type || "Product"; let pName = p.ProductName || p['Product Name'] || "නම නැත"; let pId = p.ProductID || p['Product ID'] || "No-ID"; let pPrice = p.Price || p['Product Price'] || 0;
+                
+                // Image Logic
+                let imgs = "";
+                let img1 = p.Image1 || p.img1; let img2 = p.Image2 || p.img2; let img3 = p.Image3 || p.img3;
+                if(img1) imgs += `<img src="${img1}" style="width:45px; height:45px; object-fit:cover; border-radius:5px; border:1px solid #ddd;">`;
+                if(img2) imgs += `<img src="${img2}" style="width:45px; height:45px; object-fit:cover; border-radius:5px; border:1px solid #ddd;">`;
+       
+         if(img3) imgs += `<img src="${img3}" style="width:45px; height:45px; object-fit:cover; border-radius:5px; border:1px solid #ddd;">`;
+let imgHtml = imgs ? `<div style="margin-top:8px; display:flex; gap:10px;">${imgs}</div>` : '';
+
+                let badgeBadge = `<span class="badge b-${pType}">${pType}</span>`;
+h += `<div class="product-row">
+                        <div class="grid-2">
+                          <div>
+                            ${badgeBadge} <strong style="font-size:16px;">${pName}</strong> <br><small style="color:gray;">(ID: ${pId})</small>
+                            ${imgHtml}
+     
+                     </div>
+                          <div style="display:flex; align-items:center; gap:5px; justify-content: flex-end;">
+                            <span style="font-weight:bold; color:#777; font-size:16px;">රු.</span>
+                            <input 
+type="number" id="ad_p_${pId}" value="${pPrice}" style="padding:8px; width:100px; margin:0;">
+                            <button class="btn btn-green" style="padding: 8px 12px; background:green;"
+onclick="adminUpdatePrice('${pId}')"><i class="fas fa-check"></i></button> 
+                            <button class="btn btn-red" style="padding: 8px 12px; background:#d32f2f;"
+onclick="adminDeleteProduct('${pId}')"><i class="fas fa-trash-alt"></i></button>
+                          </div>
+                        </div>
+                      </div>`;
+});
+            } else { h = `<div style="padding:10px; color:gray;">කිසිම භාණ්ඩයක් හෝ කාමරයක් ඇතුළත් කර නැත.</div>`;
+}
+            document.getElementById('adminProductsList').innerHTML = h;
+      });
+}
+
+    function adminAddProduct() {
+      const sid = document.getElementById('p_shop_id').value; const type = document.getElementById('new_p_type').value;
+const name = document.getElementById('new_p_name').value; const price = document.getElementById('new_p_price').value; const img1 = document.getElementById('new_p_img1').value; const img2 = document.getElementById('new_p_img2').value; const img3 = document.getElementById('new_p_img3').value;
+if (!sid || !name || !price) { alert("කරුණාකර Shop ID, නම සහ මිල අනිවාර්යයෙන් ඇතුළත් කරන්න."); return;
+}
+      
+      const payload = { action:"addProduct", shopId:sid, type:type, name:name, price:price, img1:img1, img2:img2, img3:img3 };
+      
+      fetch(APPS_SCRIPT_URL, { method:"POST", body:JSON.stringify(payload) })
+        .then(res=>res.json())
+        .then(d=>{ 
+            alert(d.message); 
+            adminFetchProducts(); 
+            // Clear fields
+            document.getElementById('new_p_name').value = ""; 
+            document.getElementById('new_p_price').value = ""; 
+            document.getElementById('new_p_img1').value = ""; 
+            document.getElementById('new_p_img2').value = ""; 
+            document.getElementById('new_p_img3').value = ""; 
+        });
+}
+
+    function adminUpdatePrice(pid) {
+      const sid = document.getElementById('p_shop_id').value; const price = document.getElementById(`ad_p_${pid}`).value;
+fetch(APPS_SCRIPT_URL, {method:"POST", body:JSON.stringify({action:"updatePrice", shopId:sid, productId:pid, price:price})}).then(res=>res.json()).then(d=>{alert(d.message);});
     }
+
+    function adminDeleteProduct(pid) {
+      const sid = document.getElementById('p_shop_id').value;
+if(!confirm("Are you sure you want to delete this product?")) return;
+fetch(APPS_SCRIPT_URL, {method:"POST", body:JSON.stringify({action:"deleteProduct", shopId:sid, productId:pid})})
+      .then(res=>res.json()).then(d=>{ alert(d.message); adminFetchProducts(); });
+}
+
+    // --- Feedback Management ---
+
+    function adminFetchFeedback() {
+      const sid = document.getElementById('f_shop_id').value;
+if (!sid) { alert("කරුණාකර Shop ID එක ඇතුළත් කරන්න."); return; }
+      document.getElementById('adminFeedbackList').innerHTML = `<i class="fas fa-spinner fa-spin"></i> Loading...`;
+fetch(`${APPS_SCRIPT_URL}?action=getFeedback&shopId=${sid}`).then(res=>res.json()).then(d=>{
+        let h = "";
+        if(d.success && d.data && d.data.length > 0) {
+          d.data.forEach(f => {
+            let imgHtml = (f.ImageURL && f.ImageURL !== "No Image" && f.ImageURL !== "Image Upload Error") ? `<br><a href="${f.ImageURL}" target="_blank" style="color:blue; text-decoration:underline; font-size:12px; font-weight:bold;">📸 View Attached Image</a>` : "";
+            let dateStr = f.Date ? new Date(f.Date).toLocaleString() : 'N/A';
+         
+   h += `<div class="product-row" style="border-left: 5px solid #00796b; background: white;">
+                    <div><small style="color:gray;">${dateStr}</small></div>
+                    <div><strong>👤 ${f.CustomerName || 'Anonymous'}</strong> (${f.Phone || 'No Phone'})</div>
+                    <div style="margin-top:8px; padding:10px; background:#f4f6f8; border:1px solid #ddd; border-radius:5px; font-size:14px;">${f.Message}</div>
+            
+        ${imgHtml}
+                  </div>`;
+});
+        } else { h = `<div style="padding:10px; color:gray;">කිසිම අදහසක් හෝ යෝජනාවක් ලැබී නැත.</div>`;
+}
+        document.getElementById('adminFeedbackList').innerHTML = h;
+      });
+    }
+
   </script>
 </body>
 </html>

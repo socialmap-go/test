@@ -3,391 +3,669 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Profile | Mapa Solutions</title>
+  <title>Smart Profile | Social Map</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    :root { --main-color: #1976d2; --bg-color: #f4f7f9; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; }
-    .profile-container { background: white; width: 100%; max-width: 450px; box-shadow: 0 0 20px rgba(0,0,0,0.05); min-height: 100vh; position: relative; display: flex; flex-direction: column; overflow-x: hidden; }
-    
-    /* Cover & Logo */
-    .cover-photo { width: 100%; height: 200px; object-fit: cover; background-color: #e0e0e0; }
-    .profile-header { position: relative; text-align: center; margin-top: -60px; padding: 0 20px; }
-    .logo-img { width: 120px; height: 120px; border-radius: 50%; border: 5px solid white; object-fit: cover; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    
-    /* Typography & Buttons */
-    h1 { margin: 10px 0 5px 0; font-size: 24px; color: #333; }
-    p { margin: 0 0 15px 0; color: #666; font-size: 14px; }
-    .social-links { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-    .btn-social { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-size: 18px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: transform 0.2s; }
-    .btn-social:hover { transform: scale(1.1); }
-    .btn { padding: 12px 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; display: inline-block; width: 100%; box-sizing: border-box; text-align: center; transition: 0.3s; }
-    .btn-main { background: var(--main-color); color: white; }
-    
-    /* Sections */
-    .section { padding: 20px; border-bottom: 5px solid var(--bg-color); }
-    .section-title { font-size: 18px; color: #333; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--main-color); padding-left: 10px; }
-    
-    /* Grid vs List View */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f4f6f8; display: flex; justify-content: center; min-height: 100vh; }
+    .wrap { width: 100%; max-width: 430px; background: white; min-height: 100vh; position: relative; overflow-x: hidden; padding-bottom: 30px; }
+
+    /* ── COVER & PROFILE ── */
+    .cover { width: 100%; height: 180px; object-fit: cover; background: #d32f2f; display: block; }
+    .cover-div { width: 100%; height: 180px; background: #d32f2f; background-size: cover; background-position: center; }
+    .profile-row { display: flex; align-items: flex-end; gap: 14px; padding: 0 18px; margin-top: -45px; margin-bottom: 12px; }
+    .logo-wrap { width: 88px; height: 88px; border-radius: 50%; border: 4px solid white; overflow: hidden; background: white; box-shadow: 0 3px 10px rgba(0,0,0,0.12); flex-shrink: 0; }
+    .logo-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .logo-wrap .init { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #d32f2f; color: white; font-size: 32px; font-weight: 900; }
+    .biz-name { font-size: 20px; font-weight: 800; color: #222; line-height: 1.2; padding-bottom: 6px; }
+    .biz-type { font-size: 12px; color: #888; margin-top: 2px; }
+
+    /* ── SOCIAL ICONS ROW ── */
+    .social-row { display: flex; gap: 10px; padding: 0 18px 16px; flex-wrap: wrap; }
+    .s-btn { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-size: 17px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: transform 0.18s; }
+    .s-btn:active { transform: scale(0.93); }
+
+    /* ── ACTION BUTTONS ── */
+    .btns-section { padding: 0 18px; display: flex; flex-direction: column; gap: 11px; }
+    .abtn { display: flex; align-items: center; gap: 12px; padding: 15px 18px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 15px; color: white; border: none; cursor: pointer; width: 100%; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 3px 8px rgba(0,0,0,0.10); }
+    .abtn:active { transform: scale(0.97); }
+    .abtn i { font-size: 20px; min-width: 24px; text-align: center; }
+    .abtn-wa    { background: #25D366; }
+    .abtn-maps  { background: #EA4335; }
+    .abtn-fb    { background: #1877F2; }
+    .abtn-ig    { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+    .abtn-tiktok{ background: #111; }
+    .abtn-web   { background: #37474f; }
+    .abtn-email { background: #d93025; }
+    .abtn-menu  { background: #673AB7; }
+    .abtn-bank  { background: #00695c; }
+    .abtn-review{ background: white; color: #444; border: 1.5px solid #fbbc04; }
+    .abtn-review i { color: #fbbc04; }
+    .abtn-loyalty { background: linear-gradient(135deg,#ff8c00,#ff5500); animation: glow 2s ease-in-out infinite; }
+    @keyframes glow { 0%,100%{box-shadow:0 3px 8px rgba(255,140,0,0.3)} 50%{box-shadow:0 4px 18px rgba(255,85,0,0.55)} }
+    .abtn-products{ background: #1565c0; }
+    .abtn-feedback{ background: #546e7a; }
+
+    /* ── SECTION DIVIDER ── */
+    .divider { height: 8px; background: #f4f6f8; margin: 18px 0; }
+
+    /* ── PROMOTIONS SECTION ── */
+    #promoSection { padding: 0 18px 8px; display: none; }
+    .promo-header { font-size: 16px; font-weight: 800; color: #e65100; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .promo-video-wrap { border-radius: 14px; overflow: hidden; background: #000; margin-bottom: 12px; }
+    .promo-video-wrap iframe, .promo-video-wrap video { display: block; width: 100%; max-height: 230px; border-radius: 14px; }
+    .promo-img-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .promo-img-item { aspect-ratio: 1; border-radius: 10px; overflow: hidden; background: #eee; cursor: pointer; }
+    .promo-img-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* ── PRODUCTS MODAL ── */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 1000; flex-direction: column; align-items: center; justify-content: flex-end; backdrop-filter: blur(4px); }
+    .modal-box { width: 100%; max-width: 430px; background: white; border-radius: 20px 20px 0 0; padding: 20px; max-height: 88vh; overflow-y: auto; animation: slideUp 0.28s ease; }
+    @keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .modal-title { font-size: 17px; font-weight: 800; color: #1565c0; }
+    .close-x { background: none; border: none; font-size: 24px; color: #aaa; cursor: pointer; }
     .view-toggle { display: flex; gap: 5px; }
-    .view-toggle button { background: #eee; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; color: #555; }
-    .view-toggle button.active { background: var(--main-color); color: white; }
-    
-    .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .product-grid .product-card { background: white; border: 1px solid #eee; border-radius: 10px; overflow: hidden; text-align: center; padding-bottom: 10px; }
-    .product-grid .product-card img { width: 100%; height: 120px; object-fit: cover; }
-    
-    .product-list { display: flex; flex-direction: column; gap: 10px; }
-    .product-list .product-card { display: flex; background: white; border: 1px solid #eee; border-radius: 10px; overflow: hidden; align-items: center; }
-    .product-list .product-card img { width: 100px; height: 100px; object-fit: cover; }
-    .product-list .product-info { padding: 10px; text-align: left; }
+    .vtbtn { padding: 6px 12px; border: none; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; background: #eee; color: #666; }
+    .vtbtn.on { background: #1565c0; color: white; }
 
-    .price-tag { color: #d32f2f; font-weight: bold; margin-top: 5px; }
+    /* LIST VIEW */
+    #prodContainer.lv { display: flex; flex-direction: column; gap: 12px; }
+    #prodContainer.lv .pc { display: flex; gap: 12px; align-items: center; background: #fafafa; border: 1px solid #eee; border-radius: 12px; padding: 12px; }
+    #prodContainer.lv .pc img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+    #prodContainer.lv .pc .pi { flex: 1; }
+    /* GRID VIEW */
+    #prodContainer.gv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    #prodContainer.gv .pc { background: #fafafa; border: 1px solid #eee; border-radius: 12px; overflow: hidden; }
+    #prodContainer.gv .pc img { width: 100%; height: 120px; object-fit: cover; }
+    #prodContainer.gv .pc .pi { padding: 10px; }
+    /* SHARED */
+    .pc .pname { font-weight: 700; font-size: 14px; color: #222; margin-bottom: 3px; }
+    .pc .pprice { color: #d32f2f; font-weight: 700; font-size: 13px; }
+    .pc .ptyp { font-size: 10px; background: #e3f2fd; color: #1565c0; padding: 2px 7px; border-radius: 10px; display: inline-block; margin-bottom: 5px; font-weight: 700; }
+    .btn-add { background: #ff9800; color: white; border: none; padding: 7px 14px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; margin-top: 6px; white-space: nowrap; }
+    .btn-add:active { opacity: 0.8; }
 
-    /* Loyalty */
-    .stamp-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 15px; }
-    .stamp-circle { width: 40px; height: 40px; border-radius: 50%; background: #eee; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #999; margin: auto; }
-    .stamp-filled { background: var(--main-color); color: white; box-shadow: 0 0 10px rgba(25,118,210,0.5); }
+    /* ── LOYALTY MODAL ── */
+    .loyalty-input { width: 100%; padding: 13px; border: 1.5px solid #ddd; border-radius: 9px; font-size: 15px; text-align: center; margin-bottom: 10px; }
+    .loyalty-input:focus { border-color: #d32f2f; outline: none; }
+    .loyalty-btn { background: #d32f2f; color: white; border: none; padding: 13px; width: 100%; border-radius: 9px; font-size: 15px; font-weight: 700; cursor: pointer; margin-bottom: 8px; }
+    .link-text { color: #d32f2f; font-size: 13px; text-decoration: underline; cursor: pointer; display: inline-block; margin-top: 4px; }
+    .stamp-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin: 16px 0; }
+    .sc { width: 44px; height: 44px; border-radius: 50%; background: #f0f0f0; border: 2px dashed #ccc; display: flex; align-items: center; justify-content: center; font-size: 18px; margin: auto; }
+    .sc.on { background: #ff9800; border: 2px solid #e68a00; color: white; }
 
-    /* Modals & Popups */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 1000; padding: 20px; box-sizing: border-box; }
-    .modal-content { background: white; padding: 25px; border-radius: 15px; width: 100%; max-width: 350px; text-align: center; position: relative; animation: slideUp 0.4s ease; }
-    @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    .close-btn { position: absolute; top: 10px; right: 15px; font-size: 20px; cursor: pointer; color: #777; }
-    
-    /* Inputs */
-    input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
+    /* ── FEEDBACK MODAL ── */
+    .fb-input { width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 9px; font-size: 14px; margin-bottom: 10px; font-family: inherit; }
+
+    /* ── BANK MODAL ── */
+    .bank-box { background: #e0f2f1; border: 1px solid #b2dfdb; border-radius: 10px; padding: 16px; font-family: monospace; font-size: 14px; color: #004d40; white-space: pre-wrap; line-height: 1.7; text-align: left; }
+
+    /* ── CART ── */
+    .floating-cart { position: fixed; bottom: 22px; right: 18px; background: #d32f2f; color: white; width: 60px; height: 60px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 5px 16px rgba(211,47,47,0.4); cursor: pointer; z-index: 2000; }
+    .cart-badge { position: absolute; top: 0; right: 0; background: #ffeb3b; color: #333; font-size: 11px; font-weight: 700; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #d32f2f; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0; }
+    .qty-ctrl { display: flex; align-items: center; gap: 10px; background: #f4f6f8; border-radius: 20px; padding: 3px 8px; }
+    .qty-btn { border: none; background: white; width: 26px; height: 26px; border-radius: 50%; font-weight: 700; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .cart-total { font-size: 19px; font-weight: 700; color: #d32f2f; display: flex; justify-content: space-between; margin-top: 14px; border-top: 2px solid #eee; padding-top: 14px; }
+    .inp { width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 9px; margin-bottom: 10px; font-size: 14px; }
+    .btn-place { background: #2e7d32; color: white; padding: 14px; border: none; border-radius: 9px; width: 100%; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+    .order-toggle { display: flex; gap: 8px; margin-bottom: 14px; }
+    .ot-btn { flex: 1; padding: 11px; border: 2px solid #ddd; background: white; border-radius: 9px; font-weight: 700; color: #666; cursor: pointer; font-size: 13px; }
+    .ot-btn.on { border-color: #1976d2; background: #e3f2fd; color: #1565c0; }
+
+    /* ── LIGHTBOX ── */
+    .lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; }
+    .lb.open { display: flex; }
+    .lb img { max-width: 94%; max-height: 90vh; border-radius: 10px; }
+    .lb-close { position: fixed; top: 14px; right: 18px; color: white; font-size: 30px; cursor: pointer; z-index: 10000; }
+
+    /* ── EMAIL POPUP ── */
+    .ep { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 5000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+    .ep-box { background: white; padding: 28px 22px; border-radius: 18px; width: 100%; max-width: 340px; text-align: center; }
+
+    /* ── LOADER ── */
+    #loader { position: fixed; inset: 0; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9000; }
+    .spin { border: 4px solid #f0f0f0; border-top: 4px solid #d32f2f; border-radius: 50%; width: 42px; height: 42px; animation: sp 0.9s linear infinite; }
+    @keyframes sp { to { transform: rotate(360deg); } }
+
+    .msg-text { font-size: 13px; font-weight: 700; padding: 10px; border-radius: 8px; margin-top: 8px; }
+    .msg-err { background: #ffebee; color: #c62828; }
+    .msg-ok  { background: #e8f5e9; color: #2e7d32; }
   </style>
 </head>
 <body>
 
-  <div class="profile-container" id="mainContainer">
-    <img id="uiCover" class="cover-photo" src="https://via.placeholder.com/600x200?text=Cover+Photo" alt="Cover Photo">
-    
-    <div class="profile-header">
-      <img id="uiLogo" class="logo-img" src="https://via.placeholder.com/150?text=Logo" alt="Logo" crossorigin="anonymous" onload="extractColor(this)">
-      <h1 id="uiName">Loading...</h1>
-      <p id="uiDesc">Business Description</p>
-      
-      <div class="social-links" id="socialContainer">
-        </div>
-      
-      <button class="btn btn-main" style="margin-bottom: 10px;" onclick="document.getElementById('bankModal').style.display='flex'">
-        <i class="fas fa-university"></i> Bank Details
-      </button>
-    </div>
+<!-- LOADER -->
+<div id="loader"><div class="spin"></div><p style="margin-top:14px;color:#888;font-weight:700;">Loading Profile...</p></div>
 
-    <div class="section" id="menuSection" style="display: none;">
-      <div class="section-title">Menu / Catalog</div>
-      <button class="btn" style="background:#333; color:white;" onclick="openMenu()">
-        <i class="fas fa-file-pdf"></i> View PDF Menu
-      </button>
-    </div>
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="closeLb()"><span class="lb-close">✕</span><img id="lbImg" src="" alt=""></div>
 
-    <div class="section" id="loyaltySection" style="display: none;">
-      <div class="section-title">Your Loyalty Card</div>
-      <div id="loyaltyLoginArea">
-        <p>Enter your registered phone to view points.</p>
-        <input type="number" id="lPhone" placeholder="07XXXXXXXX">
-        <button class="btn btn-main" onclick="checkLoyalty()"><i class="fas fa-search"></i> Check Points</button>
-      </div>
-      <div id="loyaltyDataArea" style="display:none; text-align:center;">
-        <h3 style="margin:0; color:var(--main-color);" id="lPointDisplay">0 Points</h3>
-        <p style="font-size:12px;" id="lTargetDisplay">Collect points for rewards!</p>
-        <div class="stamp-grid" id="stampGrid"></div>
-        <button class="btn" style="background:#eee; color:#333; margin-top:15px;" onclick="logoutLoyalty()">Not You? Logout</button>
-      </div>
-    </div>
+<!-- EMAIL POPUP -->
+<div class="ep" id="ep">
+  <div class="ep-box">
+    <div style="font-size:38px;color:#e65100;margin-bottom:8px;"><i class="fas fa-gift"></i></div>
+    <h3 style="margin-bottom:6px;color:#e65100;">Special Offers!</h3>
+    <p style="font-size:13px;color:#777;margin-bottom:14px;line-height:1.5;">සතිපතා special discounts සහ promotions ඔබගේ email ට ලැබෙන්නට subscribe කරන්න.</p>
+    <input type="email" id="subEmail" class="inp" placeholder="Your email address" style="text-align:center;">
+    <button class="btn-place" style="background:#e65100;" onclick="registerEmail()">Subscribe Now</button>
+    <button style="background:none;border:none;color:#aaa;margin-top:12px;cursor:pointer;font-size:13px;" onclick="closeEp()">Later</button>
+  </div>
+</div>
 
-    <div class="section" id="storeSection" style="display: none;">
-      <div class="section-title">
-        Our Services & Products
+<!-- MAIN WRAP -->
+<div class="wrap" id="mainWrap" style="display:none;">
+
+  <!-- COVER -->
+  <div class="cover-div" id="coverDiv"></div>
+
+  <!-- PROFILE ROW -->
+  <div class="profile-row">
+    <div class="logo-wrap" id="logoWrap"><div class="init" id="logoInit">?</div></div>
+    <div style="padding-bottom:8px;">
+      <div class="biz-name" id="bizName">Loading...</div>
+      <div class="biz-type" id="bizType">Smart Profile</div>
+    </div>
+  </div>
+
+  <!-- SOCIAL ICONS -->
+  <div class="social-row" id="socialRow"></div>
+
+  <!-- ACTION BUTTONS -->
+  <div class="btns-section" id="btnsSection"></div>
+
+  <!-- DIVIDER -->
+  <div class="divider"></div>
+
+  <!-- PROMOTIONS SECTION -->
+  <div id="promoSection">
+    <div class="promo-header"><i class="fas fa-bullhorn"></i> Promotions & Highlights</div>
+    <div id="promoVideoWrap" style="display:none;" class="promo-video-wrap"></div>
+    <div id="promoImgGrid" style="display:none;" class="promo-img-grid"></div>
+  </div>
+
+</div><!-- /wrap -->
+
+<!-- ── PRODUCTS MODAL ── -->
+<div class="modal" id="prodModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title"><i class="fas fa-box-open"></i> Services & Products</span>
+      <div style="display:flex;align-items:center;gap:8px;">
         <div class="view-toggle">
-          <button id="btnGrid" class="active" onclick="setProductView('grid')"><i class="fas fa-th"></i></button>
-          <button id="btnList" onclick="setProductView('list')"><i class="fas fa-list"></i></button>
+          <button class="vtbtn on" id="lvBtn" onclick="setView('lv')"><i class="fas fa-list"></i> List</button>
+          <button class="vtbtn" id="gvBtn" onclick="setView('gv')"><i class="fas fa-th"></i> Grid</button>
         </div>
-      </div>
-      <div id="productsContainer" class="product-grid">
-        <div style="text-align:center; padding:20px; color:gray;">Loading products...</div>
+        <button class="close-x" onclick="closeModal('prodModal')">✕</button>
       </div>
     </div>
+    <div id="prodContainer" class="lv">Loading...</div>
+  </div>
+</div>
 
-    <div class="section" id="promoSection">
-      <div class="section-title">Special Promotions</div>
-      <div style="background: #fff3e0; padding: 20px; border-radius: 10px; text-align: center; border: 1px solid #ffe0b2;">
-        <i class="fas fa-bullhorn" style="font-size:30px; color:#f57c00; margin-bottom:10px;"></i>
-        <h3 style="margin:0; color:#e65100;">Exciting Offers Soon!</h3>
-        <p style="font-size:13px; margin-top:5px;">Stay connected to get the latest updates and discounts directly to your phone.</p>
-      </div>
+<!-- ── FEEDBACK MODAL ── -->
+<div class="modal" id="fbModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title" style="color:#546e7a;"><i class="fas fa-comment-dots"></i> Feedback</span>
+      <button class="close-x" onclick="closeModal('fbModal')">✕</button>
     </div>
+    <input type="text" id="fbName" class="fb-input" placeholder="Your Name">
+    <input type="tel" id="fbPhone" class="fb-input" placeholder="Phone Number (optional)">
+    <textarea id="fbMsg" class="fb-input" rows="4" placeholder="Your feedback..."></textarea>
+    <div style="margin-bottom:10px;"><label style="font-size:12px;font-weight:700;color:#888;"><i class="fas fa-camera"></i> Add Photo (optional)</label><br><input type="file" id="fbFile" accept="image/*" style="margin-top:5px;font-size:12px;"></div>
+    <button class="loyalty-btn" style="background:#546e7a;" id="fbSubmitBtn" onclick="submitFeedback()">Submit Feedback</button>
+    <div id="fbMsg2" style="display:none;"></div>
+  </div>
+</div>
 
-    <div class="section" id="inboxSection" style="display: none; padding-bottom:40px;">
-      <div class="section-title">Feedback & Suggestions</div>
-      <input type="text" id="fName" placeholder="Your Name">
-      <input type="number" id="fPhone" placeholder="Your Phone (Optional)">
-      <textarea id="fMsg" rows="3" placeholder="Write your feedback here..."></textarea>
-      <button class="btn btn-main" onclick="submitFeedback()"><i class="fas fa-paper-plane"></i> Send Feedback</button>
+<!-- ── BANK MODAL ── -->
+<div class="modal" id="bankModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title" style="color:#00695c;"><i class="fas fa-university"></i> Bank Details</span>
+      <button class="close-x" onclick="closeModal('bankModal')">✕</button>
+    </div>
+    <div id="bankContent" class="bank-box">Loading...</div>
+  </div>
+</div>
+
+<!-- ── MENU MODAL ── -->
+<div class="modal" id="menuModal">
+  <div class="modal-box" style="padding:12px;height:86vh;">
+    <div class="modal-header">
+      <span class="modal-title" style="color:#673AB7;"><i class="fas fa-file-pdf"></i> Menu</span>
+      <button class="close-x" onclick="closeMenuModal()">✕</button>
+    </div>
+    <iframe id="menuIframe" style="width:100%;height:calc(100% - 50px);border:none;border-radius:10px;" src=""></iframe>
+  </div>
+</div>
+
+<!-- ── LOYALTY MODAL ── -->
+<div class="modal" id="loyModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title" style="color:#d32f2f;"><i class="fas fa-gift"></i> Loyalty Card</span>
+      <button class="close-x" onclick="closeModal('loyModal')">✕</button>
+    </div>
+    <!-- Login view -->
+    <div id="lv-login">
+      <input type="tel" id="lPhone" class="loyalty-input" placeholder="Phone (07XXXXXXXX)" maxlength="10">
+      <input type="password" id="lPin" class="loyalty-input" placeholder="4-Digit PIN" maxlength="4">
+      <button class="loyalty-btn" onclick="checkLoyalty()" id="lCheckBtn">Check My Card</button>
+      <div style="text-align:center;">
+        <span class="link-text" onclick="lSwitchView('lv-setup')">No account? Register</span> &nbsp;
+        <span class="link-text" onclick="lSwitchView('lv-forgot')">Forgot PIN?</span>
+      </div>
+      <div id="lLoginMsg" class="msg-text msg-err" style="display:none;"></div>
+    </div>
+    <!-- Setup view -->
+    <div id="lv-setup" style="display:none;">
+      <input type="tel" id="sPhone" class="loyalty-input" placeholder="Phone (07XXXXXXXX)" maxlength="10">
+      <input type="number" id="sPin" class="loyalty-input" placeholder="New 4-Digit PIN" maxlength="4">
+      <input type="number" id="sYear" class="loyalty-input" placeholder="Birth Year (e.g. 1995)" maxlength="4">
+      <button class="loyalty-btn" onclick="setupLoyalty()" id="lSetupBtn">Create Account</button>
+      <div id="lSetupMsg" class="msg-text msg-err" style="display:none;"></div>
+    </div>
+    <!-- Forgot PIN view -->
+    <div id="lv-forgot" style="display:none;">
+      <input type="tel" id="fLPhone" class="loyalty-input" placeholder="Phone (07XXXXXXXX)" maxlength="10">
+      <input type="number" id="fYear" class="loyalty-input" placeholder="Birth Year (e.g. 1995)" maxlength="4">
+      <input type="number" id="fNewPin" class="loyalty-input" placeholder="New 4-Digit PIN" maxlength="4">
+      <button class="loyalty-btn" onclick="resetPin()" id="lResetBtn">Reset PIN</button>
+      <div id="lForgotMsg" class="msg-text msg-err" style="display:none;"></div>
+    </div>
+    <!-- Card view -->
+    <div id="lv-card" style="display:none; text-align:center;">
+      <p id="stampText" style="font-size:16px;font-weight:700;margin-bottom:4px;"></p>
+      <div class="stamp-grid" id="stampGrid"></div>
+      <p id="targetMsg" style="font-size:13px;color:#666;margin-top:8px;"></p>
     </div>
   </div>
+</div>
 
-  <div id="emailModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeEmailPopup()">&times;</span>
-      <div style="font-size: 40px; color: var(--main-color);"><i class="fas fa-envelope-open-text"></i></div>
-      <h3 style="margin: 10px 0;">Never Miss an Offer!</h3>
-      <p style="font-size: 13px; color: #555;">Subscribe to our VIP list for exclusive discounts and updates.</p>
-      <input type="email" id="subEmail" placeholder="Enter your email address">
-      <button class="btn btn-main" onclick="submitEmail()"><i class="fas fa-check-circle"></i> Subscribe Now</button>
-      <div style="margin-top: 15px; font-size: 12px; color: gray; cursor: pointer; text-decoration: underline;" onclick="closeEmailPopup()">No thanks, I don't like discounts</div>
+<!-- ── CART BUTTON ── -->
+<div class="floating-cart" id="cartBtn" onclick="openModal('cartModal')">
+  <i class="fas fa-shopping-cart"></i>
+  <div class="cart-badge" id="cartCount">0</div>
+</div>
+
+<!-- ── CART MODAL ── -->
+<div class="modal" id="cartModal" style="z-index:3000;">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title" style="color:#d32f2f;"><i class="fas fa-shopping-basket"></i> Your Order</span>
+      <button class="close-x" onclick="closeModal('cartModal')">✕</button>
     </div>
-  </div>
-
-  <div id="bankModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="document.getElementById('bankModal').style.display='none'">&times;</span>
-      <h3 style="margin-top:0;"><i class="fas fa-money-check-alt"></i> Bank Details</h3>
-      <div style="text-align:left; background:#f9f9f9; padding:15px; border-radius:8px; border:1px solid #ddd; font-size:14px; white-space: pre-line;" id="bankInfoText">
-        Loading...
+    <div id="cartItems"></div>
+    <div class="cart-total"><span>Total:</span><span id="cartTotal">රු. 0.00</span></div>
+    <div style="margin-top:18px;">
+      <div class="order-toggle">
+        <button class="ot-btn on" id="btnDI" onclick="setOrderType('Dine-In')"><i class="fas fa-concierge-bell"></i> Dine-In</button>
+        <button class="ot-btn"    id="btnTA" onclick="setOrderType('Takeaway')"><i class="fas fa-shopping-bag"></i> Takeaway</button>
       </div>
+      <div id="tableArea">
+        <div id="fixedTable" style="display:none;background:#e3f2fd;padding:11px;border-radius:8px;margin-bottom:10px;font-weight:700;color:#1565c0;text-align:center;border:1px dashed #1976d2;">🎯 Table: <span id="fixedTableTxt"></span></div>
+        <input type="text" id="tableInput" class="inp" placeholder="Table Number (e.g. Table 03)">
+      </div>
+      <input type="text" id="orderName" class="inp" placeholder="Your Name">
+      <input type="tel"  id="orderPhone" class="inp" placeholder="Phone (07XXXXXXXX)" maxlength="10">
+      <button class="btn-place" id="placeBtn" onclick="placeOrder()">Place Order Now</button>
+      <div id="orderMsg" style="display:none;" class="msg-text"></div>
     </div>
   </div>
+</div>
 
-  <script>
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTUByYnRXZY3xdtIe5I_X_yLQ5qnIN8boGIh_o3ecXh5gBoNK1JPrpE61ODHobA_Is/exec"; 
-    let currentShopId = "";
-    let globalStampTarget = 10;
-    let productsList = [];
+<script>
+  var API = "https://script.google.com/macros/s/AKfycbzTUByYnRXZY3xdtIe5I_X_yLQ5qnIN8boGIh_o3ecXh5gBoNK1JPrpE61ODHobA_Is/exec";
+  var shopId = new URLSearchParams(window.location.search).get('id');
+  var autoTable = new URLSearchParams(window.location.search).get('table');
+  var cart = {}, orderType = 'Dine-In', stampsTarget = 10;
+  var productsData = [], menuLink = "", viewMode = 'lv';
+  var promoObserved = false;
 
-    window.onload = () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      currentShopId = urlParams.get('id');
-      
-      if(!currentShopId) {
-        document.body.innerHTML = "<h2 style='text-align:center; margin-top:50px;'>Invalid Shop ID</h2>";
-        return;
-      }
-      
-      fetchProfileData();
-      fetchProducts();
-      setupScrollListener();
-    };
-
-    function fetchProfileData() {
-      fetch(`${APPS_SCRIPT_URL}?action=profile&id=${currentShopId}`)
-        .then(res => res.json())
-        .then(data => {
-          if(data.success) {
-            const p = data.data;
-            document.getElementById('uiName').innerText = p.BusinessName || "Welcome";
-            document.getElementById('uiDesc').innerText = p.Type || "Business Profile";
-            
-            // Handle Images
-            if(p.LogoImage) document.getElementById('uiLogo').src = p.LogoImage;
-            if(p.CoverImage) document.getElementById('uiCover').src = p.CoverImage;
-            
-            // Social Links Generation
-            generateSocialLinks(p);
-            
-            // Bank Details
-            document.getElementById('bankInfoText').innerText = p.BankDetails || "Bank details not provided yet.";
-            
-            // Feature Toggles based on Status
-            if(p.StoreStatus === "Active") document.getElementById('storeSection').style.display = "block";
-            if(p.LoyaltyStatus === "Active") {
-              document.getElementById('loyaltySection').style.display = "block";
-              globalStampTarget = parseInt(p.StampTarget) || 10;
-            }
-            if(p.InboxStatus === "Active") document.getElementById('inboxSection').style.display = "block";
-            
-          } else {
-            alert(data.error);
-          }
-        }).catch(err => console.log(err));
+  window.onload = function() {
+    if (!shopId) { document.getElementById('loader').innerHTML = "<h2 style='color:red;padding:20px;text-align:center;'>Invalid QR Code</h2>"; return; }
+    if (autoTable) {
+      document.getElementById('fixedTable').style.display = 'block';
+      document.getElementById('fixedTableTxt').innerText = autoTable;
+      document.getElementById('tableInput').style.display = 'none';
     }
+    loadProfile();
+  };
 
-    function generateSocialLinks(p) {
-      const container = document.getElementById('socialContainer');
-      container.innerHTML = "";
-      
-      const networks = [
-        { key: 'WhatsApp', icon: 'fab fa-whatsapp', color: '#25D366', prefix: 'https://wa.me/' },
-        { key: 'Facebook', icon: 'fab fa-facebook-f', color: '#1877F2', prefix: '' },
-        { key: 'Instagram', icon: 'fab fa-instagram', color: '#E4405F', prefix: '' },
-        { key: 'TikTok', icon: 'fab fa-tiktok', color: '#000000', prefix: '' },
-        { key: 'GoogleMaps', icon: 'fas fa-map-marker-alt', color: '#EA4335', prefix: '' }
-      ];
+  // ── LOAD PROFILE ──
+  function loadProfile() {
+    fetch(API + "?action=profile&id=" + shopId)
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (!d.success || !d.data) { document.getElementById('loader').innerHTML = "<h2 style='color:red;text-align:center;padding:20px;'>Profile not found</h2>"; return; }
+        var p = d.data;
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('mainWrap').style.display = 'block';
 
-      networks.forEach(net => {
-        if(p[net.key]) {
-          let link = p[net.key].startsWith('http') ? p[net.key] : net.prefix + p[net.key];
-          container.innerHTML += `<a href="${link}" target="_blank" class="btn-social" style="background:${net.color};" title="${net.key}"><i class="${net.icon}"></i></a>`;
+        // Cover & Logo
+        var coverDiv = document.getElementById('coverDiv');
+        if (p.ThemeColor && p.ThemeColor.trim()) coverDiv.style.background = p.ThemeColor;
+        if (p.CoverImage && p.CoverImage.trim()) {
+          coverDiv.style.backgroundImage = "url('" + p.CoverImage + "')";
+          coverDiv.style.backgroundSize = 'cover';
+          coverDiv.style.backgroundPosition = 'center';
         }
-      });
-    }
+        var lw = document.getElementById('logoWrap');
+        if (p.ProfileImage && p.ProfileImage.trim()) {
+          lw.innerHTML = "<img src='" + p.ProfileImage + "' onerror=\"this.parentNode.innerHTML='<div class=init>' + ('" + (p.BusinessName||'?').charAt(0) + "')+'</div>'\">";
+        } else {
+          document.getElementById('logoInit').innerText = (p.BusinessName || '?').charAt(0).toUpperCase();
+        }
+        document.getElementById('bizName').innerText = p.BusinessName || 'Welcome';
+        document.getElementById('bizType').innerText = p.Type === 'redirect' ? 'Smart Redirect' : 'Smart Profile';
+        document.getElementById('bankContent').innerText = p.BankDetails || 'Bank details not available.';
+        if (p.MenuPDF && p.MenuPDF.trim()) menuLink = p.MenuPDF;
+        if (p.StampTarget) stampsTarget = parseInt(p.StampTarget) || 10;
 
-    // --- Products & View Toggle ---
-    function fetchProducts() {
-      fetch(`${APPS_SCRIPT_URL}?action=getProducts&shopId=${currentShopId}`)
-        .then(res => res.json())
-        .then(data => {
-          if(data.success) {
-            productsList = data.data;
-            renderProducts();
-          }
-        });
-    }
+        // Social icons
+        buildSocialIcons(p);
+        // Action buttons
+        buildButtons(p);
+        // Load products if store active
+        if (p.StoreStatus === 'Active') loadProducts();
+        // Load promotions
+        loadPromos(p);
 
-    function setProductView(type) {
-      document.getElementById('btnGrid').classList.remove('active');
-      document.getElementById('btnList').classList.remove('active');
-      const container = document.getElementById('productsContainer');
-      
-      if(type === 'grid') {
-        document.getElementById('btnGrid').classList.add('active');
-        container.className = 'product-grid';
+        // Scroll observer for email popup
+        setTimeout(function() { setupPromoObserver(); }, 800);
+      })
+      .catch(function() { document.getElementById('loader').innerHTML = "<h2 style='color:red;text-align:center;padding:20px;'>Connection Error</h2>"; });
+  }
+
+  // ── SOCIAL ICONS ──
+  function buildSocialIcons(p) {
+    var row = document.getElementById('socialRow');
+    var icons = [
+      { key: 'WhatsApp',  color: '#25D366', icon: 'fab fa-whatsapp', url: p.WhatsApp },
+      { key: 'Facebook',  color: '#1877F2', icon: 'fab fa-facebook-f', url: p.Facebook },
+      { key: 'Instagram', color: '#E4405F', icon: 'fab fa-instagram', url: p.Instagram },
+      { key: 'TikTok',    color: '#111',    icon: 'fab fa-tiktok', url: p.TikTok },
+      { key: 'Maps',      color: '#EA4335', icon: 'fas fa-map-marker-alt', url: p.Maps },
+      { key: 'Website',   color: '#37474f', icon: 'fas fa-globe', url: p.Website }
+    ];
+    icons.forEach(function(ic) {
+      if (ic.url && ic.url.trim() && ic.url !== 'undefined') {
+        row.innerHTML += "<a href='" + ic.url + "' target='_blank' class='s-btn' style='background:" + ic.color + ";'><i class='" + ic.icon + "'></i></a>";
+      }
+    });
+  }
+
+  // ── ACTION BUTTONS ──
+  function buildButtons(p) {
+    var sec = document.getElementById('btnsSection');
+    sec.innerHTML = '';
+
+    function addBtn(cls, icon, label, href, onclick) {
+      var el;
+      if (href) {
+        el = document.createElement('a');
+        el.href = href;
+        el.target = '_blank';
+        el.className = 'abtn ' + cls;
       } else {
-        document.getElementById('btnList').classList.add('active');
-        container.className = 'product-list';
+        el = document.createElement('button');
+        el.className = 'abtn ' + cls;
+        el.onclick = onclick;
       }
-      renderProducts();
+      el.innerHTML = "<i class='" + icon + "'></i>" + label;
+      sec.appendChild(el);
     }
 
-    function renderProducts() {
-      const container = document.getElementById('productsContainer');
-      container.innerHTML = "";
-      if(productsList.length === 0) {
-        container.innerHTML = `<div style="grid-column: span 2; text-align:center; color:gray;">No products available.</div>`;
-        return;
-      }
-      
-      const isList = container.className === 'product-list';
-      
-      productsList.forEach(prod => {
-        let img = prod.Img1 || "https://via.placeholder.com/150";
-        let html = `
-          <div class="product-card">
-            <img src="${img}" alt="${prod.Name}">
-            <div class="product-info" style="${isList ? '' : 'padding: 10px;'}">
-              <div style="font-weight:bold; font-size:14px; color:#333;">${prod.Name}</div>
-              <div class="price-tag">Rs. ${prod.Price}</div>
-            </div>
-          </div>
-        `;
-        container.innerHTML += html;
-      });
-    }
+    // Store / Products
+    if (p.StoreStatus === 'Active') addBtn('abtn-products','fas fa-box-open','Our Services & Products','',function(){ openModal('prodModal'); });
+    // Feedback
+    if (p.InboxStatus === 'Active') addBtn('abtn-feedback','fas fa-comment-dots','Feedback & Suggestions','',function(){ openModal('fbModal'); });
+    // Loyalty
+    if (p.LoyaltyStatus === 'Active') addBtn('abtn-loyalty','fas fa-gift','My Loyalty Card','',function(){ openLoyalty(); });
+    // Review
+    if (p.GoogleReview && p.GoogleReview.trim()) addBtn('abtn-review','fab fa-google','Rate Us on Google',p.GoogleReview,null);
+    // Bank
+    if (p.BankDetails && p.BankDetails.trim()) addBtn('abtn-bank','fas fa-university','Bank Details','',function(){ openModal('bankModal'); });
+    // WhatsApp
+    if (p.WhatsApp && p.WhatsApp.trim()) addBtn('abtn-wa','fab fa-whatsapp','WhatsApp',p.WhatsApp,null);
+    // Maps
+    if (p.Maps && p.Maps.trim()) addBtn('abtn-maps','fas fa-map-marker-alt','Google Maps',p.Maps,null);
+    // Facebook
+    if (p.Facebook && p.Facebook.trim()) addBtn('abtn-fb','fab fa-facebook-f','Facebook',p.Facebook,null);
+    // Instagram
+    if (p.Instagram && p.Instagram.trim()) addBtn('abtn-ig','fab fa-instagram','Instagram',p.Instagram,null);
+    // TikTok
+    if (p.TikTok && p.TikTok.trim()) addBtn('abtn-tiktok','fab fa-tiktok','TikTok',p.TikTok,null);
+    // Website
+    if (p.Website && p.Website.trim()) addBtn('abtn-web','fas fa-globe','Website',p.Website,null);
+    // Email
+    if (p.Email && p.Email.trim()) addBtn('abtn-email','fas fa-envelope','Email Us','mailto:'+p.Email,null);
+    // Menu PDF
+    if (p.MenuPDF && p.MenuPDF.trim()) addBtn('abtn-menu','fas fa-file-pdf','View Menu','',function(){ openMenuModal(); });
+  }
 
-    // --- Smart Email Capture Logic ---
-    function setupScrollListener() {
-      window.addEventListener('scroll', () => {
-        const promoSection = document.getElementById('promoSection');
-        if(!promoSection) return;
-        
-        const rect = promoSection.getBoundingClientRect();
-        // Trigger popup when promotion section is visible in viewport
-        if(rect.top < window.innerHeight && rect.bottom >= 0) {
-          if(!sessionStorage.getItem('emailPopupDismissed') && !localStorage.getItem('emailSubscribed')) {
-            document.getElementById('emailModal').style.display = 'flex';
-          }
-        }
-      });
-    }
+  // ── PROMOTIONS ──
+  function loadPromos(p) {
+    var hasVideo = p.CustomPromoVideo && p.CustomPromoVideo.trim();
+    var imgs = [p.CustomPromoImg1, p.CustomPromoImg2, p.CustomPromoImg3].filter(function(x){ return x && x.trim(); });
+    if (!hasVideo && imgs.length === 0) return;
 
-    function closeEmailPopup() {
-      sessionStorage.setItem('emailPopupDismissed', 'true');
-      document.getElementById('emailModal').style.display = 'none';
-    }
+    document.getElementById('promoSection').style.display = 'block';
 
-    function submitEmail() {
-      const email = document.getElementById('subEmail').value;
-      if(!email || !email.includes('@')) { alert("කරුණාකර නිවැරදි ඊමේල් ලිපිනයක් ලබාදෙන්න."); return; }
-      
-      const btn = event.target;
-      btn.innerText = "Submitting...";
-      
-      fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'subscribeEmail', shopId: currentShopId, email: email })
-      }).then(res => res.json()).then(data => {
-        if(data.success) {
-          localStorage.setItem('emailSubscribed', 'true');
-          alert("ස්තූතියි! ඔබ සාර්ථකව ලියාපදිංචි විය.");
-          document.getElementById('emailModal').style.display = 'none';
-        } else {
-          alert(data.error || data.message);
-          btn.innerHTML = `<i class="fas fa-check-circle"></i> Subscribe Now`;
-        }
-      });
-    }
-
-    // --- Loyalty Card Display Logic ---
-    function checkLoyalty() {
-      const phone = document.getElementById('lPhone').value;
-      if(phone.length !== 10) { alert("කරුණාකර ඉලක්කම් 10කින් යුත් දුරකථන අංකය ඇතුළත් කරන්න."); return; }
-      
-      // Temporary basic fetch for UI demonstration (Actual secure PIN process mapped in previous updates)
-      fetch(`${APPS_SCRIPT_URL}?action=getCashierLoyalty&shopId=${currentShopId}&phone=${phone}`)
-        .then(res => res.json())
-        .then(data => {
-          if(data.success) {
-            document.getElementById('loyaltyLoginArea').style.display = 'none';
-            document.getElementById('loyaltyDataArea').style.display = 'block';
-            document.getElementById('lPointDisplay').innerText = `${data.stamps} Points`;
-            document.getElementById('lTargetDisplay').innerText = `Target: ${globalStampTarget} Points`;
-            drawStamps(data.stamps);
-          } else {
-            alert(data.error);
-          }
-        });
-    }
-
-    function drawStamps(points) {
-      const grid = document.getElementById('stampGrid');
-      grid.innerHTML = "";
-      // Max items to show in visual grid
-      let visuals = globalStampTarget > 20 ? 20 : globalStampTarget; 
-      for(let i=1; i<=visuals; i++) {
-        if(i <= points) {
-          grid.innerHTML += `<div class="stamp-circle stamp-filled"><i class="fas fa-star"></i></div>`;
-        } else {
-          grid.innerHTML += `<div class="stamp-circle">${i}</div>`;
-        }
+    if (hasVideo) {
+      var vWrap = document.getElementById('promoVideoWrap');
+      var url = p.CustomPromoVideo.trim();
+      var yt = url.match(/(?:youtu\.be\/|[?&]v=|embed\/)([A-Za-z0-9_-]{11})/);
+      vWrap.style.display = 'block';
+      if (yt) {
+        vWrap.innerHTML = '<iframe width="100%" height="215" src="https://www.youtube.com/embed/' + yt[1] + '?rel=0" frameborder="0" allowfullscreen></iframe>';
+      } else {
+        vWrap.innerHTML = '<video controls playsinline style="width:100%;max-height:220px;"><source src="' + url + '"></video>';
       }
     }
 
-    function logoutLoyalty() {
-      document.getElementById('lPhone').value = "";
-      document.getElementById('loyaltyLoginArea').style.display = 'block';
-      document.getElementById('loyaltyDataArea').style.display = 'none';
-    }
-
-    // --- Feedback ---
-    function submitFeedback() {
-      const name = document.getElementById('fName').value;
-      const phone = document.getElementById('fPhone').value;
-      const msg = document.getElementById('fMsg').value;
-      if(!msg) { alert("කරුණාකර ඔබගේ අදහස ඇතුළත් කරන්න."); return; }
-      
-      fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'submitFeedback', shopId: currentShopId, name: name, phone: phone, message: msg })
-      }).then(res => res.json()).then(data => {
-        if(data.success) {
-          alert("ඔබගේ අදහස් සාර්ථකව යොමු කරන ලදී. ස්තූතියි!");
-          document.getElementById('fMsg').value = "";
-        }
+    if (imgs.length > 0) {
+      var grid = document.getElementById('promoImgGrid');
+      grid.style.display = 'grid';
+      imgs.forEach(function(img) {
+        grid.innerHTML += '<div class="promo-img-item" onclick="openLb(\'' + img + '\')"><img src="' + img + '" loading="lazy"></div>';
       });
     }
+  }
 
-    // --- Auto Color (Basic Approximation Fallback) ---
-    function extractColor(imgObj) {
-      // For cross-origin security, advanced canvas manipulation might fail if logos are hosted externally.
-      // This is a placeholder structure to show where dominant color logic exists if CORS allows.
-      try {
-        // Fallback color setting using standard UI logic
-        document.documentElement.style.setProperty('--main-color', '#1976d2'); 
-      } catch(e) { console.log("Color extraction skipped due to CORS."); }
+  // ── EMAIL POPUP OBSERVER ──
+  function setupPromoObserver() {
+    var promo = document.getElementById('promoSection');
+    if (!promo || promo.style.display === 'none') return;
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting && !promoObserved) {
+          promoObserved = true;
+          checkAndShowPopup();
+        }
+      }, { threshold: 0.1 });
+      obs.observe(promo);
     }
-  </script>
+  }
+
+  function checkAndShowPopup() {
+    if (localStorage.getItem('subscribed_' + shopId)) return;
+    if (sessionStorage.getItem('epClosed_' + shopId)) return;
+    document.getElementById('ep').style.display = 'flex';
+  }
+
+  function closeEp() {
+    sessionStorage.setItem('epClosed_' + shopId, '1');
+    document.getElementById('ep').style.display = 'none';
+  }
+
+  function registerEmail() {
+    var email = document.getElementById('subEmail').value.trim();
+    if (!email || !email.includes('@')) { alert("නිවැරදි email ලිපිනය ඇතුළත් කරන්න."); return; }
+    fetch(API, { method: 'POST', body: JSON.stringify({ action: 'subscribeEmail', shopId: shopId, email: email }) })
+      .then(function(r) { return r.json(); })
+      .then(function() { localStorage.setItem('subscribed_' + shopId, '1'); alert("Subscribe කළා! ස්තූතියි."); closeEp(); });
+  }
+
+  // ── PRODUCTS ──
+  function loadProducts() {
+    fetch(API + "?action=getProducts&shopId=" + shopId)
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.success && d.data) { productsData = d.data; renderProds(); }
+      });
+  }
+
+  function setView(mode) {
+    viewMode = mode;
+    document.getElementById('lvBtn').className = 'vtbtn' + (mode==='lv'?' on':'');
+    document.getElementById('gvBtn').className = 'vtbtn' + (mode==='gv'?' on':'');
+    renderProds();
+  }
+
+  function renderProds() {
+    var c = document.getElementById('prodContainer');
+    c.className = viewMode;
+    if (productsData.length === 0) { c.innerHTML = '<p style="color:gray;padding:20px;text-align:center;">No items yet.</p>'; return; }
+    c.innerHTML = '';
+    productsData.forEach(function(p) {
+      var nm    = p.ProductName || p.Name || 'Item';
+      var price = parseFloat(p.Price || 0);
+      var pid   = p.ProductID || Math.random().toString(36).substr(2,5);
+      var img   = p.Image1 || p.Img1 || '';
+      var typ   = p.Type || 'Product';
+      var safeNm = nm.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+
+      var imgHtml = img ? "<img src='" + img + "' onerror=\"this.style.display='none'\" alt=''>" : '';
+      var addBtn  = "<button class='btn-add' onclick='addToCart(\""+pid+"\",\""+safeNm+"\","+price+")'><i class='fas fa-plus'></i> Add</button>";
+
+      if (viewMode === 'lv') {
+        c.innerHTML += "<div class='pc'>" + (img ? imgHtml : '') + "<div class='pi'><div class='ptyp'>" + typ + "</div><div class='pname'>" + nm + "</div><div class='pprice'>රු. " + price.toFixed(2) + "</div>" + addBtn + "</div></div>";
+      } else {
+        c.innerHTML += "<div class='pc'>" + (img ? imgHtml : '') + "<div class='pi'><div class='ptyp'>" + typ + "</div><div class='pname'>" + nm + "</div><div class='pprice'>රු. " + price.toFixed(2) + "</div>" + addBtn + "</div></div>";
+      }
+    });
+  }
+
+  // ── CART ──
+  function addToCart(id, name, price) {
+    if (cart[id]) cart[id].qty++; else cart[id] = { name: name, price: price, qty: 1 };
+    updateCartUI();
+  }
+  function changeQty(id, d) {
+    if (cart[id]) { cart[id].qty += d; if (cart[id].qty <= 0) delete cart[id]; updateCartUI(); }
+  }
+  function updateCartUI() {
+    var qty = 0, total = 0, html = '';
+    for (var id in cart) {
+      qty += cart[id].qty; total += cart[id].price * cart[id].qty;
+      html += "<div class='cart-item'><div style='flex:1;text-align:left;'><b>" + cart[id].name + "</b><br><span style='color:#d32f2f;'>රු. " + (cart[id].price * cart[id].qty).toFixed(2) + "</span></div><div class='qty-ctrl'><button class='qty-btn' onclick='changeQty(\"" + id + "\",-1)'>−</button><b>" + cart[id].qty + "</b><button class='qty-btn' onclick='changeQty(\"" + id + "\",1)'>+</button></div></div>";
+    }
+    document.getElementById('cartItems').innerHTML = html;
+    document.getElementById('cartTotal').innerText = "රු. " + total.toFixed(2);
+    document.getElementById('cartCount').innerText = qty;
+    var cb = document.getElementById('cartBtn');
+    cb.style.display = qty > 0 ? 'flex' : 'none';
+    if (qty === 0) closeModal('cartModal');
+  }
+  function setOrderType(t) {
+    orderType = t;
+    document.getElementById('btnDI').className = 'ot-btn' + (t==='Dine-In'?' on':'');
+    document.getElementById('btnTA').className = 'ot-btn' + (t==='Takeaway'?' on':'');
+    document.getElementById('tableArea').style.display = t==='Dine-In' ? 'block' : 'none';
+  }
+  function placeOrder() {
+    var items = {}, total = 0;
+    for (var id in cart) { items[cart[id].name] = cart[id].qty; total += cart[id].price * cart[id].qty; }
+    if (Object.keys(items).length === 0) return;
+    var nm = document.getElementById('orderName').value.trim();
+    var msgEl = document.getElementById('orderMsg');
+    if (!nm) { msgEl.innerHTML = "කරුණාකර ඔබගේ නම ඇතුළත් කරන්න."; msgEl.className = 'msg-text msg-err'; msgEl.style.display = 'block'; return; }
+    var tbl = orderType === 'Dine-In' ? (autoTable || document.getElementById('tableInput').value || 'Not Specified') : 'Takeaway';
+    msgEl.innerHTML = "Processing..."; msgEl.className = 'msg-text'; msgEl.style.display = 'block';
+    document.getElementById('placeBtn').disabled = true;
+    fetch(API, { method: 'POST', body: JSON.stringify({ action: 'placeOrder', shopId: shopId, tableNo: tbl, customerName: nm, phone: document.getElementById('orderPhone').value, items: items, totalAmount: total }) })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        document.getElementById('placeBtn').disabled = false;
+        if (d.success) { cart = {}; updateCartUI(); msgEl.innerHTML = "✅ Order placed!"; msgEl.className = 'msg-text msg-ok'; setTimeout(function(){ closeModal('cartModal'); }, 2500); }
+        else { msgEl.innerHTML = d.error || "Error"; msgEl.className = 'msg-text msg-err'; }
+      });
+  }
+
+  // ── LOYALTY ──
+  function openLoyalty() { lSwitchView('lv-login'); openModal('loyModal'); }
+  function lSwitchView(v) { ['lv-login','lv-setup','lv-forgot','lv-card'].forEach(function(x){ document.getElementById(x).style.display = x===v?'block':'none'; }); }
+  function checkLoyalty() {
+    var ph = document.getElementById('lPhone').value, pin = document.getElementById('lPin').value;
+    if (ph.length !== 10) { showLMsg('lLoginMsg',"10-digit phone number enter කරන්න"); return; }
+    document.getElementById('lCheckBtn').innerText = 'Checking...';
+    fetch(API, { method:'POST', body: JSON.stringify({ action:'loyaltyGet', shopId:shopId, phone:ph, pin:pin }) })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        document.getElementById('lCheckBtn').innerText = 'Check My Card';
+        if(d.success){ if(d.requiresSetup){ document.getElementById('sPhone').value=ph; lSwitchView('lv-setup'); } else { drawCard(d.stamps, d.redeemed); lSwitchView('lv-card'); } }
+        else showLMsg('lLoginMsg', d.error);
+      });
+  }
+  function setupLoyalty() {
+    var ph=document.getElementById('sPhone').value, pin=document.getElementById('sPin').value, yr=document.getElementById('sYear').value;
+    if(ph.length!==10||pin.length!==4||yr.length!==4){ showLMsg('lSetupMsg',"Details නිවැරදිව enter කරන්න"); return; }
+    document.getElementById('lSetupBtn').innerText='Saving...';
+    fetch(API,{method:'POST',body:JSON.stringify({action:'loyaltySetup',shopId:shopId,phone:ph,pin:pin,birthYear:yr})})
+      .then(function(r){return r.json();}).then(function(d){ document.getElementById('lSetupBtn').innerText='Create Account'; if(d.success){document.getElementById('lPhone').value=ph; lSwitchView('lv-login'); alert("Account created!");} else showLMsg('lSetupMsg',d.error); });
+  }
+  function resetPin() {
+    var ph=document.getElementById('fLPhone').value, yr=document.getElementById('fYear').value, np=document.getElementById('fNewPin').value;
+    if(ph.length!==10||yr.length!==4||np.length!==4){ showLMsg('lForgotMsg',"Details නිවැරදිව enter කරන්න"); return; }
+    fetch(API,{method:'POST',body:JSON.stringify({action:'loyaltyResetPinSelf',shopId:shopId,phone:ph,birthYear:yr,newPin:np})})
+      .then(function(r){return r.json();}).then(function(d){ if(d.success){lSwitchView('lv-login'); alert("PIN reset successful!");} else showLMsg('lForgotMsg',d.error); });
+  }
+  function drawCard(stamps, redeemed) {
+    document.getElementById('stampText').innerText = "You have " + stamps + " stamps!";
+    var grid = document.getElementById('stampGrid'); grid.innerHTML = '';
+    for (var i=1; i<=stampsTarget; i++) grid.innerHTML += "<div class='sc" + (i<=stamps?' on':'') + "'>" + (i<=stamps ? "<i class='fas fa-gift'></i>" : i) + "</div>";
+    document.getElementById('targetMsg').innerHTML = "Collect " + stampsTarget + " stamps for a reward!<br><span style='background:#e8f5e9;color:#2e7d32;padding:4px 10px;border-radius:6px;font-weight:700;'>🏆 Total Redeemed: " + (redeemed||0) + "</span>";
+  }
+  function showLMsg(id, txt) { var el=document.getElementById(id); el.innerText=txt; el.style.display='block'; }
+
+  // ── FEEDBACK ──
+  function submitFeedback() {
+    var nm=document.getElementById('fbName').value, ph=document.getElementById('fbPhone').value, msg=document.getElementById('fbMsg').value, fi=document.getElementById('fbFile');
+    if(!nm||!msg){alert("Name and message are required."); return;}
+    document.getElementById('fbSubmitBtn').innerText='Uploading...';
+    var payload={action:'submitFeedback',shopId:shopId,name:nm,phone:ph,message:msg};
+    if(fi.files.length>0){
+      var reader=new FileReader(); reader.onload=function(e){payload.imageBase64=e.target.result.split(',')[1]; payload.mimeType=fi.files[0].type; sendFb(payload);}; reader.readAsDataURL(fi.files[0]);
+    } else sendFb(payload);
+  }
+  function sendFb(payload) {
+    fetch(API,{method:'POST',body:JSON.stringify(payload)}).then(function(r){return r.json();}).then(function(d){
+      alert(d.message); document.getElementById('fbSubmitBtn').innerText='Submit Feedback';
+      document.getElementById('fbName').value=''; document.getElementById('fbMsg').value=''; document.getElementById('fbFile').value='';
+      closeModal('fbModal');
+    });
+  }
+
+  // ── MENU ──
+  function openMenuModal() {
+    var url = menuLink;
+    if(url.includes("drive.google.com") && url.includes("/view")) url = url.replace(/\/view.*$/,"/preview");
+    document.getElementById('menuIframe').src = url;
+    openModal('menuModal');
+  }
+  function closeMenuModal() { document.getElementById('menuIframe').src=''; closeModal('menuModal'); }
+
+  // ── MODAL HELPERS ──
+  function openModal(id) { document.getElementById(id).style.display='flex'; }
+  function closeModal(id) { document.getElementById(id).style.display='none'; }
+
+  // ── LIGHTBOX ──
+  function openLb(src) { document.getElementById('lbImg').src=src; document.getElementById('lb').classList.add('open'); }
+  function closeLb() { document.getElementById('lb').classList.remove('open'); }
+</script>
 </body>
 </html>

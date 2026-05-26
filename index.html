@@ -3,52 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redirecting | Social Map</title>
+  <title>Redirecting | Mapa Solutions</title>
   <style>
-    body { font-family: 'Segoe UI', sans-serif; background: #f9f9f9; text-align: center; margin: 0; padding: 50px 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; box-sizing: border-box; }
-    .branding { font-weight: 900; color: #d32f2f; font-size: 26px; margin-bottom: 20px; letter-spacing: 1px; }
-    .loader { border: 4px solid #f3f3f3; border-top: 4px solid #d32f2f; border-radius: 50%; width: 42px; height: 42px; animation: spin 0.9s linear infinite; margin: 20px auto; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .status-text { color: #666; font-size: 15px; font-weight: 600; margin-top: 10px; }
-    .error-box { background: #fde4e4; color: #d32f2f; padding: 22px; border-radius: 12px; border: 1px solid #f5c6c6; display: none; max-width: 380px; margin: 20px auto; line-height: 1.6; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f9f9; text-align: center; margin: 0; padding: 50px 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; box-sizing: border-box; }
+    .branding { font-weight: 900; color: #d32f2f; font-size: 24px; margin-bottom: 20px; letter-spacing: 1px; }
+    .loader { border: 4px solid #f3f3f3; border-top: 4px solid #d32f2f; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .status-text { color: #555; font-size: 16px; font-weight: bold; margin-top: 10px; }
+    .error-box { background: #fde4e4; color: #d32f2f; padding: 15px; border-radius: 8px; font-weight: bold; margin-top: 20px; display: none; border: 1px solid #f5c6c6; }
   </style>
 </head>
 <body>
-  <div class="branding">🔴 SOCIAL MAP</div>
-  <div id="loadingSection">
-    <div class="loader"></div>
-    <div class="status-text">කරුණාකර රැඳී සිටින්න...<br><small style="color:#aaa;">Processing your request</small></div>
-  </div>
-  <div id="errorBox" class="error-box">
-    <h3 style="margin:0 0 8px;">ගැටළුවක් මතු විය!</h3>
-    <p id="errorMsg" style="margin:0;"></p>
-  </div>
-  <script>
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU8NQF6m62kbDwCr6ol48LEVl8-veggT_bR5Lue7sIrJWlgpiI7GzosU_PqZzzV0JP/exec";
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const device   = isMobile ? "Mobile" : "Desktop";
 
-    if (id) {
-      fetch(APPS_SCRIPT_URL + "?action=scan&id=" + id + "&device=" + device)
-        .then(r => r.json())
-        .then(data => {
-          if (data.error)   { showError(data.error); }
-          else if (data.success) {
-            if (data.destination === "profile") { window.location.href = "profile/?id=" + id; }
-            else { window.location.href = data.destination; }
-          }
-        })
-        .catch(() => showError("අන්තර්ජාල සම්බන්ධතාවය පරීක්ෂා කරන්න. [Network Error]"));
-    } else {
-      showError("කරුණාකර නිවැරදි QR කේතයක් ස්කෑන් කරන්න. [Invalid QR]");
-    }
+  <div class="branding">Mapa Solutions</div>
+  
+  <div class="loader" id="loader"></div>
+  <div class="status-text" id="statusText">System Processing... Please wait.</div>
+  
+  <div class="error-box" id="errorBox"></div>
+
+  <script>
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxONcDGHcvtzopqtKgL7KgiF7W3goNUYUz_QXrFbGPgNH8Kw-vFI7NraPXHiCUv7cL5/exec";
+
+    window.onload = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const shopId = urlParams.get('id');
+
+      // Device detection (Fact-based User Agent check)
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const deviceType = isMobile ? "Mobile" : "Desktop";
+
+      if (shopId) {
+        // Backend API Call for Analytics & Redirection
+        fetch(`${APPS_SCRIPT_URL}?action=scan&id=${shopId}&device=${deviceType}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.error) {
+              showError(data.error);
+            } else if (data.success) {
+              // Redirection Logic
+              if (data.destination === "profile" || data.destination === "Smart Profile") {
+                window.location.href = `profile/index.html?id=${shopId}`;
+              } else {
+                window.location.href = data.destination;
+              }
+            }
+          })
+          .catch(err => {
+            showError("Network Error. Krupaya internet connection check kara.");
+          });
+      } else {
+        showError("Invalid QR Code. Krupaya yogya QR code scan kara.");
+      }
+    };
 
     function showError(msg) {
-      document.getElementById('loadingSection').style.display = 'none';
-      document.getElementById('errorBox').style.display = 'block';
-      document.getElementById('errorMsg').innerText = msg;
+      document.getElementById('loader').style.display = 'none';
+      document.getElementById('statusText').style.display = 'none';
+      const errBox = document.getElementById('errorBox');
+      errBox.innerText = msg;
+      errBox.style.display = 'block';
     }
   </script>
 </body>

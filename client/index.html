@@ -14,8 +14,9 @@
     .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 15px; margin-bottom: 10px; color: white; transition: 0.15s; }
     .btn:active { transform: scale(0.97); }
 
-    .tab-container { display: flex; background: #eee; border-radius: 10px; margin-bottom: 18px; overflow: hidden; font-size: 12px; }
-    .tab { flex: 1; padding: 11px 2px; font-weight: 700; color: #777; cursor: pointer; transition: 0.2s; }
+    /* ── TABS ── */
+    .tab-container { display: flex; background: #eee; border-radius: 10px; margin-bottom: 18px; overflow: hidden; font-size: 11px; }
+    .tab { flex: 1; padding: 10px 2px; font-weight: 700; color: #777; cursor: pointer; transition: 0.2s; text-align: center; }
     .tab.active { background: #d32f2f; color: white; }
     .tab.disabled { color: #bbb; cursor: pointer; }
 
@@ -23,6 +24,7 @@
     .upgrade-box i { font-size: 38px; margin-bottom: 12px; color: #ff9800; display: block; }
     .contact-wa-btn { display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: white; padding: 12px 22px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 14px; margin-top: 14px; }
 
+    /* ── STATS ── */
     .stat-card { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
     .stat-number { font-size: 30px; font-weight: 900; color: #d32f2f; margin: 4px 0; }
     .stat-label { color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
@@ -31,18 +33,42 @@
     .input-label { text-align: left; font-size: 13px; font-weight: 700; color: #555; display: block; margin-top: 10px; }
     .msg { padding: 13px; border-radius: 8px; font-weight: 700; display: none; margin-top: 10px; font-size: 14px; }
 
+    /* ── PRODUCTS ── */
     .product-item { background: #fafafa; border: 1px solid #ddd; padding: 14px; border-radius: 12px; margin-bottom: 12px; text-align: left; }
     .product-title { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 4px; }
     .price-update-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
     .delete-btn { background: #d32f2f; color: white; border: none; padding: 10px 13px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 700; flex-shrink: 0; }
     .delete-btn:active { opacity: 0.8; }
 
-    .force-logout-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(5px); }
+    /* ── PROMOS ── */
+    .promo-section-title { font-weight: 700; font-size: 14px; margin-bottom: 10px; text-align: left; }
+    .promo-video-wrap { margin-bottom: 18px; border-radius: 12px; overflow: hidden; background: #000; }
+    .promo-video-wrap iframe,
+    .promo-video-wrap video { display: block; width: 100%; border-radius: 12px; }
+    .promo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 18px; }
+    .promo-grid-item { aspect-ratio: 1; overflow: hidden; border-radius: 10px; background: #eee; cursor: pointer; }
+    .promo-grid-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .promo-empty { color: #aaa; font-size: 14px; padding: 32px 0; text-align: center; }
+
+    /* ── LIGHTBOX ── */
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 100%; max-height: 90vh; border-radius: 10px; }
+    .lightbox-close { position: fixed; top: 16px; right: 20px; color: white; font-size: 28px; cursor: pointer; font-weight: bold; z-index: 10000; }
+
+    .force-logout-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9998; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(5px); }
     .force-logout-box { background: white; padding: 28px; border-radius: 16px; width: 100%; max-width: 340px; text-align: center; }
   </style>
 </head>
 <body>
 
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+
+  <!-- FORCE LOGOUT MODAL -->
   <div class="force-logout-overlay" id="forceLogoutModal">
     <div class="force-logout-box">
       <i class="fas fa-sync-alt" style="font-size:36px;color:#1976d2;margin-bottom:12px;"></i>
@@ -65,6 +91,8 @@
 
   <!-- MAIN APP -->
   <div class="container" id="mainApp" style="display:none; padding-top:18px;">
+
+    <!-- HEADER -->
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
       <div style="text-align:left;">
         <h3 id="shopName" style="margin:0;color:#d32f2f;">Shop Name</h3>
@@ -73,11 +101,13 @@
       <button onclick="logout()" style="background:none;border:none;color:#888;text-decoration:underline;cursor:pointer;font-size:13px;">Logout</button>
     </div>
 
+    <!-- TABS (5 tabs) -->
     <div class="tab-container">
       <div class="tab active" id="tab-stats"    onclick="switchTab('stats')">📊 Dash</div>
       <div class="tab"        id="tab-cashier"  onclick="switchTab('cashier')">🎁 Loyalty</div>
       <div class="tab"        id="tab-products" onclick="switchTab('products')">📦 Store</div>
       <div class="tab"        id="tab-feedback" onclick="switchTab('feedback')">📝 Inbox</div>
+      <div class="tab"        id="tab-promo"    onclick="switchTab('promo')">📣 Promos</div>
     </div>
 
     <!-- UPGRADE VIEW -->
@@ -86,7 +116,7 @@
         <i class="fas fa-lock"></i>
         <div id="upgrade-text" style="font-size:17px;">Unlock This Feature!</div>
         <p style="font-size:13px;color:#888;margin-top:8px;font-weight:400;">Upgrade your plan to unlock this amazing feature and grow your business today.</p>
-        <a href="https://wa.me/94XXXXXXXXX?text=Hi%2C%20I%20want%20to%20upgrade%20my%20Social%20Map%20plan" target="_blank" class="contact-wa-btn" id="upgradeWaLink">
+        <a href="https://wa.me/94XXXXXXXXX?text=Hi%2C%20I%20want%20to%20upgrade%20my%20Social%20Map%20plan" target="_blank" class="contact-wa-btn">
           <i class="fab fa-whatsapp"></i> Contact Us to Upgrade
         </a>
         <br><br>
@@ -94,7 +124,7 @@
       </div>
     </div>
 
-    <!-- STATS VIEW -->
+    <!-- ── STATS VIEW ── -->
     <div id="view-stats">
       <div class="stat-card"><div class="stat-label">Total Scans</div><div class="stat-number" id="scans">...</div></div>
       <div id="dashLoyaltyStats">
@@ -108,7 +138,7 @@
       <button class="btn" style="background:#555;padding:10px;margin-top:6px;" onclick="fetchStats()">🔄 Refresh Data</button>
     </div>
 
-    <!-- CASHIER / LOYALTY VIEW -->
+    <!-- ── CASHIER / LOYALTY VIEW ── -->
     <div id="view-cashier" style="display:none;">
       <span class="input-label">Customer Phone Number</span>
       <div style="display:flex;gap:8px;margin-bottom:10px;">
@@ -123,7 +153,7 @@
       <div id="actionMsg" class="msg"></div>
     </div>
 
-    <!-- PRODUCTS VIEW -->
+    <!-- ── PRODUCTS VIEW ── -->
     <div id="view-products" style="display:none;">
       <div style="background:#f9f9f9;padding:14px;border-radius:10px;margin-bottom:18px;border:1px dashed #ccc;">
         <h4 style="margin-top:0;color:#1976d2;font-size:14px;">➕ Add New Item</h4>
@@ -140,53 +170,94 @@
       <div id="productsList">Loading products...</div>
     </div>
 
-    <!-- FEEDBACK INBOX VIEW -->
+    <!-- ── FEEDBACK INBOX VIEW ── -->
     <div id="view-feedback" style="display:none;">
-      <h4 style="text-align:left;color:#555;margin-top:0;">Customer Feedback &amp; Suggestions</h4>
+      <h4 style="text-align:left;color:#555;margin-top:0;">Customer Feedback & Suggestions</h4>
       <div id="feedbackList">Loading...</div>
     </div>
-  </div>
+
+    <!-- ── PROMOTIONS VIEW ── -->
+    <div id="view-promo" style="display:none;">
+
+      <div id="promo-loading" class="promo-empty">
+        <i class="fas fa-spinner fa-spin" style="font-size:24px;margin-bottom:8px;display:block;"></i>
+        Loading promotions...
+      </div>
+
+      <!-- Video section (hidden until loaded) -->
+      <div id="promo-video-section" style="display:none;">
+        <p class="promo-section-title">🎬 Latest Promotion Video</p>
+        <div class="promo-video-wrap" id="promo-video-container"></div>
+      </div>
+
+      <!-- Posts grid (hidden until loaded) -->
+      <div id="promo-posts-section" style="display:none;">
+        <p class="promo-section-title" style="margin-top:16px;">🖼️ Promotion Posts</p>
+        <div class="promo-grid" id="promo-posts-grid"></div>
+      </div>
+
+      <!-- Empty state -->
+      <div id="promo-empty" class="promo-empty" style="display:none;">
+        <i class="fas fa-image" style="font-size:32px;color:#ddd;margin-bottom:10px;display:block;"></i>
+        Promotions නෑ.<br>
+        <span style="font-size:12px;color:#ccc;">Admin panel ඇතුළේ promo links ඇතුළු කරන්න.</span>
+      </div>
+
+      <button class="btn" style="background:#555;padding:10px;margin-top:8px;font-size:13px;" onclick="fetchPromos()">🔄 Refresh</button>
+    </div>
+
+  </div><!-- /mainApp -->
 
   <script>
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTUByYnRXZY3xdtIe5I_X_yLQ5qnIN8boGIh_o3ecXh5gBoNK1JPrpE61ODHobA_Is/exec";
-    let liveCheckInterval;
+    var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTUByYnRXZY3xdtIe5I_X_yLQ5qnIN8boGIh_o3ecXh5gBoNK1JPrpE61ODHobA_Is/exec";
+    var liveCheckInterval;
 
+    // ══ LOGIN ══
     function login() {
-      var phone = document.getElementById('uPhone').value, pass = document.getElementById('uPass').value;
+      var phone = document.getElementById('uPhone').value;
+      var pass  = document.getElementById('uPass').value;
       document.getElementById('loginMsg').style.display = "none";
       document.querySelector('#loginBox .btn').innerText = "Loading...";
       fetch(APPS_SCRIPT_URL + "?action=clientLogin&phone=" + phone + "&password=" + pass)
-        .then(r => r.json())
-        .then(data => {
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
           document.querySelector('#loginBox .btn').innerText = "Login";
           if (data.success) {
             localStorage.setItem('shopId',        data.shopId);
             localStorage.setItem('bName',         data.businessName);
-            localStorage.setItem('loyaltyStatus', data.loyaltyStatus);
-            localStorage.setItem('storeStatus',   data.storeStatus);
-            localStorage.setItem('inboxStatus',   data.inboxStatus);
+            localStorage.setItem('loyaltyStatus', data.loyaltyStatus  || 'Inactive');
+            localStorage.setItem('storeStatus',   data.storeStatus    || 'Active');
+            localStorage.setItem('inboxStatus',   data.inboxStatus    || 'Active');
             initApp();
-          } else { var m = document.getElementById('loginMsg'); m.innerText = data.error; m.style.display = "block"; }
-        }).catch(() => { document.querySelector('#loginBox .btn').innerText = "Login"; alert("Network Error!"); });
+          } else {
+            var m = document.getElementById('loginMsg');
+            m.innerText = data.error; m.style.display = "block";
+          }
+        })
+        .catch(function() { document.querySelector('#loginBox .btn').innerText = "Login"; alert("Network Error!"); });
     }
 
     function logout() { localStorage.clear(); clearInterval(liveCheckInterval); location.reload(); }
 
+    // ══ INIT ══
     function initApp() {
-      document.getElementById('loginBox').style.display = 'none';
-      document.getElementById('mainApp').style.display  = 'block';
-      document.getElementById('shopName').innerText    = localStorage.getItem('bName');
+      document.getElementById('loginBox').style.display  = 'none';
+      document.getElementById('mainApp').style.display   = 'block';
+      document.getElementById('shopName').innerText      = localStorage.getItem('bName');
       document.getElementById('shopIdDisplay').innerText = "ID: " + localStorage.getItem('shopId');
       applyTabStyles();
-      fetchStats(); fetchProducts(); fetchFeedback();
+      fetchStats();
+      fetchProducts();
+      fetchFeedback();
+      fetchPromos();
       liveCheckInterval = setInterval(checkLiveStatus, 20000);
     }
 
     function checkLiveStatus() {
       if (!localStorage.getItem('shopId')) return;
       fetch(APPS_SCRIPT_URL + "?action=checkStatus&shopId=" + localStorage.getItem('shopId'))
-        .then(r => r.json())
-        .then(data => {
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
           if (data.success) {
             if (data.loyaltyStatus !== localStorage.getItem('loyaltyStatus') ||
                 data.storeStatus   !== localStorage.getItem('storeStatus')   ||
@@ -212,61 +283,89 @@
 
     if (localStorage.getItem('shopId')) initApp();
 
+    // ══ SWITCH TAB ══
     function switchTab(tab) {
-      var statuses = { 'cashier': localStorage.getItem('loyaltyStatus') || 'Inactive', 'products': localStorage.getItem('storeStatus') || 'Active', 'feedback': localStorage.getItem('inboxStatus') || 'Active' };
-      ['stats','cashier','products','feedback'].forEach(function(t) {
+      var statuses = {
+        'cashier':  localStorage.getItem('loyaltyStatus') || 'Inactive',
+        'products': localStorage.getItem('storeStatus')   || 'Active',
+        'feedback': localStorage.getItem('inboxStatus')   || 'Active',
+        'promo':    'Active'
+      };
+      ['stats','cashier','products','feedback','promo'].forEach(function(t) {
         document.getElementById('tab-' + t).classList.remove('active');
-        document.getElementById('view-' + t).style.display = "none";
+        var v = document.getElementById('view-' + t);
+        if (v) v.style.display = 'none';
       });
-      document.getElementById('view-upgrade').style.display = "none";
-      if (tab !== 'stats' && statuses[tab] === 'Inactive') {
+      document.getElementById('view-upgrade').style.display = 'none';
+      if (tab !== 'stats' && tab !== 'promo' && statuses[tab] === 'Inactive') {
         document.getElementById('tab-' + tab).classList.add('active');
-        document.getElementById('view-upgrade').style.display = "block";
+        document.getElementById('view-upgrade').style.display = 'block';
         return;
       }
       document.getElementById('tab-' + tab).classList.add('active');
-      document.getElementById('view-' + tab).style.display = "block";
+      document.getElementById('view-' + tab).style.display = 'block';
     }
 
+    // ══ STATS ══
     function fetchStats() {
       fetch(APPS_SCRIPT_URL + "?action=getClientStats&shopId=" + localStorage.getItem('shopId'))
-        .then(r => r.json())
-        .then(data => { if (data.success) { document.getElementById('scans').innerText = data.totalScans; document.getElementById('loyaltyUsers').innerText = data.loyaltyCustomers; document.getElementById('stamps').innerText = data.totalStamps; } });
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) {
+            document.getElementById('scans').innerText       = data.totalScans       || 0;
+            document.getElementById('loyaltyUsers').innerText = data.loyaltyCustomers || 0;
+            document.getElementById('stamps').innerText       = data.totalStamps      || 0;
+          }
+        });
     }
 
+    // ══ LOYALTY ══
     function checkCustomerLoyalty() {
-      var shopId = localStorage.getItem('shopId'), phone = document.getElementById('cPhone').value;
+      var shopId = localStorage.getItem('shopId');
+      var phone  = document.getElementById('cPhone').value;
       if (phone.length !== 10) { showMsg('actionMsg', "Please enter a valid 10-digit number.", false); return; }
       var msgBox = document.getElementById('actionMsg');
       msgBox.innerHTML = "Checking..."; msgBox.style.display = "block"; msgBox.style.background = "#e3f2fd"; msgBox.style.color = "#1565c0";
       fetch(APPS_SCRIPT_URL + "?action=getCashierLoyalty&shopId=" + shopId + "&phone=" + phone)
-        .then(r => r.json())
-        .then(data => {
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
           if (data.success) {
             msgBox.innerHTML = 'Current Stamps: <span style="font-size:20px;font-weight:900;color:#d32f2f;">' + data.stamps + '</span><br>Total Redeemed: <span style="font-size:18px;font-weight:700;color:#2e7d32;">' + data.redeemed + '</span>';
           } else { showMsg('actionMsg', data.error, false); }
-        }).catch(() => showMsg('actionMsg', "Network Error", false));
+        }).catch(function() { showMsg('actionMsg', "Network Error", false); });
     }
 
     function processAction(actionType) {
-      var shopId = localStorage.getItem('shopId'), phone = document.getElementById('cPhone').value, count = document.getElementById('cStampCount').value;
+      var shopId = localStorage.getItem('shopId');
+      var phone  = document.getElementById('cPhone').value;
+      var count  = document.getElementById('cStampCount').value;
       if (phone.length !== 10) { showMsg('actionMsg', "Please enter a valid 10-digit number.", false); return; }
       var msgBox = document.getElementById('actionMsg');
       msgBox.innerText = "Processing..."; msgBox.style.display = "block"; msgBox.style.background = "#eee"; msgBox.style.color = "#333";
       fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: actionType, shopId: shopId, phone: phone, stampCount: count }) })
-        .then(r => r.json())
-        .then(data => { if (data.success) { showMsg('actionMsg', data.message, true); document.getElementById('cPhone').value = ""; document.getElementById('cStampCount').value = 1; fetchStats(); } else { showMsg('actionMsg', data.error, false); } })
-        .catch(() => showMsg('actionMsg', "Network Error!", false));
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) {
+            showMsg('actionMsg', data.message, true);
+            document.getElementById('cPhone').value = "";
+            document.getElementById('cStampCount').value = 1;
+            fetchStats();
+          } else { showMsg('actionMsg', data.error, false); }
+        }).catch(function() { showMsg('actionMsg', "Network Error!", false); });
     }
 
+    // ══ PRODUCTS ══
     function fetchProducts() {
       fetch(APPS_SCRIPT_URL + "?action=getProducts&shopId=" + localStorage.getItem('shopId'))
-        .then(r => r.json())
-        .then(data => {
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
           var list = document.getElementById('productsList'); list.innerHTML = "";
           if (data.success && data.data.length > 0) {
             data.data.forEach(function(p) {
-              var pName = p.ProductName || "No Name", pId = p.ProductID || "", pPrice = p.Price || 0, pType = p.Type || "Product";
+              var pName  = p.ProductName || "No Name";
+              var pId    = p.ProductID || "";
+              var pPrice = p.Price || 0;
+              var pType  = p.Type || "Product";
               var imgs = "";
               if (p.Image1) imgs += '<img src="' + p.Image1 + '" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid #ddd;">';
               if (p.Image2) imgs += '<img src="' + p.Image2 + '" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid #ddd;">';
@@ -285,40 +384,56 @@
                   imgHtml +
                 '</div>';
             });
-          } else { list.innerHTML = '<p style="color:gray;font-size:14px;">No items added yet.</p>'; }
+          } else {
+            list.innerHTML = '<p style="color:gray;font-size:14px;">No items added yet.</p>';
+          }
         });
     }
 
     function updatePrice(productId) {
-      var msgBox = document.getElementById('productMsg'); msgBox.innerText = "Updating..."; msgBox.style.display = "block"; msgBox.style.background = "#eee"; msgBox.style.color = "#333";
+      var msgBox = document.getElementById('productMsg');
+      msgBox.innerText = "Updating..."; msgBox.style.display = "block"; msgBox.style.background = "#eee"; msgBox.style.color = "#333";
       fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updatePrice', shopId: localStorage.getItem('shopId'), productId: productId, price: document.getElementById('price_' + productId).value }) })
-        .then(r => r.json())
-        .then(data => { showMsg('productMsg', data.success ? "Price updated!" : (data.error || "Error"), data.success); setTimeout(function() { msgBox.style.display = "none"; }, 3000); });
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          showMsg('productMsg', data.success ? "Price updated!" : (data.error || "Error"), data.success);
+          setTimeout(function() { msgBox.style.display = "none"; }, 3000);
+        });
     }
 
     function deleteProduct(productId) {
       if (!confirm("Delete this product? This cannot be undone.")) return;
       fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteProduct', shopId: localStorage.getItem('shopId'), productId: productId }) })
-        .then(r => r.json())
-        .then(data => { alert(data.message); fetchProducts(); });
+        .then(function(r) { return r.json(); })
+        .then(function(data) { alert(data.message); fetchProducts(); });
     }
 
     function addProductClient() {
-      var name = document.getElementById('new_p_name').value, price = document.getElementById('new_p_price').value, type = document.getElementById('new_p_type').value;
+      var name  = document.getElementById('new_p_name').value;
+      var price = document.getElementById('new_p_price').value;
+      var type  = document.getElementById('new_p_type').value;
       if (!name || !price) { alert("Please fill in all details."); return; }
       fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "addProduct", shopId: localStorage.getItem('shopId'), type: type, name: name, price: price }) })
-        .then(r => r.json())
-        .then(d => { alert(d.message); document.getElementById('new_p_name').value = ""; document.getElementById('new_p_price').value = ""; fetchProducts(); });
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          alert(d.message);
+          document.getElementById('new_p_name').value  = "";
+          document.getElementById('new_p_price').value = "";
+          fetchProducts();
+        });
     }
 
+    // ══ FEEDBACK ══
     function fetchFeedback() {
       fetch(APPS_SCRIPT_URL + "?action=getFeedback&shopId=" + localStorage.getItem('shopId'))
-        .then(r => r.json())
-        .then(data => {
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
           var list = document.getElementById('feedbackList'); list.innerHTML = "";
           if (data.success && data.data.length > 0) {
             data.data.reverse().forEach(function(f) {
-              var imgHtml = (f.ImageURL && f.ImageURL !== "No Image" && f.ImageURL !== "Image Upload Error") ? '<br><a href="' + f.ImageURL + '" target="_blank" style="color:#1976d2;font-size:13px;font-weight:700;"><i class="fas fa-image"></i> View Photo</a>' : '';
+              var imgHtml = (f.ImageURL && f.ImageURL !== "No Image" && f.ImageURL !== "Image Upload Error")
+                ? '<br><a href="' + f.ImageURL + '" target="_blank" style="color:#1976d2;font-size:13px;font-weight:700;"><i class="fas fa-image"></i> View Photo</a>'
+                : '';
               list.innerHTML +=
                 '<div style="background:#fafafa;border:1px solid #eee;padding:14px;border-radius:12px;margin-bottom:12px;text-align:left;">' +
                   '<div style="font-size:12px;color:#aaa;">📅 ' + new Date(f.Date).toLocaleDateString() + '</div>' +
@@ -327,15 +442,93 @@
                   imgHtml +
                 '</div>';
             });
-          } else { list.innerHTML = '<p style="color:gray;font-size:14px;">No feedback received yet.</p>'; }
+          } else {
+            list.innerHTML = '<p style="color:gray;font-size:14px;">No feedback received yet.</p>';
+          }
         });
     }
 
+    // ══ PROMOTIONS ══
+    function fetchPromos() {
+      var shopId = localStorage.getItem('shopId');
+      if (!shopId) return;
+
+      // Reset state
+      document.getElementById('promo-loading').style.display     = 'block';
+      document.getElementById('promo-video-section').style.display = 'none';
+      document.getElementById('promo-posts-section').style.display = 'none';
+      document.getElementById('promo-empty').style.display        = 'none';
+
+      fetch(APPS_SCRIPT_URL + "?action=profile&id=" + shopId)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          document.getElementById('promo-loading').style.display = 'none';
+
+          if (!data.success || !data.data) {
+            document.getElementById('promo-empty').style.display = 'block';
+            return;
+          }
+
+          var d = data.data;
+          var hasVideo = d.CustomPromoVideo && d.CustomPromoVideo.toString().trim() !== "";
+          var imgs = [d.CustomPromoImg1, d.CustomPromoImg2, d.CustomPromoImg3].filter(function(x) {
+            return x && x.toString().trim() !== "";
+          });
+
+          if (!hasVideo && imgs.length === 0) {
+            document.getElementById('promo-empty').style.display = 'block';
+            return;
+          }
+
+          // ── VIDEO ──
+          if (hasVideo) {
+            var videoUrl = d.CustomPromoVideo.toString().trim();
+            var vCon = document.getElementById('promo-video-container');
+            var ytMatch = videoUrl.match(/(?:youtu\.be\/|[?&]v=|embed\/)([A-Za-z0-9_-]{11})/);
+            if (ytMatch) {
+              vCon.innerHTML = '<iframe width="100%" height="210" src="https://www.youtube.com/embed/' + ytMatch[1] + '?rel=0" frameborder="0" allowfullscreen></iframe>';
+            } else {
+              vCon.innerHTML = '<video controls playsinline style="width:100%;max-height:220px;"><source src="' + videoUrl + '"></video>';
+            }
+            document.getElementById('promo-video-section').style.display = 'block';
+          }
+
+          // ── POSTS GRID ──
+          if (imgs.length > 0) {
+            var pGrid = document.getElementById('promo-posts-grid');
+            pGrid.innerHTML = "";
+            imgs.forEach(function(img) {
+              pGrid.innerHTML += '<div class="promo-grid-item" onclick="openLightbox(\'' + img + '\')">' +
+                '<img src="' + img + '" loading="lazy" alt="Promo">' +
+                '</div>';
+            });
+            document.getElementById('promo-posts-section').style.display = 'block';
+          }
+        })
+        .catch(function() {
+          document.getElementById('promo-loading').style.display = 'none';
+          document.getElementById('promo-empty').style.display   = 'block';
+          document.getElementById('promo-empty').innerHTML       =
+            '<i class="fas fa-wifi" style="font-size:28px;color:#ddd;margin-bottom:8px;display:block;"></i>Network error. Refresh try කරන්න.';
+        });
+    }
+
+    // ── LIGHTBOX ──
+    function openLightbox(src) {
+      document.getElementById('lightboxImg').src = src;
+      document.getElementById('lightbox').classList.add('open');
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.getElementById('lightboxImg').src = '';
+    }
+
+    // ══ HELPERS ══
     function showMsg(id, text, success) {
       var m = document.getElementById(id);
       m.innerHTML = text;
       m.style.background = success ? "#d4edda" : "#f8d7da";
-      m.style.color       = success ? "#155724" : "#721c24";
+      m.style.color      = success ? "#155724" : "#721c24";
       m.style.display = "block";
     }
   </script>

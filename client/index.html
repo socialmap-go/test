@@ -6,108 +6,114 @@
   <title>Business Portal | Social Map</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { font-family: 'Segoe UI', sans-serif; background: #f4f7f9; margin: 0; padding: 0; display: flex; justify-content: center;}
-    .container { width: 100%; max-width: 400px; margin: 20px; padding: 25px; background: white; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; box-sizing: border-box; position: relative;}
-    input, select { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; text-align: center; }
-    .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; margin-bottom: 10px; color: white; transition: 0.2s;}
-    .btn:active { transform: scale(0.98); }
-    
-    .tab-container { display: flex; background: #eee; border-radius: 10px; margin-bottom: 20px; overflow: hidden; font-size: 13px;}
-    .tab { flex: 1; padding: 12px 2px; font-weight: bold; color: #777; cursor: pointer; transition: 0.3s; }
-    .tab.active { background: #d32f2f; color: white; }
-    
-    /* Disabled Tab Styles & Promos */
-    .tab.disabled { color: #999; cursor: pointer; opacity: 0.8; }
-    .upgrade-box { background: #fff3e0; border: 1px dashed #ff9800; padding: 30px 20px; border-radius: 10px; margin-top: 15px; color: #e65100; font-weight: bold; }
-    .upgrade-box i { font-size: 40px; margin-bottom: 15px; color: #ff9800; }
-    .locked-card { background: #f5f5f5; border: 1px dashed #ccc; padding: 15px; border-radius: 12px; margin-bottom: 15px; color: #777; font-weight: bold;}
+    * { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f4f7f9; margin: 0; padding: 0; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 420px; margin: 18px; padding: 22px; background: white; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; position: relative; }
+    input, select { width: 100%; padding: 14px; margin: 8px 0; border: 1.5px solid #ddd; border-radius: 10px; font-size: 15px; text-align: center; }
+    input:focus, select:focus { border-color: #d32f2f; outline: none; }
+    .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 15px; margin-bottom: 10px; color: white; transition: 0.15s; }
+    .btn:active { transform: scale(0.97); }
 
-    .stat-card { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-    .stat-number { font-size: 32px; font-weight: bold; color: #d32f2f; margin: 5px 0; }
-    .stat-label { color: #777; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
-    
-    .input-label { text-align: left; font-size: 13px; font-weight: bold; color: #555; display: block; margin-top: 10px;}
-    .msg { padding: 15px; border-radius: 8px; font-weight: bold; display: none; margin-top: 10px; font-size: 14px;}
-    
-    .product-item { background: #fafafa; border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: left;}
-    .product-title { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 5px;}
-    .price-update-row { display: flex; gap: 10px; align-items: center; margin-top: 10px;}
-    
-    /* Force Logout Overlay */
-    .force-logout-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; display:none; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px; box-sizing:border-box; backdrop-filter:blur(5px); }
-    .force-logout-box { background: white; padding: 30px; border-radius: 15px; width: 100%; max-width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    .tab-container { display: flex; background: #eee; border-radius: 10px; margin-bottom: 18px; overflow: hidden; font-size: 12px; }
+    .tab { flex: 1; padding: 11px 2px; font-weight: 700; color: #777; cursor: pointer; transition: 0.2s; }
+    .tab.active { background: #d32f2f; color: white; }
+    .tab.disabled { color: #bbb; cursor: pointer; }
+
+    .upgrade-box { background: #fff3e0; border: 1px dashed #ff9800; padding: 28px 18px; border-radius: 12px; margin-top: 12px; color: #e65100; font-weight: 700; }
+    .upgrade-box i { font-size: 38px; margin-bottom: 12px; color: #ff9800; display: block; }
+    .contact-wa-btn { display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: white; padding: 12px 22px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 14px; margin-top: 14px; }
+
+    .stat-card { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+    .stat-number { font-size: 30px; font-weight: 900; color: #d32f2f; margin: 4px 0; }
+    .stat-label { color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .locked-card { background: #f5f5f5; border: 1px dashed #ccc; padding: 14px; border-radius: 12px; margin-bottom: 12px; color: #aaa; font-weight: 700; font-size: 14px; }
+
+    .input-label { text-align: left; font-size: 13px; font-weight: 700; color: #555; display: block; margin-top: 10px; }
+    .msg { padding: 13px; border-radius: 8px; font-weight: 700; display: none; margin-top: 10px; font-size: 14px; }
+
+    .product-item { background: #fafafa; border: 1px solid #ddd; padding: 14px; border-radius: 12px; margin-bottom: 12px; text-align: left; }
+    .product-title { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 4px; }
+    .price-update-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+    .delete-btn { background: #d32f2f; color: white; border: none; padding: 10px 13px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+    .delete-btn:active { opacity: 0.8; }
+
+    .force-logout-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(5px); }
+    .force-logout-box { background: white; padding: 28px; border-radius: 16px; width: 100%; max-width: 340px; text-align: center; }
   </style>
 </head>
 <body>
 
-  <!-- Force Logout Screen -->
   <div class="force-logout-overlay" id="forceLogoutModal">
     <div class="force-logout-box">
-      <i class="fas fa-sync-alt" style="font-size:40px; color:#1976d2; margin-bottom:15px;"></i>
-      <h3 style="margin-top:0; color:#333;">System Updated</h3>
-      <p style="color:#666; font-size:14px; margin-bottom:20px;">ඔබගේ ගිණුමේ වෙනස්කම් කිහිපයක් සිදුවී ඇත. කරුණාකර නැවත Login වන්න.</p>
-      <button class="btn" style="background:#d32f2f; margin:0;" onclick="logout()">Logout Now</button>
+      <i class="fas fa-sync-alt" style="font-size:36px;color:#1976d2;margin-bottom:12px;"></i>
+      <h3 style="margin-top:0;color:#333;">System Updated</h3>
+      <p style="color:#666;font-size:14px;margin-bottom:18px;">ඔබගේ ගිණුමේ වෙනස්කම් සිදු වී ඇත. නැවත Login වන්න.</p>
+      <button class="btn" style="background:#d32f2f;margin:0;" onclick="logout()">Logout Now</button>
     </div>
   </div>
 
+  <!-- LOGIN -->
   <div class="container" id="loginBox">
-    <img src="https://via.placeholder.com/80/d32f2f/ffffff?text=SM" style="border-radius:20px; margin-bottom:15px;">
-    <h2>Business Login</h2>
-    <p style="color:#777; font-size:14px;">Login to your business portal</p>
-    <input type="tel" id="uPhone" placeholder="Phone Number (07XXXXXXXX)">
-    <input type="password" id="uPass" placeholder="Password">
+    <img src="https://via.placeholder.com/80/d32f2f/ffffff?text=SM" style="border-radius:16px;margin-bottom:14px;">
+    <h2 style="margin:0 0 5px;">Business Login</h2>
+    <p style="color:#888;font-size:14px;margin-bottom:18px;">Login to your business portal</p>
+    <input type="tel"      id="uPhone" placeholder="Phone Number (07XXXXXXXX)">
+    <input type="password" id="uPass"  placeholder="Password">
     <button class="btn" style="background:#d32f2f;" onclick="login()">Login</button>
-    <p id="loginMsg" style="color:red; font-size:13px; display:none;"></p>
+    <p id="loginMsg" style="color:red;font-size:13px;display:none;"></p>
   </div>
 
-  <div class="container" id="mainApp" style="display: none; padding-top: 20px;">
-    
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+  <!-- MAIN APP -->
+  <div class="container" id="mainApp" style="display:none; padding-top:18px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
       <div style="text-align:left;">
-        <h3 id="shopName" style="margin:0; color:#d32f2f;">Shop Name</h3>
-        <p style="margin:0; font-size:12px; color:gray;" id="shopIdDisplay">ID: --</p>
+        <h3 id="shopName" style="margin:0;color:#d32f2f;">Shop Name</h3>
+        <p style="margin:0;font-size:12px;color:gray;" id="shopIdDisplay">ID: --</p>
       </div>
-      <button onclick="logout()" style="background:none; border:none; color:#777; text-decoration:underline; cursor:pointer;">Logout</button>
+      <button onclick="logout()" style="background:none;border:none;color:#888;text-decoration:underline;cursor:pointer;font-size:13px;">Logout</button>
     </div>
 
     <div class="tab-container">
-      <div class="tab active" id="tab-stats" onclick="switchTab('stats')">📊 Dash</div>
-      <div class="tab" id="tab-cashier" onclick="switchTab('cashier')">🎁 Loyalty</div>
-      <div class="tab" id="tab-products" onclick="switchTab('products')">📦 Store</div>
-      <div class="tab" id="tab-feedback" onclick="switchTab('feedback')">📝 Inbox</div>
+      <div class="tab active" id="tab-stats"    onclick="switchTab('stats')">📊 Dash</div>
+      <div class="tab"        id="tab-cashier"  onclick="switchTab('cashier')">🎁 Loyalty</div>
+      <div class="tab"        id="tab-products" onclick="switchTab('products')">📦 Store</div>
+      <div class="tab"        id="tab-feedback" onclick="switchTab('feedback')">📝 Inbox</div>
     </div>
 
-    <!-- UPGRADE MESSAGE VIEW -->
-    <div id="view-upgrade" style="display: none;">
+    <!-- UPGRADE VIEW -->
+    <div id="view-upgrade" style="display:none;">
       <div class="upgrade-box">
         <i class="fas fa-lock"></i>
-        <div id="upgrade-text" style="font-size: 18px;">Unlock This Feature!</div>
-        <p style="font-size: 13px; color: #777; margin-top: 10px; font-weight: normal;">Upgrade your plan to unlock this amazing feature and grow your business today.</p>
-        <button class="btn" style="background:#ff9800; margin-top:15px; padding:10px; font-size:14px;" onclick="switchTab('stats')">Go Back</button>
+        <div id="upgrade-text" style="font-size:17px;">Unlock This Feature!</div>
+        <p style="font-size:13px;color:#888;margin-top:8px;font-weight:400;">Upgrade your plan to unlock this amazing feature and grow your business today.</p>
+        <a href="https://wa.me/94XXXXXXXXX?text=Hi%2C%20I%20want%20to%20upgrade%20my%20Social%20Map%20plan" target="_blank" class="contact-wa-btn" id="upgradeWaLink">
+          <i class="fab fa-whatsapp"></i> Contact Us to Upgrade
+        </a>
+        <br><br>
+        <button class="btn" style="background:#999;margin:0;padding:10px;font-size:13px;" onclick="switchTab('stats')">← Go Back</button>
       </div>
     </div>
 
+    <!-- STATS VIEW -->
     <div id="view-stats">
       <div class="stat-card"><div class="stat-label">Total Scans</div><div class="stat-number" id="scans">...</div></div>
-      
-      <!-- Locked Loyalty Stats -->
       <div id="dashLoyaltyStats">
         <div class="stat-card"><div class="stat-label">Loyalty Customers</div><div class="stat-number" id="loyaltyUsers">...</div></div>
         <div class="stat-card"><div class="stat-label">Total Stamps Given</div><div class="stat-number" id="stamps">...</div></div>
       </div>
       <div id="dashLoyaltyLocked" class="locked-card" style="display:none;">
-        <i class="fas fa-lock" style="font-size:24px; color:#ccc; margin-bottom:10px; display:block;"></i>
-        Loyalty Stats Locked<br><span style="font-size:11px; font-weight:normal;">Upgrade to unlock this feature</span>
+        <i class="fas fa-lock" style="font-size:22px;color:#ccc;margin-bottom:8px;display:block;"></i>
+        Loyalty Stats Locked — Upgrade to unlock
       </div>
-
-      <button class="btn" style="background:#555; padding:10px; margin-top:10px;" onclick="fetchStats()">🔄 Refresh Data</button>
+      <button class="btn" style="background:#555;padding:10px;margin-top:6px;" onclick="fetchStats()">🔄 Refresh Data</button>
     </div>
 
-    <div id="view-cashier" style="display: none;">
+    <!-- CASHIER / LOYALTY VIEW -->
+    <div id="view-cashier" style="display:none;">
       <span class="input-label">Customer Phone Number</span>
-      <div style="display:flex; gap:10px; margin-bottom:10px;">
-        <input type="tel" id="cPhone" placeholder="07XXXXXXXX" maxlength="10" style="margin:0; flex:1;">
-        <button class="btn" style="background:#1976d2; margin:0; width:auto; padding:0 20px;" onclick="checkCustomerLoyalty()">🔍 Check</button>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <input type="tel" id="cPhone" placeholder="07XXXXXXXX" maxlength="10" style="margin:0;flex:1;">
+        <button class="btn" style="background:#1976d2;margin:0;width:auto;padding:0 18px;" onclick="checkCustomerLoyalty()"><i class="fas fa-search"></i></button>
       </div>
       <span class="input-label">Number of Stamps</span>
       <input type="number" id="cStampCount" value="1" min="1">
@@ -117,82 +123,82 @@
       <div id="actionMsg" class="msg"></div>
     </div>
 
-    <div id="view-products" style="display: none;">
-      <div style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:20px; border: 1px dashed #ccc;">
-        <h4 style="margin-top:0;">➕ Add New Item</h4>
-        <select id="new_p_type" style="margin-top:0;"><option value="Product">🍽️ Product / Food</option><option value="Room">🛏️ Hotel Room</option><option value="Package">🎁 Special Package</option></select>
-        <input type="text" id="new_p_name" placeholder="Name (e.g. Fried Rice)">
+    <!-- PRODUCTS VIEW -->
+    <div id="view-products" style="display:none;">
+      <div style="background:#f9f9f9;padding:14px;border-radius:10px;margin-bottom:18px;border:1px dashed #ccc;">
+        <h4 style="margin-top:0;color:#1976d2;font-size:14px;">➕ Add New Item</h4>
+        <select id="new_p_type" style="margin-top:0;">
+          <option value="Product">🍽️ Product / Food</option>
+          <option value="Room">🛏️ Hotel Room</option>
+          <option value="Package">🎁 Special Package</option>
+        </select>
+        <input type="text"   id="new_p_name"  placeholder="Name (e.g. Fried Rice)">
         <input type="number" id="new_p_price" placeholder="Price (e.g. 1200)">
         <button class="btn" style="background:#2e7d32;" onclick="addProductClient()">Add Item</button>
       </div>
-      <div id="productMsg" class="msg" style="padding:10px; font-size:13px;"></div>
+      <div id="productMsg" class="msg" style="padding:10px;font-size:13px;"></div>
       <div id="productsList">Loading products...</div>
     </div>
 
-    <div id="view-feedback" style="display: none;">
-      <h4 style="text-align:left; color:#555; margin-top:0;">Customer Feedback & Suggestions</h4>
-      <div id="feedbackList">Loading feedbacks...</div>
+    <!-- FEEDBACK INBOX VIEW -->
+    <div id="view-feedback" style="display:none;">
+      <h4 style="text-align:left;color:#555;margin-top:0;">Customer Feedback &amp; Suggestions</h4>
+      <div id="feedbackList">Loading...</div>
     </div>
-
   </div>
 
   <script>
-    // WEB APP URL HERE
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU8NQF6m62kbDwCr6ol48LEVl8-veggT_bR5Lue7sIrJWlgpiI7GzosU_PqZzzV0JP/exec";
     let liveCheckInterval;
 
     function login() {
-      const phone = document.getElementById('uPhone').value; const pass = document.getElementById('uPass').value;
-      document.getElementById('loginMsg').style.display="none"; document.querySelector('#loginBox .btn').innerText = "Loading...";
-      fetch(`${APPS_SCRIPT_URL}?action=clientLogin&phone=${phone}&password=${pass}`).then(res => res.json()).then(data => {
+      var phone = document.getElementById('uPhone').value, pass = document.getElementById('uPass').value;
+      document.getElementById('loginMsg').style.display = "none";
+      document.querySelector('#loginBox .btn').innerText = "Loading...";
+      fetch(APPS_SCRIPT_URL + "?action=clientLogin&phone=" + phone + "&password=" + pass)
+        .then(r => r.json())
+        .then(data => {
           document.querySelector('#loginBox .btn').innerText = "Login";
-          if(data.success) { 
-            localStorage.setItem('shopId', data.shopId); 
-            localStorage.setItem('bName', data.businessName); 
+          if (data.success) {
+            localStorage.setItem('shopId',        data.shopId);
+            localStorage.setItem('bName',         data.businessName);
             localStorage.setItem('loyaltyStatus', data.loyaltyStatus);
-            localStorage.setItem('storeStatus', data.storeStatus);
-            localStorage.setItem('inboxStatus', data.inboxStatus);
-            initApp(); 
-          } 
-          else { const m = document.getElementById('loginMsg'); m.innerText = data.error; m.style.display="block"; }
-        }).catch(err => { document.querySelector('#loginBox .btn').innerText = "Login"; alert("Network Error!"); });
+            localStorage.setItem('storeStatus',   data.storeStatus);
+            localStorage.setItem('inboxStatus',   data.inboxStatus);
+            initApp();
+          } else { var m = document.getElementById('loginMsg'); m.innerText = data.error; m.style.display = "block"; }
+        }).catch(() => { document.querySelector('#loginBox .btn').innerText = "Login"; alert("Network Error!"); });
     }
 
-    function logout() { 
-      localStorage.clear(); 
-      clearInterval(liveCheckInterval);
-      location.reload(); 
-    }
+    function logout() { localStorage.clear(); clearInterval(liveCheckInterval); location.reload(); }
 
     function initApp() {
-      document.getElementById('loginBox').style.display = 'none'; document.getElementById('mainApp').style.display = 'block';
-      document.getElementById('shopName').innerText = localStorage.getItem('bName'); document.getElementById('shopIdDisplay').innerText = "ID: " + localStorage.getItem('shopId');
-      
-      applyTabStyles(); 
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('mainApp').style.display  = 'block';
+      document.getElementById('shopName').innerText    = localStorage.getItem('bName');
+      document.getElementById('shopIdDisplay').innerText = "ID: " + localStorage.getItem('shopId');
+      applyTabStyles();
       fetchStats(); fetchProducts(); fetchFeedback();
-
-      // Start Live Checking (Every 20 seconds)
       liveCheckInterval = setInterval(checkLiveStatus, 20000);
     }
 
-    // Background Status Checker
     function checkLiveStatus() {
-      if(!localStorage.getItem('shopId')) return;
-      fetch(`${APPS_SCRIPT_URL}?action=checkStatus&shopId=${localStorage.getItem('shopId')}`)
-      .then(res=>res.json()).then(data => {
-        if(data.success) {
-          if(data.loyaltyStatus !== localStorage.getItem('loyaltyStatus') ||
-             data.storeStatus !== localStorage.getItem('storeStatus') ||
-             data.inboxStatus !== localStorage.getItem('inboxStatus')) {
-              // Details have changed! Show Force Logout Overlay
+      if (!localStorage.getItem('shopId')) return;
+      fetch(APPS_SCRIPT_URL + "?action=checkStatus&shopId=" + localStorage.getItem('shopId'))
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            if (data.loyaltyStatus !== localStorage.getItem('loyaltyStatus') ||
+                data.storeStatus   !== localStorage.getItem('storeStatus')   ||
+                data.inboxStatus   !== localStorage.getItem('inboxStatus')) {
               document.getElementById('forceLogoutModal').style.display = 'flex';
+            }
           }
-        }
-      });
+        });
     }
 
     function applyTabStyles() {
-      if(localStorage.getItem('loyaltyStatus') === 'Inactive') {
+      if (localStorage.getItem('loyaltyStatus') === 'Inactive') {
         document.getElementById('tab-cashier').classList.add('disabled');
         document.getElementById('dashLoyaltyStats').style.display = 'none';
         document.getElementById('dashLoyaltyLocked').style.display = 'block';
@@ -200,118 +206,137 @@
         document.getElementById('dashLoyaltyStats').style.display = 'block';
         document.getElementById('dashLoyaltyLocked').style.display = 'none';
       }
-      
-      if(localStorage.getItem('storeStatus') === 'Inactive') document.getElementById('tab-products').classList.add('disabled');
-      if(localStorage.getItem('inboxStatus') === 'Inactive') document.getElementById('tab-feedback').classList.add('disabled');
+      if (localStorage.getItem('storeStatus')  === 'Inactive') document.getElementById('tab-products').classList.add('disabled');
+      if (localStorage.getItem('inboxStatus')  === 'Inactive') document.getElementById('tab-feedback').classList.add('disabled');
     }
 
-    if(localStorage.getItem('shopId')) initApp();
+    if (localStorage.getItem('shopId')) initApp();
 
     function switchTab(tab) {
-      const statuses = {
-         'cashier': localStorage.getItem('loyaltyStatus') || 'Inactive',
-         'products': localStorage.getItem('storeStatus') || 'Active',
-         'feedback': localStorage.getItem('inboxStatus') || 'Active'
-      };
-
-      // Reset all views and tabs
-      ['stats', 'cashier', 'products', 'feedback'].forEach(t => {
+      var statuses = { 'cashier': localStorage.getItem('loyaltyStatus') || 'Inactive', 'products': localStorage.getItem('storeStatus') || 'Active', 'feedback': localStorage.getItem('inboxStatus') || 'Active' };
+      ['stats','cashier','products','feedback'].forEach(function(t) {
         document.getElementById('tab-' + t).classList.remove('active');
         document.getElementById('view-' + t).style.display = "none";
       });
       document.getElementById('view-upgrade').style.display = "none";
-
-      // Check if feature is locked
-      if(tab !== 'stats' && statuses[tab] === 'Inactive') {
-         document.getElementById('tab-' + tab).classList.add('active');
-         document.getElementById('view-upgrade').style.display = "block";
-         return;
+      if (tab !== 'stats' && statuses[tab] === 'Inactive') {
+        document.getElementById('tab-' + tab).classList.add('active');
+        document.getElementById('view-upgrade').style.display = "block";
+        return;
       }
-
       document.getElementById('tab-' + tab).classList.add('active');
       document.getElementById('view-' + tab).style.display = "block";
     }
 
-    function fetchStats() { fetch(`${APPS_SCRIPT_URL}?action=getClientStats&shopId=${localStorage.getItem('shopId')}`).then(res => res.json()).then(data => { if(data.success) { document.getElementById('scans').innerText = data.totalScans; document.getElementById('loyaltyUsers').innerText = data.loyaltyCustomers; document.getElementById('stamps').innerText = data.totalStamps; } }); }
+    function fetchStats() {
+      fetch(APPS_SCRIPT_URL + "?action=getClientStats&shopId=" + localStorage.getItem('shopId'))
+        .then(r => r.json())
+        .then(data => { if (data.success) { document.getElementById('scans').innerText = data.totalScans; document.getElementById('loyaltyUsers').innerText = data.loyaltyCustomers; document.getElementById('stamps').innerText = data.totalStamps; } });
+    }
 
-    // (Cashier checks and actions remain same)
     function checkCustomerLoyalty() {
-      const shopId = localStorage.getItem('shopId'); const phone = document.getElementById('cPhone').value;
-      const msgBox = document.getElementById('actionMsg');
-      if(phone.length !== 10) { showMsg('actionMsg', "Please enter a valid 10-digit number.", false); return; }
-      msgBox.innerText = "Checking..."; msgBox.style.display="block"; msgBox.style.background="#e3f2fd"; msgBox.style.color="#1565c0";
-      fetch(`${APPS_SCRIPT_URL}?action=getCashierLoyalty&shopId=${shopId}&phone=${phone}`).then(res=>res.json()).then(data => {
-        if(data.success) {
-           msgBox.innerHTML = `Current Stamps: <span style="font-size:18px; font-weight:bold; color:#d32f2f;">${data.stamps}</span> <br> Total Redeemed Rewards: <span style="font-size:18px; font-weight:bold; color:#2e7d32;">${data.redeemed}</span>`;
-        } else { showMsg('actionMsg', data.error, false); }
-      }).catch(err => showMsg('actionMsg', "Network Error", false));
+      var shopId = localStorage.getItem('shopId'), phone = document.getElementById('cPhone').value;
+      if (phone.length !== 10) { showMsg('actionMsg', "Please enter a valid 10-digit number.", false); return; }
+      var msgBox = document.getElementById('actionMsg');
+      msgBox.innerHTML = "Checking..."; msgBox.style.display = "block"; msgBox.style.background = "#e3f2fd"; msgBox.style.color = "#1565c0";
+      fetch(APPS_SCRIPT_URL + "?action=getCashierLoyalty&shopId=" + shopId + "&phone=" + phone)
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            msgBox.innerHTML = 'Current Stamps: <span style="font-size:20px;font-weight:900;color:#d32f2f;">' + data.stamps + '</span><br>Total Redeemed: <span style="font-size:18px;font-weight:700;color:#2e7d32;">' + data.redeemed + '</span>';
+          } else { showMsg('actionMsg', data.error, false); }
+        }).catch(() => showMsg('actionMsg', "Network Error", false));
     }
 
     function processAction(actionType) {
-      const shopId = localStorage.getItem('shopId'); const phone = document.getElementById('cPhone').value; const count = document.getElementById('cStampCount').value; const msgBox = document.getElementById('actionMsg');
-      if(phone.length !== 10) { showMsg('actionMsg', "Please enter a valid 10-digit number.", false); return; }
-      msgBox.innerText = "Processing..."; msgBox.style.display="block"; msgBox.style.background="#eee"; msgBox.style.color="black";
-      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: actionType, shopId: shopId, phone: phone, stampCount: count }) }).then(res => res.json()).then(data => { if(data.success) { showMsg('actionMsg', data.message, true); document.getElementById('cPhone').value = ""; document.getElementById('cStampCount').value = 1; fetchStats(); } else { showMsg('actionMsg', data.error, false); } }).catch(err => showMsg('actionMsg', "Network Error!", false));
+      var shopId = localStorage.getItem('shopId'), phone = document.getElementById('cPhone').value, count = document.getElementById('cStampCount').value;
+      if (phone.length !== 10) { showMsg('actionMsg', "Please enter a valid 10-digit number.", false); return; }
+      var msgBox = document.getElementById('actionMsg');
+      msgBox.innerText = "Processing..."; msgBox.style.display = "block"; msgBox.style.background = "#eee"; msgBox.style.color = "#333";
+      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: actionType, shopId: shopId, phone: phone, stampCount: count }) })
+        .then(r => r.json())
+        .then(data => { if (data.success) { showMsg('actionMsg', data.message, true); document.getElementById('cPhone').value = ""; document.getElementById('cStampCount').value = 1; fetchStats(); } else { showMsg('actionMsg', data.error, false); } })
+        .catch(() => showMsg('actionMsg', "Network Error!", false));
     }
 
-    function showMsg(id, text, success) { let m = document.getElementById(id); m.innerText = text; m.style.background = success ? "#d4edda" : "#f8d7da"; m.style.color = success ? "#155724" : "#721c24"; m.style.display = "block"; }
-
     function fetchProducts() {
-      fetch(`${APPS_SCRIPT_URL}?action=getProducts&shopId=${localStorage.getItem('shopId')}`).then(res => res.json()).then(data => {
-          const list = document.getElementById('productsList'); list.innerHTML = "";
-          if(data.success && data.data.length > 0) {
-            data.data.forEach(p => {
-              let pName = p.ProductName || p['Product Name'] || "No Name"; let pId = p.ProductID || p['Product ID'] || ""; let pPrice = p.Price || p['Product Price'] || 0; let pType = p.Type || "Product";
-              
-              // Load Images if available
-              let imgs = "";
-              if(p.Image1) imgs += `<img src="${p.Image1}" style="width:60px; height:60px; object-fit:cover; border-radius:5px; border:1px solid #ddd;">`;
-              if(p.Image2) imgs += `<img src="${p.Image2}" style="width:60px; height:60px; object-fit:cover; border-radius:5px; border:1px solid #ddd;">`;
-              if(p.Image3) imgs += `<img src="${p.Image3}" style="width:60px; height:60px; object-fit:cover; border-radius:5px; border:1px solid #ddd;">`;
-              let imgHtml = imgs ? `<div style="display:flex; gap:10px; margin-top:10px; overflow-x:auto;">${imgs}</div>` : '';
-
-              list.innerHTML += `<div class="product-item">
-                  <div style="font-size:11px; background:#ddd; padding:2px 5px; border-radius:3px; display:inline-block; margin-bottom:5px;">${pType}</div>
-                  <div class="product-title">${pName}</div>
-                  <div class="price-update-row">
-                    <span style="font-weight:bold; color:#777;">Rs.</span>
-                    <input type="number" id="price_${pId}" value="${pPrice}" style="margin:0; padding:10px; flex:1;">
-                    <button class="btn" style="background:#1976d2; margin:0; padding:10px 15px; font-size:14px; width:auto;" onclick="updatePrice('${pId}')">Update</button>
-                  </div>
-                  ${imgHtml}
-                </div>`;
+      fetch(APPS_SCRIPT_URL + "?action=getProducts&shopId=" + localStorage.getItem('shopId'))
+        .then(r => r.json())
+        .then(data => {
+          var list = document.getElementById('productsList'); list.innerHTML = "";
+          if (data.success && data.data.length > 0) {
+            data.data.forEach(function(p) {
+              var pName = p.ProductName || "No Name", pId = p.ProductID || "", pPrice = p.Price || 0, pType = p.Type || "Product";
+              var imgs = "";
+              if (p.Image1) imgs += '<img src="' + p.Image1 + '" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid #ddd;">';
+              if (p.Image2) imgs += '<img src="' + p.Image2 + '" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid #ddd;">';
+              if (p.Image3) imgs += '<img src="' + p.Image3 + '" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid #ddd;">';
+              var imgHtml = imgs ? '<div style="display:flex;gap:8px;margin-top:10px;overflow-x:auto;">' + imgs + '</div>' : '';
+              list.innerHTML +=
+                '<div class="product-item">' +
+                  '<div style="font-size:11px;background:#e3f2fd;color:#1565c0;padding:2px 7px;border-radius:4px;display:inline-block;margin-bottom:6px;font-weight:700;">' + pType + '</div>' +
+                  '<div class="product-title">' + pName + '</div>' +
+                  '<div class="price-update-row">' +
+                    '<span style="font-weight:700;color:#888;">Rs.</span>' +
+                    '<input type="number" id="price_' + pId + '" value="' + pPrice + '" style="margin:0;padding:10px;flex:1;">' +
+                    '<button class="btn" style="background:#1976d2;margin:0;padding:10px 12px;font-size:13px;width:auto;" onclick="updatePrice(\'' + pId + '\')">Update</button>' +
+                    '<button class="delete-btn" onclick="deleteProduct(\'' + pId + '\')"><i class="fas fa-trash"></i></button>' +
+                  '</div>' +
+                  imgHtml +
+                '</div>';
             });
-          } else { list.innerHTML = "<p style='color:gray;'>No items added yet.</p>"; }
+          } else { list.innerHTML = '<p style="color:gray;font-size:14px;">No items added yet.</p>'; }
         });
     }
 
     function updatePrice(productId) {
-      const msgBox = document.getElementById('productMsg'); msgBox.innerText = "Updating..."; msgBox.style.display="block"; msgBox.style.background="#eee"; msgBox.style.color="black";
-      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updatePrice', shopId: localStorage.getItem('shopId'), productId: productId, price: document.getElementById('price_' + productId).value }) }).then(res => res.json()).then(data => { if(data.success) { showMsg('productMsg', "Price updated successfully!", true); } else { showMsg('productMsg', data.error || "Error", false); } setTimeout(() => msgBox.style.display="none", 3000); });
+      var msgBox = document.getElementById('productMsg'); msgBox.innerText = "Updating..."; msgBox.style.display = "block"; msgBox.style.background = "#eee"; msgBox.style.color = "#333";
+      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updatePrice', shopId: localStorage.getItem('shopId'), productId: productId, price: document.getElementById('price_' + productId).value }) })
+        .then(r => r.json())
+        .then(data => { showMsg('productMsg', data.success ? "Price updated!" : (data.error || "Error"), data.success); setTimeout(function() { msgBox.style.display = "none"; }, 3000); });
+    }
+
+    function deleteProduct(productId) {
+      if (!confirm("Delete this product? This cannot be undone.")) return;
+      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteProduct', shopId: localStorage.getItem('shopId'), productId: productId }) })
+        .then(r => r.json())
+        .then(data => { alert(data.message); fetchProducts(); });
     }
 
     function addProductClient() {
-      const name = document.getElementById('new_p_name').value; const price = document.getElementById('new_p_price').value; const type = document.getElementById('new_p_type').value;
-      if(!name || !price) { alert("Please fill in all details."); return; }
-      fetch(APPS_SCRIPT_URL, {method:"POST", body:JSON.stringify({action:"addProduct", shopId:localStorage.getItem('shopId'), type:type, name:name, price:price})}).then(res=>res.json()).then(d=>{ alert(d.message); document.getElementById('new_p_name').value = ""; document.getElementById('new_p_price').value = ""; fetchProducts(); });
+      var name = document.getElementById('new_p_name').value, price = document.getElementById('new_p_price').value, type = document.getElementById('new_p_type').value;
+      if (!name || !price) { alert("Please fill in all details."); return; }
+      fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "addProduct", shopId: localStorage.getItem('shopId'), type: type, name: name, price: price }) })
+        .then(r => r.json())
+        .then(d => { alert(d.message); document.getElementById('new_p_name').value = ""; document.getElementById('new_p_price').value = ""; fetchProducts(); });
     }
 
     function fetchFeedback() {
-      fetch(`${APPS_SCRIPT_URL}?action=getFeedback&shopId=${localStorage.getItem('shopId')}`).then(res => res.json()).then(data => {
-          const list = document.getElementById('feedbackList'); list.innerHTML = "";
-          if(data.success && data.data.length > 0) {
-            data.data.reverse().forEach(f => {
-              let imgHtml = (f.ImageURL && f.ImageURL !== "No Image" && f.ImageURL !== "Image Upload Error") ? `<br><a href="${f.ImageURL}" target="_blank" style="color:#1976d2; font-size:13px; font-weight:bold; text-decoration:none;"><i class="fas fa-image"></i> 🖼️ View Uploaded Photo</a>` : '';
-              let dateStr = new Date(f.Date).toLocaleDateString();
-              list.innerHTML += `<div style="background: #fafafa; border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: left;">
-                  <div style="font-size:12px; color:gray;">📅 ${dateStr}</div>
-                  <div style="font-weight:bold; color:#333; margin:5px 0;">👤 ${f.CustomerName || 'Anonymous'} <span style="font-weight:normal; color:#555;">(${f.Phone || '-'})</span></div>
-                  <div style="color:#444; font-size:14px; background:#eef2f5; padding:10px; border-radius:5px;">💬 ${f.Message}</div>
-                  ${imgHtml}
-                </div>`;
+      fetch(APPS_SCRIPT_URL + "?action=getFeedback&shopId=" + localStorage.getItem('shopId'))
+        .then(r => r.json())
+        .then(data => {
+          var list = document.getElementById('feedbackList'); list.innerHTML = "";
+          if (data.success && data.data.length > 0) {
+            data.data.reverse().forEach(function(f) {
+              var imgHtml = (f.ImageURL && f.ImageURL !== "No Image" && f.ImageURL !== "Image Upload Error") ? '<br><a href="' + f.ImageURL + '" target="_blank" style="color:#1976d2;font-size:13px;font-weight:700;"><i class="fas fa-image"></i> View Photo</a>' : '';
+              list.innerHTML +=
+                '<div style="background:#fafafa;border:1px solid #eee;padding:14px;border-radius:12px;margin-bottom:12px;text-align:left;">' +
+                  '<div style="font-size:12px;color:#aaa;">📅 ' + new Date(f.Date).toLocaleDateString() + '</div>' +
+                  '<div style="font-weight:700;color:#333;margin:5px 0;">👤 ' + (f.CustomerName || 'Anonymous') + ' <span style="font-weight:400;color:#777;">(' + (f.Phone || '-') + ')</span></div>' +
+                  '<div style="color:#444;font-size:14px;background:#eef2f5;padding:10px;border-radius:8px;">💬 ' + f.Message + '</div>' +
+                  imgHtml +
+                '</div>';
             });
-          } else { list.innerHTML = "<p style='color:gray;'>No feedback or suggestions received yet.</p>"; }
+          } else { list.innerHTML = '<p style="color:gray;font-size:14px;">No feedback received yet.</p>'; }
         });
+    }
+
+    function showMsg(id, text, success) {
+      var m = document.getElementById(id);
+      m.innerHTML = text;
+      m.style.background = success ? "#d4edda" : "#f8d7da";
+      m.style.color       = success ? "#155724" : "#721c24";
+      m.style.display = "block";
     }
   </script>
 </body>

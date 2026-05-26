@@ -1,126 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cashier Portal | Social Map</title>
+  <title>Cashier Portal | Mapa Solutions</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * { box-sizing: border-box; }
-    body { font-family: 'Segoe UI', sans-serif; background: #eef2f5; margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; align-items: center; }
-    .container { width: 100%; max-width: 400px; margin: 20px; padding: 25px; background: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); text-align: center; }
-    input { width: 100%; padding: 14px; margin: 8px 0; border: 1.5px solid #ddd; border-radius: 10px; font-size: 16px; text-align: center; }
-    input:focus { border-color: #e65100; outline: none; }
-    .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 15px; margin-bottom: 10px; color: white; transition: 0.15s; }
-    .btn:active { transform: scale(0.97); }
-    .input-label { text-align: left; font-size: 13px; font-weight: 700; color: #555; display: block; margin-top: 10px; }
-    .msg { padding: 14px; border-radius: 10px; font-weight: 700; display: none; margin-top: 10px; font-size: 14px; }
-    .header-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px dashed #eee; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f5; margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; align-items: center; }
+    .container { width: 100%; max-width: 400px; margin: 20px; padding: 25px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); text-align: center; box-sizing: border-box; }
+    .header-title { font-size: 22px; color: #2e7d32; font-weight: 900; margin-bottom: 5px; }
+    .shop-name { font-size: 14px; color: #666; margin-bottom: 20px; }
+    
+    input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; text-align: center; }
+    .input-label { text-align: left; font-size: 13px; font-weight: bold; color: #555; display: block; margin-top: 10px; margin-bottom: -5px;}
+    
+    .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; margin-bottom: 10px; color: white; transition: 0.2s; }
+    .btn-green { background: #2e7d32; }
+    .btn-green:hover { background: #1b5e20; }
+    .btn-blue { background: #1976d2; }
+    .btn-red { background: #d32f2f; }
+    .btn-dark { background: #333; }
+    
+    .msg-box { padding: 15px; border-radius: 10px; margin-bottom: 15px; font-weight: bold; display: none; font-size: 14px; }
+    .customer-stats { background: #f4f6f8; padding: 15px; border-radius: 10px; margin-bottom: 15px; display: none; border: 1px solid #ddd; }
   </style>
 </head>
 <body>
-  <div class="container" id="loginBox">
-    <div style="background:#e65100;color:white;width:60px;height:60px;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:24px;margin:0 auto 15px;">
-      <i class="fas fa-cash-register"></i>
-    </div>
-    <h2 style="margin-top:0;color:#333;">Cashier Login</h2>
-    <p style="color:#888;font-size:14px;margin-bottom:20px;">Secure Access for Shop Staff</p>
-    <input type="tel"      id="uPhone" placeholder="Shop Phone Number">
-    <input type="password" id="uPass"  placeholder="Password">
-    <button class="btn" style="background:#e65100;margin-top:10px;" onclick="login()">Login to Cashier</button>
-    <p id="loginMsg" style="color:red;font-size:13px;display:none;"></p>
-  </div>
 
-  <div class="container" id="mainApp" style="display:none;">
-    <div class="header-box">
-      <div style="text-align:left;">
-        <h3 id="shopName" style="margin:0;color:#e65100;">Shop Name</h3>
-        <p style="margin:0;font-size:12px;color:gray;">Cashier Mode</p>
+  <div class="container">
+    <div class="header-title"><i class="fas fa-cash-register"></i> Cashier Terminal</div>
+    <div class="shop-name" id="shopNameDisplay">Loading...</div>
+
+    <div id="actionMsg" class="msg-box"></div>
+
+    <label class="input-label">Customer Phone Number</label>
+    <input type="number" id="cPhone" placeholder="07XXXXXXXX">
+    
+    <button class="btn btn-blue" onclick="checkCustomer()"><i class="fas fa-search"></i> Check Customer Points</button>
+
+    <div id="customerStats" class="customer-stats">
+      <div style="font-size: 12px; color: gray;">Current Points</div>
+      <div style="font-size: 28px; color: #1976d2; font-weight: bold;" id="statPoints">0</div>
+      <hr style="border: 0; border-top: 1px solid #ddd; margin: 10px 0;">
+      <div style="display: flex; gap: 10px;">
+        <button class="btn btn-red" style="padding: 10px; font-size: 13px;" onclick="processAction('loyaltyRedeem')"><i class="fas fa-gift"></i> Redeem Reward</button>
+        <button class="btn btn-dark" style="padding: 10px; font-size: 13px;" onclick="processAction('loyaltyCashierReset')"><i class="fas fa-key"></i> Reset PIN (0000)</button>
       </div>
-      <button onclick="logout()" style="background:#f4f6f8;border:1px solid #ddd;padding:8px 15px;border-radius:8px;color:#555;font-weight:700;cursor:pointer;">Logout</button>
     </div>
 
-    <div style="background:#fff3e0;padding:15px;border-radius:12px;margin-bottom:18px;border:1px solid #ffe0b2;">
-      <span class="input-label" style="color:#e65100;margin-top:0;"><i class="fas fa-search"></i> Customer Phone Number</span>
-      <div style="display:flex;gap:8px;margin-top:6px;">
-        <input type="tel" id="cPhone" placeholder="07XXXXXXXX" maxlength="10" style="margin:0;flex:1;">
-        <button class="btn" style="background:#1976d2;margin:0;width:auto;padding:0 18px;" onclick="checkCustomerLoyalty()"><i class="fas fa-search"></i></button>
-      </div>
-      <span class="input-label" style="color:#e65100;margin-top:12px;">Stamps to Give</span>
-      <input type="number" id="cStampCount" value="1" min="1" style="background:white;margin-top:6px;">
-    </div>
+    <hr style="border: 0; border-top: 2px dashed #eee; margin: 20px 0;">
 
-    <button class="btn" style="background:#2e7d32;" onclick="processAction('loyaltyAddStamp')"><i class="fas fa-stamp"></i> Add Stamps</button>
-    <button class="btn" style="background:#ff9800;" onclick="processAction('loyaltyRedeem')"><i class="fas fa-gift"></i> Redeem Reward</button>
-    <button class="btn" style="background:#757575;" onclick="processAction('loyaltyCashierReset')"><i class="fas fa-undo"></i> Reset User PIN</button>
-    <div id="actionMsg" class="msg"></div>
+    <label class="input-label">Bill Amount (Rs.)</label>
+    <input type="number" id="cBillAmount" placeholder="e.g. 3500">
+
+    <button class="btn btn-green" onclick="processAction('loyaltyAddPoints')"><i class="fas fa-plus-circle"></i> Add Points via Bill</button>
+
   </div>
 
   <script>
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxONcDGHcvtzopqtKgL7KgiF7W3goNUYUz_QXrFbGPgNH8Kw-vFI7NraPXHiCUv7cL5/exec";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxONcDGHcvtzopqtKgL7KgiF7W3goNUYUz_QXrFbGPgNH8Kw-vFI7NraPXHiCUv7cL5/exec"; 
 
-    function login() {
-      var phone = document.getElementById('uPhone').value, pass = document.getElementById('uPass').value;
-      var msg = document.getElementById('loginMsg');
-      msg.style.display = "none";
-      document.querySelector('#loginBox .btn').innerText = "Verifying...";
-      fetch(APPS_SCRIPT_URL + "?action=clientLogin&phone=" + phone + "&password=" + pass)
-        .then(r => r.json())
+    window.onload = () => {
+      const shopId = localStorage.getItem('shopId');
+      const bName = localStorage.getItem('businessName');
+      
+      if(!shopId) {
+        alert("Session Expired. Please Login Again from Client Portal.");
+        return;
+      }
+      
+      sessionStorage.setItem('cashierShopId', shopId);
+      if(bName) document.getElementById('shopNameDisplay').innerText = bName;
+    };
+
+    function checkCustomer() {
+      const shopId = sessionStorage.getItem('cashierShopId'); 
+      const phone = document.getElementById('cPhone').value; 
+      
+      if(phone.length !== 10) { showMsg('Please enter a valid 10-digit number.', false); return; }
+      
+      showMsg("Checking...", true, "#eee", "black");
+      
+      fetch(`${APPS_SCRIPT_URL}?action=getCashierLoyalty&shopId=${shopId}&phone=${phone}`)
+        .then(res => res.json())
         .then(data => {
-          document.querySelector('#loginBox .btn').innerText = "Login to Cashier";
-          if (data.success) {
-            if (data.isExpired)                   { msg.innerText = "Your shop subscription has expired."; msg.style.display = "block"; return; }
-            if (data.loyaltyStatus === 'Inactive') { msg.innerText = "Loyalty System is disabled for your shop."; msg.style.display = "block"; return; }
-            sessionStorage.setItem('cashierShopId',   data.shopId);
-            sessionStorage.setItem('cashierShopName', data.businessName);
-            initApp();
-          } else { msg.innerText = data.error || "Invalid Credentials"; msg.style.display = "block"; }
-        }).catch(() => { document.querySelector('#loginBox .btn').innerText = "Login to Cashier"; alert("Network Error!"); });
-    }
-
-    function logout() { sessionStorage.clear(); location.reload(); }
-
-    function initApp() {
-      document.getElementById('loginBox').style.display = 'none';
-      document.getElementById('mainApp').style.display  = 'block';
-      document.getElementById('shopName').innerText = sessionStorage.getItem('cashierShopName');
-    }
-
-    if (sessionStorage.getItem('cashierShopId')) initApp();
-
-    function checkCustomerLoyalty() {
-      var shopId = sessionStorage.getItem('cashierShopId'), phone = document.getElementById('cPhone').value;
-      var msgBox = document.getElementById('actionMsg');
-      if (phone.length !== 10) { showMsg('actionMsg', "Please enter a valid 10-digit number.", false); return; }
-      msgBox.innerHTML = "Checking Database..."; msgBox.style.display = "block"; msgBox.style.background = "#e3f2fd"; msgBox.style.color = "#1565c0";
-      fetch(APPS_SCRIPT_URL + "?action=getCashierLoyalty&shopId=" + shopId + "&phone=" + phone)
-        .then(r => r.json())
-        .then(data => {
-          if (data.success) {
-            msgBox.innerHTML = 'Current Stamps: <span style="font-size:22px;font-weight:900;color:#d32f2f;">' + data.stamps + '</span><br>Total Redeemed: <span style="font-size:18px;font-weight:700;color:#2e7d32;">' + data.redeemed + '</span>';
-          } else { showMsg('actionMsg', data.error || "Customer not found.", false); }
-        }).catch(() => showMsg('actionMsg', "Network Error", false));
+          if(data.success) {
+            document.getElementById('actionMsg').style.display = "none";
+            document.getElementById('customerStats').style.display = "block";
+            document.getElementById('statPoints').innerText = data.stamps;
+          } else {
+            document.getElementById('customerStats').style.display = "none";
+            showMsg(data.error, false);
+          }
+        }).catch(err => showMsg("Network Error!", false));
     }
 
     function processAction(actionType) {
-      var shopId = sessionStorage.getItem('cashierShopId'), phone = document.getElementById('cPhone').value, count = document.getElementById('cStampCount').value;
-      if (phone.length !== 10) { showMsg('actionMsg', "Please enter a valid 10-digit number.", false); return; }
-      var msgBox = document.getElementById('actionMsg');
-      msgBox.innerText = "Processing..."; msgBox.style.display = "block"; msgBox.style.background = "#eee"; msgBox.style.color = "#333";
-      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: actionType, shopId: shopId, phone: phone, stampCount: count }) })
-        .then(r => r.json())
-        .then(data => {
-          if (data.success) { showMsg('actionMsg', data.message, true); document.getElementById('cPhone').value = ""; document.getElementById('cStampCount').value = 1; }
-          else { showMsg('actionMsg', data.error, false); }
-        }).catch(() => showMsg('actionMsg', "Network Error!", false));
+      const shopId = sessionStorage.getItem('cashierShopId'); 
+      const phone = document.getElementById('cPhone').value; 
+      const billAmount = document.getElementById('cBillAmount').value; 
+      
+      if(phone.length !== 10) { showMsg('Please enter a valid 10-digit number.', false); return; }
+      if(actionType === 'loyaltyAddPoints' && (!billAmount || billAmount <= 0)) {
+        showMsg('Please enter a valid Bill Amount.', false); return;
+      }
+      
+      showMsg("Processing Please Wait...", true, "#eee", "black");
+      
+      fetch(APPS_SCRIPT_URL, { 
+        method: 'POST', 
+        body: JSON.stringify({ action: actionType, shopId: shopId, phone: phone, billAmount: billAmount }) 
+      })
+      .then(res => res.json())
+      .then(data => { 
+        if(data.success) { 
+          showMsg(data.message, true); 
+          document.getElementById('cBillAmount').value = ""; 
+          checkCustomer(); // Auto refresh points
+        } else { 
+          showMsg(data.error, false); 
+        } 
+      }).catch(err => showMsg("Network Error!", false));
     }
 
-    function showMsg(id, text, success) {
-      var m = document.getElementById(id);
-      m.innerHTML = text;
-      m.style.background = success ? "#d4edda" : "#f8d7da";
-      m.style.color       = success ? "#155724" : "#721c24";
-      m.style.display = "block";
+    function showMsg(text, isSuccess, bgColor, textColor) { 
+      let m = document.getElementById('actionMsg'); 
+      m.innerHTML = text; 
+      m.style.background = bgColor || (isSuccess ? "#e8f5e9" : "#ffebee"); 
+      m.style.color = textColor || (isSuccess ? "#2e7d32" : "#d32f2f"); 
+      m.style.display = "block"; 
     }
   </script>
 </body>

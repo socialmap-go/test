@@ -113,13 +113,10 @@
 </head>
 <body>
 
-<!-- LOADER -->
 <div id="loader"><div class="spin"></div><p style="margin-top:14px;color:#888;font-weight:700;">Loading Profile...</p></div>
 
-<!-- LIGHTBOX -->
 <div class="lb" id="lb" onclick="closeLb()"><span class="lb-close">✕</span><img id="lbImg" src="" alt=""></div>
 
-<!-- EMAIL POPUP -->
 <div class="ep" id="ep">
   <div class="ep-box">
     <div style="font-size:38px;color:#e65100;margin-bottom:8px;"><i class="fas fa-gift"></i></div>
@@ -131,14 +128,11 @@
   </div>
 </div>
 
-<!-- MAIN WRAP -->
 <div class="wrap" id="mainWrap" style="display:none;">
   <div class="cover-div" id="coverDiv"></div>
-  <!-- Logo half-overlaps cover -->
   <div class="profile-row">
     <div class="logo-wrap" id="logoWrap"><div class="init" id="logoInit">?</div></div>
   </div>
-  <!-- Business name sits fully below cover -->
   <div class="biz-info">
     <div class="biz-name" id="bizName">Loading...</div>
     <div class="biz-type" id="bizType">Smart Profile</div>
@@ -152,7 +146,6 @@
   </div>
 </div>
 
-<!-- PRODUCTS MODAL -->
 <div class="modal" id="prodModal">
   <div class="modal-box">
     <div class="modal-header">
@@ -169,7 +162,6 @@
   </div>
 </div>
 
-<!-- FEEDBACK MODAL -->
 <div class="modal" id="fbModal">
   <div class="modal-box">
     <div class="modal-header">
@@ -188,7 +180,6 @@
   </div>
 </div>
 
-<!-- BANK MODAL -->
 <div class="modal" id="bankModal">
   <div class="modal-box">
     <div class="modal-header">
@@ -199,7 +190,6 @@
   </div>
 </div>
 
-<!-- MENU MODAL -->
 <div class="modal" id="menuModal">
   <div class="modal-box" style="padding:12px;height:86vh;">
     <div class="modal-header">
@@ -210,7 +200,6 @@
   </div>
 </div>
 
-<!-- LOYALTY MODAL -->
 <div class="modal" id="loyModal">
   <div class="modal-box">
     <div class="modal-header">
@@ -249,13 +238,11 @@
   </div>
 </div>
 
-<!-- CART BUTTON -->
 <div class="floating-cart" id="cartBtn" onclick="openModal('cartModal')">
   <i class="fas fa-shopping-cart"></i>
   <div class="cart-badge" id="cartCount">0</div>
 </div>
 
-<!-- CART MODAL -->
 <div class="modal" id="cartModal" style="z-index:3000;">
   <div class="modal-box">
     <div class="modal-header">
@@ -294,12 +281,6 @@
 
   // ════════════════════════════════════════════
   // PLATFORM DETECTION
-  // Google Sheet columns used for custom links:
-  //   CustomLink1Name, CustomLink1URL
-  //   CustomLink2Name, CustomLink2URL
-  //   CustomLink3Name, CustomLink3URL
-  //   CustomLink4Name, CustomLink4URL
-  //   CustomLink5Name, CustomLink5URL
   // ════════════════════════════════════════════
   var PLATFORMS = [
     { m:['wa.me','whatsapp.com'],              cls:'abtn-wa',          icon:'fab fa-whatsapp'         },
@@ -334,6 +315,22 @@
       if (!u.startsWith('http')) u = 'https://' + u;
       return 'https://www.google.com/s2/favicons?sz=64&domain=' + new URL(u).hostname;
     } catch(e) { return ''; }
+  }
+
+  // ════════════════════════════════════════════
+  // CLICK TRACKING (ANALYTICS)
+  // ════════════════════════════════════════════
+  function trackClick(destination) {
+    var bName = document.getElementById('bizName').innerText || "Unknown";
+    var device = /Mobi|Android/i.test(navigator.userAgent) ? "Mobile Web" : "Desktop Web";
+    var payload = {
+      action: 'logClick',
+      shopId: shopId,
+      businessName: bName,
+      device: device,
+      destination: destination
+    };
+    fetch(API, { method: 'POST', body: JSON.stringify(payload) }).catch(function(e) { console.log(e); });
   }
 
   // ════════════════════════════════════════════
@@ -424,6 +421,8 @@
         el.href = href;
         el.target = '_blank';
         el.className = 'abtn ' + cls;
+        // අලුතින් එකතු කළ Click Tracking කොටස
+        el.onclick = function() { trackClick(label); };
       } else {
         el = document.createElement('button');
         el.className = 'abtn ' + cls;
@@ -462,7 +461,6 @@
       addBtn('abtn-menu',     ic('fas fa-file-pdf'),      'View Menu',               '', function(){ openMenuModal(); });
 
     // ── Dynamic Custom Links (1–5) ──
-    // Google Sheet columns: CustomLink1Name, CustomLink1URL ... CustomLink5Name, CustomLink5URL
     for (var n = 1; n <= 5; n++) {
       var url   = p['CustomLink' + n + 'URL'];
       var label = p['CustomLink' + n + 'Name'];
@@ -471,10 +469,10 @@
 
       var plt = detectPlatform(url);
       if (plt) {
-        // Known platform → branded color + FA icon
+        // Known platform
         addBtn(plt.cls, ic(plt.icon), label, url, null);
       } else {
-        // Unknown site → Google favicon as icon
+        // Unknown site
         var fav = getFaviconUrl(url);
         var imgHtml = fav
           ? "<img class='btn-favicon' src='" + fav + "' onerror=\"this.style.display='none'\" alt=''>"

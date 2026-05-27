@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | Combined Panel - Mapa Solutions & Social Map</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f6f8; margin: 0; padding: 0; }
     .header { background: #d32f2f; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
@@ -109,15 +110,34 @@
         </button>
       </div>
 
-      <div class="card">
+      <div class="card" id="analyticsCard">
         <h3 style="margin-top:0;"><i class="fas fa-chart-pie"></i> Global / Shop Analytics</h3>
-        <select id="analyticsShopId" onchange="loadAnalytics()">
-          <option value="ALL">All Shops (Global)</option>
-        </select>
-        <div class="grid-2" style="margin-top: 15px;">
+        
+        <div class="grid-3" style="margin-bottom: 15px;">
+          <div>
+            <label style="font-size:11px;">Shop තෝරන්න</label>
+            <select id="analyticsShopId" onchange="loadAnalytics()">
+              <option value="ALL">All Shops (Global)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:11px;">ආරම්භක දිනය</label>
+            <input type="date" id="statStartDate" onchange="loadAnalytics()">
+          </div>
+          <div>
+            <label style="font-size:11px;">අවසාන දිනය</label>
+            <input type="date" id="statEndDate" onchange="loadAnalytics()">
+          </div>
+        </div>
+
+        <button class="btn btn-dark" style="margin-bottom:15px; width:100%;" onclick="downloadPDF()">
+          <i class="fas fa-file-pdf" style="color:#ff5252;"></i> Download PDF Report
+        </button>
+
+        <div class="grid-2" style="margin-top: 5px;">
           <div class="stat-box">
             <h2 id="a_scans">0</h2>
-            <small>Total Scans</small>
+            <small>Total Scans / Actions</small>
           </div>
           <div class="stat-box" style="background: #e8f5e9;">
             <h2 id="a_emails" style="color: #2e7d32;">0</h2>
@@ -325,7 +345,7 @@
       
       alert("System Configuration Saved Successfully!");
       generateQRs();
-      loadAllCustomers(); // Reload with new script URL
+      loadAllCustomers(); 
     }
 
     function logout() {
@@ -488,7 +508,6 @@
       document.getElementById('c_expiryDate').value   = safeDate(g(['ExpiryDate','Expiry Date','expiryDate','Expiry','expiry']));
       document.getElementById('c_status').value       = g(['Status','status']) || 'Active';
 
-      // Custom Links Load
       document.getElementById('c_cl1_name').value = g(['CustomLink1Name']);
       document.getElementById('c_cl1_url').value  = g(['CustomLink1URL']);
       document.getElementById('c_cl2_name').value = g(['CustomLink2Name']);
@@ -640,11 +659,18 @@
       });
     }
 
-    // ══ ANALYTICS ══
+    // ══ ANALYTICS & PDF DOWNLOAD ══
     function loadAnalytics() {
       if (!APPS_SCRIPT_URL) return;
       var shopId = document.getElementById('analyticsShopId').value;
-      fetch(APPS_SCRIPT_URL + "?action=getClientStats&shopId=" + shopId)
+      var start = document.getElementById('statStartDate').value;
+      var end = document.getElementById('statEndDate').value;
+
+      var url = APPS_SCRIPT_URL + "?action=getClientStats&shopId=" + shopId;
+      if (start) url += "&start=" + start;
+      if (end) url += "&end=" + end;
+
+      fetch(url)
         .then(function(res) { return res.json(); })
         .then(function(data) {
           if (data.success) {
@@ -659,11 +685,32 @@
                 linkContainer.innerHTML += '<div class="link-stat-row"><span>' + showName + '</span><strong>' + data.linkStats[dest] + ' Scans / Clicks</strong></div>';
               }
             } else {
-              linkContainer.innerHTML = '<div style="font-size:13px; color:gray;">No scan/click destinations recorded yet.</div>';
+              linkContainer.innerHTML = '<div style="font-size:13px; color:gray;">No scan/click destinations recorded for this period.</div>';
             }
           }
         })
         .catch(function() {});
+    }
+
+    function downloadPDF() {
+      var element = document.getElementById('analyticsCard');
+      var shopSelect = document.getElementById('analyticsShopId');
+      var shopName = shopSelect.options[shopSelect.selectedIndex].text;
+      
+      var opt = {
+        margin:       10,
+        filename:     'Report_' + shopName.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      
+      var btn = element.querySelector('button');
+      btn.style.display = 'none';
+      
+      html2pdf().set(opt).from(element).save().then(function(){
+        btn.style.display = 'block'; 
+      });
     }
 
     // ══ QR GENERATION ══
@@ -705,12 +752,12 @@
           if (d.success && d.data && d.data.length > 0) {
             d.data.forEach(function(p) {
               var pType  = p.Type || "Product";
-              // මෙතැනින් තමයි Product Name ප්‍රශ්නය නිවැරදි කරලා තියෙන්නේ
               var pName  = p.ProductName || p['Product Name'] || p.name || p.Name || "නම නැත"; 
               var pId    = p.ProductID || p['Product ID'] || "No-ID";
               var pPrice = p.Price || p['Product Price'] || 0;
               var imgs = "";
-              [p.Image1 || p.img1, p.Image2 || p.img2, p.Image3 || p.img3].forEach(function(img) {
+              // මෙහිදී Img1, Img2, Img3 ලෙසද කියවීමට පහසුකම එකතු කර ඇත
+              [p.Image1 || p.img1 || p.Img1, p.Image2 || p.img2 || p.Img2, p.Image3 || p.img3 || p.Img3].forEach(function(img) {
                 if (img) imgs += '<img src="' + img + '" style="width:45px;height:45px;object-fit:cover;border-radius:5px;border:1px solid #ddd;">';
               });
               var imgHtml = imgs ? '<div style="margin-top:8px;display:flex;gap:10px;">' + imgs + '</div>' : '';

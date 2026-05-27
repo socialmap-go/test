@@ -9,13 +9,15 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', sans-serif; background: #f4f6f8; display: flex; justify-content: center; min-height: 100vh; }
     .wrap { width: 100%; max-width: 430px; background: white; min-height: 100vh; position: relative; overflow-x: hidden; padding-bottom: 30px; }
-    .cover-div { width: 100%; height: 180px; background: #d32f2f; background-size: cover; background-position: center; }
-    .profile-row { display: flex; align-items: flex-end; gap: 14px; padding: 0 18px; margin-top: -45px; margin-bottom: 12px; }
+    .cover-div { width: 100%; height: 160px; background: #d32f2f; background-size: cover; background-position: center; }
+    /* Profile row: logo half-overlaps cover, name sits BELOW cover fully */
+    .profile-row { padding: 0 18px 0; margin-top: -44px; margin-bottom: 0; }
     .logo-wrap { width: 88px; height: 88px; border-radius: 50%; border: 4px solid white; overflow: hidden; background: white; box-shadow: 0 3px 10px rgba(0,0,0,0.12); flex-shrink: 0; }
     .logo-wrap img { width: 100%; height: 100%; object-fit: cover; }
     .logo-wrap .init { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #d32f2f; color: white; font-size: 32px; font-weight: 900; }
-    .biz-name { font-size: 20px; font-weight: 800; color: #222; line-height: 1.2; padding-bottom: 6px; }
-    .biz-type { font-size: 12px; color: #888; margin-top: 2px; }
+    .biz-info { padding: 8px 18px 14px; }
+    .biz-name { font-size: 20px; font-weight: 800; color: #222; line-height: 1.2; }
+    .biz-type { font-size: 12px; color: #888; margin-top: 3px; }
     .btns-section { padding: 0 18px; display: flex; flex-direction: column; gap: 11px; }
     .abtn { display: flex; align-items: center; gap: 12px; padding: 15px 18px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 15px; color: white; border: none; cursor: pointer; width: 100%; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 3px 8px rgba(0,0,0,0.10); }
     .abtn:active { transform: scale(0.97); }
@@ -132,12 +134,14 @@
 <!-- MAIN WRAP -->
 <div class="wrap" id="mainWrap" style="display:none;">
   <div class="cover-div" id="coverDiv"></div>
+  <!-- Logo half-overlaps cover -->
   <div class="profile-row">
     <div class="logo-wrap" id="logoWrap"><div class="init" id="logoInit">?</div></div>
-    <div style="padding-bottom:8px;">
-      <div class="biz-name" id="bizName">Loading...</div>
-      <div class="biz-type" id="bizType">Smart Profile</div>
-    </div>
+  </div>
+  <!-- Business name sits fully below cover -->
+  <div class="biz-info">
+    <div class="biz-name" id="bizName">Loading...</div>
+    <div class="biz-type" id="bizType">Smart Profile</div>
   </div>
   <div class="btns-section" id="btnsSection"></div>
   <div class="divider"></div>
@@ -304,7 +308,7 @@
     { m:['tiktok.com'],                        cls:'abtn-tiktok',      icon:'fab fa-tiktok'           },
     { m:['maps.google','goo.gl/maps','maps.app.goo'], cls:'abtn-maps', icon:'fas fa-map-marker-alt'   },
     { m:['youtube.com','youtu.be'],            cls:'abtn-youtube',     icon:'fab fa-youtube'          },
-    { m:['tripadvisor.com'],                   cls:'abtn-tripadvisor', icon:'fab fa-tripadvisor'      },
+    { m:['tripadvisor.com'],                   cls:'abtn-tripadvisor', icon:'svg-tripadvisor'         },
     { m:['booking.com'],                       cls:'abtn-booking',     icon:'fas fa-bed'              },
     { m:['airbnb.com'],                        cls:'abtn-airbnb',      icon:'fab fa-airbnb'           },
     { m:['linkedin.com'],                      cls:'abtn-linkedin',    icon:'fab fa-linkedin'         },
@@ -403,7 +407,15 @@
     var sec = document.getElementById('btnsSection');
     sec.innerHTML = '';
 
-    function ic(cls) { return "<i class='" + cls + "'></i>"; }
+    // SVG icons for brands not reliably in FA
+    var SVG_ICONS = {
+      'svg-tripadvisor': '<svg style="width:22px;height:22px;min-width:22px;fill:currentColor;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.006 4.295c-2.67 0-5.338.784-7.645 2.352H1l1.804 1.96a5.38 5.38 0 0 0-.7 2.662 5.397 5.397 0 0 0 5.397 5.396 5.372 5.372 0 0 0 3.547-1.336l.952 1.03.952-1.03a5.374 5.374 0 0 0 3.548 1.336 5.397 5.397 0 0 0 5.397-5.396 5.38 5.38 0 0 0-.7-2.661L23 6.647h-3.36c-2.307-1.568-4.975-2.352-7.634-2.352zm-4.505 3.79a3.58 3.58 0 1 1 0 7.16 3.58 3.58 0 0 1 0-7.16zm9.01 0a3.58 3.58 0 1 1 0 7.16 3.58 3.58 0 0 1 0-7.16zm-9.01 1.426a2.154 2.154 0 1 0 0 4.308 2.154 2.154 0 0 0 0-4.308zm9.01 0a2.154 2.154 0 1 0 0 4.308 2.154 2.154 0 0 0 0-4.308zm-9.01 1.07a1.084 1.084 0 1 1 0 2.168 1.084 1.084 0 0 1 0-2.168zm9.01 0a1.084 1.084 0 1 1 0 2.168 1.084 1.084 0 0 1 0-2.168z"/></svg>'
+    };
+
+    function ic(cls) {
+      if (cls.indexOf('svg-') === 0 && SVG_ICONS[cls]) return SVG_ICONS[cls];
+      return "<i class='" + cls + "'></i>";
+    }
 
     function addBtn(cls, iconHtml, label, href, onclick) {
       var el;

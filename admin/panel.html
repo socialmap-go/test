@@ -21,13 +21,11 @@
     .btn-dark { background: #333; }
     .btn-save { background: #2e7d32; color: white; padding: 15px; border: none; border-radius: 5px; width: 100%; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; }
 
-    /* ── SEARCH BOX ── */
     .search-wrap { margin-bottom: 12px; }
     .search-row { display: flex; gap: 8px; margin-bottom: 6px; }
     .search-row input { margin: 0; flex: 1; padding: 10px 12px; font-size: 13px; }
     .search-count { font-size: 12px; color: #888; padding: 0 2px; }
 
-    /* ── CUSTOMER LIST ── */
     .customer-list { max-height: 420px; overflow-y: auto; border: 1px solid #eee; border-radius: 5px; }
     .customer-item { padding: 12px 14px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.1s; }
     .customer-item:hover { background: #f9f9f9; }
@@ -45,8 +43,7 @@
     .b-Product { background: #ff9800; } .b-Room { background: #2196f3; } .b-Package { background: #9c27b0; }
     #msg { display:none; padding:10px; margin-bottom:10px; font-weight:bold; border-radius:5px; }
 
-    /* ── SELECTED SHOP BANNER ── */
-    #selectedShopBanner { display:none; background:#fff8e1; border:1px solid #ffe082; border-radius:8px; padding:10px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
+    #selectedShopBanner { display:none; background:#fff8e1; border:1px solid #ffe082; border-radius:8px; padding:10px 14px; margin-bottom:12px; justify-content:space-between; align-items:center; }
     #selectedShopBanner .banner-name { font-weight:bold; color:#e65100; font-size:14px; }
     #selectedShopBanner .banner-id { font-size:12px; color:#888; margin-top:2px; }
     #selectedShopBanner button { background:#d32f2f; color:white; border:none; padding:6px 12px; border-radius:5px; cursor:pointer; font-size:12px; font-weight:bold; }
@@ -76,12 +73,11 @@
 
     <div class="grid-2">
 
-      <!-- ══ CUSTOMER LIST CARD ══ -->
+      <!-- CUSTOMER LIST CARD -->
       <div class="card">
         <h3 style="margin-top:0;"><i class="fas fa-users"></i> Customers / Shops</h3>
 
-        <!-- SELECTED BANNER -->
-        <div id="selectedShopBanner" style="display:none;">
+        <div id="selectedShopBanner">
           <div>
             <div class="banner-name" id="bannerName">—</div>
             <div class="banner-id"  id="bannerId">ID: —</div>
@@ -89,7 +85,6 @@
           <button onclick="clearSelection()"><i class="fas fa-times"></i> Clear</button>
         </div>
 
-        <!-- SEARCH -->
         <div class="search-wrap">
           <div class="search-row">
             <input type="text" id="searchInput" placeholder="ID, Name හෝ Phone සොයන්න..." oninput="filterCustomers()">
@@ -99,12 +94,10 @@
           <div class="search-count" id="searchCount"></div>
         </div>
 
-        <!-- LIST -->
         <div class="customer-list" id="customerList">
           <div style="padding: 20px; text-align: center; color: gray;"><i class="fas fa-spinner fa-spin"></i> Loading customers...</div>
         </div>
 
-        <!-- ADD NEW BUTTON -->
         <button class="btn btn-green" style="width:100%;margin-top:12px;" onclick="newCustomerForm()">
           <i class="fas fa-plus"></i> නව Shop / Customer එකතු කරන්න
         </button>
@@ -135,7 +128,7 @@
       </div>
     </div>
 
-    <!-- ══ CUSTOMER EDIT FORM ══ -->
+    <!-- CUSTOMER EDIT FORM -->
     <div class="card" id="customerFormCard">
       <h3 style="margin-top:0;" id="formTitle"><i class="fas fa-edit"></i> Customer / Shop Detailed Setup</h3>
       <div id="msg"></div>
@@ -160,7 +153,7 @@
         <div style="grid-column: 1 / -1;"><label><i class="fas fa-images"></i> Cover Image (Background)</label><input type="text" id="c_cover" placeholder="Image Direct Link"></div>
       </div>
 
-      <!-- PROMOTIONS SECTION -->
+      <!-- PROMOTIONS -->
       <div style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:8px;padding:15px;margin-bottom:15px;">
         <h4 style="margin:0 0 12px 0;color:#1b5e20;"><i class="fas fa-bullhorn"></i> Promotions & Video (Client App)</h4>
         <div><label><i class="fab fa-youtube"></i> Promo Video URL (YouTube හෝ Direct)</label><input type="text" id="c_promoVideo" placeholder="https://youtu.be/... හෝ direct mp4 link"></div>
@@ -208,7 +201,7 @@
     <!-- QR GENERATOR -->
     <div class="card">
       <h3 style="margin-top:0;"><i class="fas fa-qrcode"></i> High Quality QR Generator</h3>
-      <p style="font-size: 13px; color: gray;">අදාළ කඩහිමියා තෝරා ඔවුන්ගේ QRs සහ Links ලබාගන්න. (System URL එක Save කර තිබීම අනිවාර්යයි).</p>
+      <p style="font-size: 13px; color: gray;">අදාළ කඩහිමියා තෝරා ඔවුන්ගේ QRs සහ Links ලබාගන්න.</p>
       <select id="qrShopSelect" onchange="generateQRs()">
         <option value="">-- Select a Shop to Generate QRs --</option>
       </select>
@@ -279,7 +272,7 @@
       <div id="adminFeedbackList" style="margin-top:20px;"></div>
     </div>
 
-  </div><!-- /container -->
+  </div>
 
   <script>
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTUByYnRXZY3xdtIe5I_X_yLQ5qnIN8boGIh_o3ecXh5gBoNK1JPrpE61ODHobA_Is/exec";
@@ -302,13 +295,27 @@
       if (!url.endsWith('/')) url += '/';
       localStorage.setItem('sysBaseUrl', url);
       document.getElementById('sysBaseUrl').value = url;
-      alert("Base URL Saved! Now you can generate accurate QRs.");
+      alert("Base URL Saved!");
       generateQRs();
     }
 
     function logout() {
       sessionStorage.clear();
       window.location.href = "index.html";
+    }
+
+    // ══ HELPER: Google Sheet data වලින් field value ලබාගන්න ══
+    // Sheet columns different names වලින් එන්න පුළුවන් — ඒ නිසා
+    // possible keys list එකක් check කරලා first valid value return කරනවා
+    function getField(obj, keys) {
+      if (!obj) return '';
+      for (var i = 0; i < keys.length; i++) {
+        var k = keys[i];
+        if (obj[k] !== undefined && obj[k] !== null && obj[k] !== '') {
+          return obj[k].toString();
+        }
+      }
+      return '';
     }
 
     // ══ LOAD ALL CUSTOMERS ══
@@ -326,6 +333,9 @@
           } else {
             container.innerHTML = '<div style="padding: 20px; text-align: center; color: red;">Failed to load customers.</div>';
           }
+        })
+        .catch(function(err) {
+          container.innerHTML = '<div style="padding: 20px; text-align: center; color: red;">Network error. Please refresh.</div>';
         });
     }
 
@@ -338,19 +348,27 @@
         return;
       }
       list.forEach(function(c) {
-        var isSelected = currentSelectedId === c.ID;
-        var statusBg  = c.Status === 'Active' ? '#e8f5e9' : '#ffebee';
-        var statusClr = c.Status === 'Active' ? 'green' : 'red';
-        var loyBg = c.LoyaltyStatus === 'Active' ? '#2e7d32' : '#999';
+        // ID field — possible key names
+        var id   = getField(c, ['ID','id','ShopID','Shop ID','shopId']);
+        var name = getField(c, ['BusinessName','Business Name','businessName','Name','name','ShopName']);
+        var ph   = getField(c, ['ClientPhone','Client Phone','Phone','phone','clientPhone']);
+        var stat = getField(c, ['Status','status']) || 'Active';
+        var loy  = getField(c, ['LoyaltyStatus','Loyalty Status','loyaltyStatus','Loyalty']) || 'Inactive';
+
+        var isSelected = currentSelectedId === id;
+        var statusBg  = stat === 'Active' ? '#e8f5e9' : '#ffebee';
+        var statusClr = stat === 'Active' ? 'green' : 'red';
+        var loyBg = loy === 'Active' ? '#2e7d32' : '#999';
+
         container.innerHTML +=
-          '<div class="customer-item' + (isSelected ? ' selected' : '') + '" id="citem_' + c.ID + '" onclick="selectCustomer(\'' + c.ID + '\')">' +
+          '<div class="customer-item' + (isSelected ? ' selected' : '') + '" id="citem_' + id + '" onclick="selectCustomer(\'' + id + '\')">' +
             '<div>' +
-              '<strong>' + (c.BusinessName || 'No Name') + '</strong><br>' +
-              '<small style="color:gray;">ID: ' + c.ID + ' | Ph: ' + (c.ClientPhone || 'N/A') + '</small>' +
+              '<strong>' + (name || 'No Name') + '</strong><br>' +
+              '<small style="color:gray;">ID: ' + id + ' | Ph: ' + (ph || 'N/A') + '</small>' +
             '</div>' +
             '<div style="text-align:right;">' +
-              '<span class="badge" style="background:' + statusBg + ';color:' + statusClr + ';">' + (c.Status || 'Active') + '</span><br>' +
-              '<span class="badge" style="background:' + loyBg + ';font-size:10px;margin-top:4px;display:inline-block;">Loyalty: ' + (c.LoyaltyStatus || 'Inactive') + '</span>' +
+              '<span class="badge" style="background:' + statusBg + ';color:' + statusClr + ';">' + stat + '</span><br>' +
+              '<span class="badge" style="background:' + loyBg + ';font-size:10px;margin-top:4px;display:inline-block;">Loyalty: ' + loy + '</span>' +
             '</div>' +
           '</div>';
       });
@@ -360,9 +378,10 @@
     function filterCustomers() {
       var term = document.getElementById('searchInput').value.toLowerCase().trim();
       var filtered = term === "" ? allCustomersData : allCustomersData.filter(function(c) {
-        return (c.ID && c.ID.toLowerCase().includes(term)) ||
-               (c.BusinessName && c.BusinessName.toLowerCase().includes(term)) ||
-               (c.ClientPhone && c.ClientPhone.toString().includes(term));
+        var id   = getField(c, ['ID','id','ShopID','Shop ID']).toLowerCase();
+        var name = getField(c, ['BusinessName','Business Name','Name']).toLowerCase();
+        var ph   = getField(c, ['ClientPhone','Client Phone','Phone']).toLowerCase();
+        return id.includes(term) || name.includes(term) || ph.includes(term);
       });
       renderCustomerList(filtered);
       updateSearchCount(filtered.length, allCustomersData.length);
@@ -381,70 +400,94 @@
       filterCustomers();
     }
 
-    // ══ SELECT CUSTOMER ══
+    // ══ SELECT CUSTOMER — FIX MAIN ══
     function selectCustomer(shopId) {
-      var customer = allCustomersData.find(function(c) { return c.ID === shopId; });
-      if (!customer) return;
+      // ID possible keys හරහා හොයාගන්නවා
+      var customer = allCustomersData.find(function(c) {
+        var id = getField(c, ['ID','id','ShopID','Shop ID','shopId']);
+        return id === shopId;
+      });
+
+      if (!customer) {
+        alert("Customer data load වුනේ නෑ. Refresh කරලා try කරන්න.");
+        return;
+      }
 
       currentSelectedId = shopId;
 
-      // Update banner
+      // Banner update
+      var name = getField(customer, ['BusinessName','Business Name','businessName','Name','name','ShopName']);
       document.getElementById('selectedShopBanner').style.display = 'flex';
-      document.getElementById('bannerName').innerText = customer.BusinessName || 'No Name';
-      document.getElementById('bannerId').innerText = 'ID: ' + customer.ID;
+      document.getElementById('bannerName').innerText = name || 'No Name';
+      document.getElementById('bannerId').innerText = 'ID: ' + shopId;
 
-      // Re-render list to show highlight
+      // List re-render with highlight
       var term = document.getElementById('searchInput').value.trim().toLowerCase();
       var list = term ? allCustomersData.filter(function(c) {
-        return (c.ID && c.ID.toLowerCase().includes(term)) ||
-               (c.BusinessName && c.BusinessName.toLowerCase().includes(term)) ||
-               (c.ClientPhone && c.ClientPhone.toString().includes(term));
+        var id2   = getField(c, ['ID','id','ShopID','Shop ID']).toLowerCase();
+        var name2 = getField(c, ['BusinessName','Business Name','Name']).toLowerCase();
+        var ph2   = getField(c, ['ClientPhone','Client Phone','Phone']).toLowerCase();
+        return id2.includes(term) || name2.includes(term) || ph2.includes(term);
       }) : allCustomersData;
       renderCustomerList(list);
 
-      // Fill form
-      var safe = function(s) { return s ? s.toString() : ''; };
+      // ══ FORM FILL — ALL POSSIBLE COLUMN NAMES HANDLE කරනවා ══
+      var g = function(keys) { return getField(customer, keys); };
+
       var safeDate = function(dt) {
         if (!dt) return '';
-        try { var d = new Date(dt); return isNaN(d) ? '' : d.toISOString().split('T')[0]; } catch(e) { return ''; }
+        try {
+          var d = new Date(dt);
+          return isNaN(d.getTime()) ? '' : d.toISOString().split('T')[0];
+        } catch(e) { return ''; }
       };
-      document.getElementById('c_id').value            = safe(customer.ID);
-      document.getElementById('c_type').value          = customer.Type || 'profile';
-      document.getElementById('c_name').value          = safe(customer.BusinessName);
-      document.getElementById('c_wa').value            = safe(customer.WhatsApp);
-      document.getElementById('c_maps').value          = safe(customer.Maps);
-      document.getElementById('c_fb').value            = safe(customer.Facebook);
-      document.getElementById('c_ig').value            = safe(customer.Instagram);
-      document.getElementById('c_tiktok').value        = safe(customer.TikTok);
-      document.getElementById('c_web').value           = safe(customer.Website);
-      document.getElementById('c_email').value         = safe(customer.Email);
-      document.getElementById('c_menu').value          = safe(customer.MenuPDF);
-      document.getElementById('c_review').value        = safe(customer.GoogleReview);
-      document.getElementById('c_image').value         = safe(customer.ProfileImage);
-      document.getElementById('c_cover').value         = safe(customer.CoverImage);
-      document.getElementById('c_bank').value          = safe(customer.BankDetails);
-      document.getElementById('c_promoVideo').value    = safe(customer.CustomPromoVideo);
-      document.getElementById('c_promoImg1').value     = safe(customer.CustomPromoImg1);
-      document.getElementById('c_promoImg2').value     = safe(customer.CustomPromoImg2);
-      document.getElementById('c_promoImg3').value     = safe(customer.CustomPromoImg3);
-      document.getElementById('c_loyaltyStatus').value = customer.LoyaltyStatus || 'Inactive';
-      document.getElementById('c_storeStatus').value   = customer.StoreStatus || 'Active';
-      document.getElementById('c_inboxStatus').value   = customer.InboxStatus || 'Active';
-      document.getElementById('c_stampTarget').value   = customer.StampTarget || 10;
-      document.getElementById('c_clientPhone').value   = safe(customer.ClientPhone);
-      document.getElementById('c_password').value      = safe(customer.Password);
-      document.getElementById('c_expiryDate').value    = safeDate(customer.ExpiryDate);
-      document.getElementById('c_status').value        = customer.Status || 'Active';
-      document.getElementById('c_theme').value         = safe(customer.ThemeColor);
-      document.getElementById('formTitle').innerHTML   = '<i class="fas fa-edit"></i> Editing: <span style="color:#d32f2f;">' + (customer.BusinessName || customer.ID) + '</span>';
 
-      // Load related data
-      document.getElementById('p_shop_id').value = safe(customer.ID);
-      document.getElementById('f_shop_id').value = safe(customer.ID);
+      document.getElementById('c_id').value           = g(['ID','id','ShopID','Shop ID','shopId']);
+      document.getElementById('c_type').value         = g(['Type','type']) || 'profile';
+      document.getElementById('c_name').value         = g(['BusinessName','Business Name','businessName','Name','name','ShopName']);
+      document.getElementById('c_wa').value           = g(['WhatsApp','whatsapp','Whatsapp','WhatsAppNumber','wa']);
+      document.getElementById('c_maps').value         = g(['Maps','maps','GoogleMaps','Google Maps','MapsLink']);
+      document.getElementById('c_fb').value           = g(['Facebook','facebook','FB','fb','FacebookURL']);
+      document.getElementById('c_ig').value           = g(['Instagram','instagram','IG','ig','InstagramURL']);
+      document.getElementById('c_tiktok').value       = g(['TikTok','tiktok','Tiktok','TikTokURL']);
+      document.getElementById('c_web').value          = g(['Website','website','Web','web','WebsiteURL']);
+      document.getElementById('c_email').value        = g(['Email','email','EmailAddress']);
+      document.getElementById('c_menu').value         = g(['MenuPDF','Menu PDF','menuPDF','MenuLink','Menu Link','menu']);
+      document.getElementById('c_review').value       = g(['GoogleReview','Google Review','googleReview','ReviewLink','Review Link']);
+      document.getElementById('c_image').value        = g(['ProfileImage','Profile Image','profileImage','ProfileImg','ProfilePhoto','Logo']);
+      document.getElementById('c_cover').value        = g(['CoverImage','Cover Image','coverImage','CoverImg','Cover','Banner']);
+      document.getElementById('c_bank').value         = g(['BankDetails','Bank Details','bankDetails','BankInfo','Bank']);
+      document.getElementById('c_promoVideo').value   = g(['CustomPromoVideo','PromoVideo','Promo Video','promoVideo','PromoVideoURL']);
+      document.getElementById('c_promoImg1').value    = g(['CustomPromoImg1','PromoImg1','PromoImage1','promoImg1']);
+      document.getElementById('c_promoImg2').value    = g(['CustomPromoImg2','PromoImg2','PromoImage2','promoImg2']);
+      document.getElementById('c_promoImg3').value    = g(['CustomPromoImg3','PromoImg3','PromoImage3','promoImg3']);
+      document.getElementById('c_theme').value        = g(['ThemeColor','Theme Color','themeColor','Theme','theme']);
+      document.getElementById('c_clientPhone').value  = g(['ClientPhone','Client Phone','clientPhone','Phone','phone']);
+      document.getElementById('c_password').value     = g(['Password','password','Pass','pass']);
+      document.getElementById('c_expiryDate').value   = safeDate(g(['ExpiryDate','Expiry Date','expiryDate','Expiry','expiry']));
+      document.getElementById('c_status').value       = g(['Status','status']) || 'Active';
+
+      // Select dropdowns — value set කරන්නේ value exist නම් විතරයි
+      var loyVal = g(['LoyaltyStatus','Loyalty Status','loyaltyStatus','Loyalty']) || 'Inactive';
+      var stoVal = g(['StoreStatus','Store Status','storeStatus','Store']) || 'Active';
+      var inbVal = g(['InboxStatus','Inbox Status','inboxStatus','Inbox']) || 'Active';
+      var stmVal = g(['StampTarget','Stamp Target','stampTarget','Stamps']) || '10';
+
+      document.getElementById('c_loyaltyStatus').value = loyVal;
+      document.getElementById('c_storeStatus').value   = stoVal;
+      document.getElementById('c_inboxStatus').value   = inbVal;
+      document.getElementById('c_stampTarget').value   = stmVal;
+
+      // Form title
+      document.getElementById('formTitle').innerHTML = '<i class="fas fa-edit"></i> Editing: <span style="color:#d32f2f;">' + (name || shopId) + '</span>';
+
+      // Related data fields autofill
+      document.getElementById('p_shop_id').value = shopId;
+      document.getElementById('f_shop_id').value = shopId;
       adminFetchProducts();
       adminFetchFeedback();
 
-      // Dropdowns
+      // Analytics & QR dropdowns
       document.getElementById('analyticsShopId').value = shopId;
       document.getElementById('qrShopSelect').value    = shopId;
       loadAnalytics();
@@ -481,7 +524,7 @@
 
     // ══ SAVE ══
     function saveCustomerData() {
-      var id = document.getElementById('c_id').value;
+      var id = document.getElementById('c_id').value.trim();
       if (!id) { alert("සැලකිය යුතුයි: Shop ID එක අනිවාර්යයි."); return; }
       var payload = {
         action: "saveCustomer",
@@ -527,17 +570,25 @@
           loadAllCustomers();
           msg.style.display = 'none';
         })
-        .catch(function() { alert("Error saving data."); msg.style.display = 'none'; });
+        .catch(function() { alert("Error saving data. Connection problem."); msg.style.display = 'none'; });
     }
 
     // ══ DELETE ══
     function deleteCustomerFromForm() {
-      var id = document.getElementById('c_id').value;
+      var id = document.getElementById('c_id').value.trim();
       if (!id) return;
       if (!confirm("ඔබ සහතිකද? ID " + id + " සහිත පාරිභෝගිකයා සදහටම මැකීමට අවශ්‍යද?")) return;
-      fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "deleteCustomer", id: id, staffId: sessionStorage.getItem('loggedInStaff'), staffName: sessionStorage.getItem('loggedInStaff') }) })
+      fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          action: "deleteCustomer",
+          id: id,
+          staffId: sessionStorage.getItem('loggedInStaff'),
+          staffName: sessionStorage.getItem('loggedInStaff')
+        })
+      })
         .then(function(res) { return res.json(); })
-        .then(function(d) { alert(d.message); currentSelectedId = ""; loadAllCustomers(); });
+        .then(function(d) { alert(d.message); currentSelectedId = ""; loadAllCustomers(); newCustomerForm(); });
     }
 
     // ══ DROPDOWNS ══
@@ -547,9 +598,11 @@
       analyticsSelect.innerHTML = '<option value="ALL">All Shops (Global)</option>';
       qrSelect.innerHTML = '<option value="">-- Select a Shop to Generate QRs --</option>';
       list.forEach(function(c) {
-        var label = (c.BusinessName || 'No Name') + ' (' + c.ID + ')';
-        analyticsSelect.innerHTML += '<option value="' + c.ID + '">' + label + '</option>';
-        qrSelect.innerHTML += '<option value="' + c.ID + '">' + label + '</option>';
+        var id   = getField(c, ['ID','id','ShopID','Shop ID','shopId']);
+        var name = getField(c, ['BusinessName','Business Name','businessName','Name','name','ShopName']);
+        var label = (name || 'No Name') + ' (' + id + ')';
+        analyticsSelect.innerHTML += '<option value="' + id + '">' + label + '</option>';
+        qrSelect.innerHTML += '<option value="' + id + '">' + label + '</option>';
       });
     }
 
@@ -574,7 +627,8 @@
               linkContainer.innerHTML = '<div style="font-size:13px; color:gray;">No scan destinations recorded yet.</div>';
             }
           }
-        });
+        })
+        .catch(function() {});
     }
 
     // ══ QR GENERATION ══
@@ -605,8 +659,8 @@
 
     // ══ PRODUCTS ══
     function adminFetchProducts() {
-      var sid = document.getElementById('p_shop_id').value;
-      if (!sid) { alert("කරුණාකර Shop ID එක ඇතුළත් කරන්න."); return; }
+      var sid = document.getElementById('p_shop_id').value.trim();
+      if (!sid) return;
       document.getElementById('adminProductsList').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
       fetch(APPS_SCRIPT_URL + "?action=getProducts&shopId=" + sid)
         .then(function(res) { return res.json(); })
@@ -633,27 +687,40 @@
     }
 
     function adminAddProduct() {
-      var sid = document.getElementById('p_shop_id').value;
-      var name = document.getElementById('new_p_name').value;
-      var price = document.getElementById('new_p_price').value;
+      var sid = document.getElementById('p_shop_id').value.trim();
+      var name = document.getElementById('new_p_name').value.trim();
+      var price = document.getElementById('new_p_price').value.trim();
       if (!sid || !name || !price) { alert("කරුණාකර Shop ID, නම සහ මිල අනිවාර්යයෙන් ඇතුළත් කරන්න."); return; }
-      fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "addProduct", shopId: sid, type: document.getElementById('new_p_type').value, name: name, price: price, img1: document.getElementById('new_p_img1').value, img2: document.getElementById('new_p_img2').value, img3: document.getElementById('new_p_img3').value }) })
+      fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          action: "addProduct",
+          shopId: sid,
+          type: document.getElementById('new_p_type').value,
+          name: name,
+          price: price,
+          img1: document.getElementById('new_p_img1').value,
+          img2: document.getElementById('new_p_img2').value,
+          img3: document.getElementById('new_p_img3').value
+        })
+      })
         .then(function(res) { return res.json(); })
         .then(function(d) {
-          alert(d.message); adminFetchProducts();
+          alert(d.message);
+          adminFetchProducts();
           ['new_p_name','new_p_price','new_p_img1','new_p_img2','new_p_img3'].forEach(function(f) { document.getElementById(f).value = ""; });
         });
     }
 
     function adminUpdatePrice(pid) {
-      var sid = document.getElementById('p_shop_id').value;
+      var sid = document.getElementById('p_shop_id').value.trim();
       var price = document.getElementById('ad_p_' + pid).value;
       fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "updatePrice", shopId: sid, productId: pid, price: price }) })
         .then(function(res) { return res.json(); }).then(function(d) { alert(d.message); });
     }
 
     function adminDeleteProduct(pid) {
-      var sid = document.getElementById('p_shop_id').value;
+      var sid = document.getElementById('p_shop_id').value.trim();
       if (!confirm("Are you sure you want to delete this product?")) return;
       fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "deleteProduct", shopId: sid, productId: pid }) })
         .then(function(res) { return res.json(); }).then(function(d) { alert(d.message); adminFetchProducts(); });
@@ -661,8 +728,8 @@
 
     // ══ FEEDBACK ══
     function adminFetchFeedback() {
-      var sid = document.getElementById('f_shop_id').value;
-      if (!sid) { alert("කරුණාකර Shop ID එක ඇතුළත් කරන්න."); return; }
+      var sid = document.getElementById('f_shop_id').value.trim();
+      if (!sid) return;
       document.getElementById('adminFeedbackList').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
       fetch(APPS_SCRIPT_URL + "?action=getFeedback&shopId=" + sid)
         .then(function(res) { return res.json(); })

@@ -10,7 +10,6 @@
     body { font-family: 'Segoe UI', sans-serif; background: #f4f6f8; display: flex; justify-content: center; min-height: 100vh; }
     .wrap { width: 100%; max-width: 430px; background: white; min-height: 100vh; position: relative; overflow-x: hidden; padding-bottom: 30px; }
     .cover-div { width: 100%; height: 160px; background: #d32f2f; background-size: cover; background-position: center; }
-    /* Profile row: logo half-overlaps cover, name sits BELOW cover fully */
     .profile-row { padding: 0 18px 0; margin-top: -44px; margin-bottom: 0; }
     .logo-wrap { width: 88px; height: 88px; border-radius: 50%; border: 4px solid white; overflow: hidden; background: white; box-shadow: 0 3px 10px rgba(0,0,0,0.12); flex-shrink: 0; }
     .logo-wrap img { width: 100%; height: 100%; object-fit: cover; }
@@ -146,6 +145,7 @@
   </div>
 </div>
 
+<!-- PRODUCTS MODAL -->
 <div class="modal" id="prodModal">
   <div class="modal-box">
     <div class="modal-header">
@@ -162,6 +162,7 @@
   </div>
 </div>
 
+<!-- FEEDBACK MODAL -->
 <div class="modal" id="fbModal">
   <div class="modal-box">
     <div class="modal-header">
@@ -180,6 +181,7 @@
   </div>
 </div>
 
+<!-- BANK MODAL -->
 <div class="modal" id="bankModal">
   <div class="modal-box">
     <div class="modal-header">
@@ -190,6 +192,7 @@
   </div>
 </div>
 
+<!-- MENU MODAL -->
 <div class="modal" id="menuModal">
   <div class="modal-box" style="padding:12px;height:86vh;">
     <div class="modal-header">
@@ -200,6 +203,7 @@
   </div>
 </div>
 
+<!-- LOYALTY MODAL -->
 <div class="modal" id="loyModal">
   <div class="modal-box">
     <div class="modal-header">
@@ -238,11 +242,13 @@
   </div>
 </div>
 
+<!-- FLOATING CART -->
 <div class="floating-cart" id="cartBtn" onclick="openModal('cartModal')">
   <i class="fas fa-shopping-cart"></i>
   <div class="cart-badge" id="cartCount">0</div>
 </div>
 
+<!-- CART / ORDER MODAL -->
 <div class="modal" id="cartModal" style="z-index:3000;">
   <div class="modal-box">
     <div class="modal-header">
@@ -260,7 +266,7 @@
         <div id="fixedTable" style="display:none;background:#e3f2fd;padding:11px;border-radius:8px;margin-bottom:10px;font-weight:700;color:#1565c0;text-align:center;border:1px dashed #1976d2;">&#127919; Table: <span id="fixedTableTxt"></span></div>
         <input type="text" id="tableInput" class="inp" placeholder="Table Number (e.g. Table 03)">
       </div>
-      <input type="text" id="orderName" class="inp" placeholder="Your Name">
+      <input type="text" id="orderName"  class="inp" placeholder="Your Name">
       <input type="tel"  id="orderPhone" class="inp" placeholder="Phone (07XXXXXXXX)" maxlength="10">
       <button class="btn-place" id="placeBtn" onclick="placeOrder()">Place Order Now</button>
       <div id="orderMsg" style="display:none;" class="msg-text"></div>
@@ -270,7 +276,7 @@
 
 <script>
   // ════════════════════════════════════════════
-  // CONFIG — ඔයාගේ Apps Script URL ඒකමයි
+  // CONFIG
   // ════════════════════════════════════════════
   var API       = "https://script.google.com/macros/s/AKfycbzbH_bZzGRsrS_gzRAin7F3voc999Jlwqq5UYO-8wLQMjUeXyjSpSSDhPAFaKT5bzJx/exec";
   var shopId    = new URLSearchParams(window.location.search).get('id');
@@ -301,11 +307,9 @@
   function detectPlatform(url) {
     if (!url) return null;
     var l = url.toLowerCase();
-    for (var i = 0; i < PLATFORMS.length; i++) {
-      for (var j = 0; j < PLATFORMS[i].m.length; j++) {
+    for (var i = 0; i < PLATFORMS.length; i++)
+      for (var j = 0; j < PLATFORMS[i].m.length; j++)
         if (l.indexOf(PLATFORMS[i].m[j]) !== -1) return PLATFORMS[i];
-      }
-    }
     return null;
   }
 
@@ -318,19 +322,12 @@
   }
 
   // ════════════════════════════════════════════
-  // CLICK TRACKING (ANALYTICS)
+  // CLICK TRACKING
   // ════════════════════════════════════════════
   function trackClick(destination) {
-    var bName = document.getElementById('bizName').innerText || "Unknown";
+    var bName  = document.getElementById('bizName').innerText || "Unknown";
     var device = /Mobi|Android/i.test(navigator.userAgent) ? "Mobile Web" : "Desktop Web";
-    var payload = {
-      action: 'logClick',
-      shopId: shopId,
-      businessName: bName,
-      device: device,
-      destination: destination
-    };
-    fetch(API, { method: 'POST', body: JSON.stringify(payload) }).catch(function(e) { console.log(e); });
+    fetch(API, { method:'POST', body: JSON.stringify({ action:'logClick', shopId:shopId, businessName:bName, device:device, destination:destination }) }).catch(function(){});
   }
 
   // ════════════════════════════════════════════
@@ -342,9 +339,9 @@
       return;
     }
     if (autoTable) {
-      document.getElementById('fixedTable').style.display = 'block';
-      document.getElementById('fixedTableTxt').innerText = autoTable;
-      document.getElementById('tableInput').style.display = 'none';
+      document.getElementById('fixedTable').style.display    = 'block';
+      document.getElementById('fixedTableTxt').innerText     = autoTable;
+      document.getElementById('tableInput').style.display    = 'none';
     }
     loadProfile();
   };
@@ -361,15 +358,15 @@
           return;
         }
         var p = d.data;
-        document.getElementById('loader').style.display = 'none';
+        document.getElementById('loader').style.display  = 'none';
         document.getElementById('mainWrap').style.display = 'block';
 
         // Cover
         var cd = document.getElementById('coverDiv');
         if (p.ThemeColor && p.ThemeColor.trim()) cd.style.background = p.ThemeColor;
-        if (p.CoverImage && p.CoverImage.trim()) {
-          cd.style.backgroundImage = "url('" + p.CoverImage + "')";
-          cd.style.backgroundSize = 'cover';
+        if (p.CoverImage  && p.CoverImage.trim()) {
+          cd.style.backgroundImage    = "url('" + p.CoverImage + "')";
+          cd.style.backgroundSize     = 'cover';
           cd.style.backgroundPosition = 'center';
         }
 
@@ -381,11 +378,12 @@
           document.getElementById('logoInit').innerText = (p.BusinessName || '?').charAt(0).toUpperCase();
         }
 
-        document.getElementById('bizName').innerText    = p.BusinessName || 'Welcome';
-        document.getElementById('bizType').innerText    = p.Type === 'redirect' ? 'Smart Redirect' : 'Smart Profile';
-        document.getElementById('bankContent').innerText = p.BankDetails || 'Bank details not available.';
-        if (p.MenuPDF && p.MenuPDF.trim()) menuLink = p.MenuPDF;
-        if (p.StampTarget) stampsTarget = parseInt(p.StampTarget) || 10;
+        document.getElementById('bizName').innerText     = p.BusinessName || 'Welcome';
+        document.getElementById('bizType').innerText     = p.Type === 'redirect' ? 'Smart Redirect' : 'Smart Profile';
+        document.getElementById('bankContent').innerText = p.BankDetails  || 'Bank details not available.';
+
+        if (p.MenuPDF    && p.MenuPDF.trim())    menuLink     = p.MenuPDF;
+        if (p.StampTarget)                        stampsTarget = parseInt(p.StampTarget) || 10;
 
         buildButtons(p);
         if (p.StoreStatus === 'Active') loadProducts();
@@ -404,75 +402,55 @@
     var sec = document.getElementById('btnsSection');
     sec.innerHTML = '';
 
-    // SVG icons for brands not reliably in FA
     var SVG_ICONS = {
-      'svg-tripadvisor': '<svg style="width:22px;height:22px;min-width:22px;fill:currentColor;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.006 4.295c-2.67 0-5.338.784-7.645 2.352H1l1.804 1.96a5.38 5.38 0 0 0-.7 2.662 5.397 5.397 0 0 0 5.397 5.396 5.372 5.372 0 0 0 3.547-1.336l.952 1.03.952-1.03a5.374 5.374 0 0 0 3.548 1.336 5.397 5.397 0 0 0 5.397-5.396 5.38 5.38 0 0 0-.7-2.661L23 6.647h-3.36c-2.307-1.568-4.975-2.352-7.634-2.352zm-4.505 3.79a3.58 3.58 0 1 1 0 7.16 3.58 3.58 0 0 1 0-7.16zm9.01 0a3.58 3.58 0 1 1 0 7.16 3.58 3.58 0 0 1 0-7.16zm-9.01 1.426a2.154 2.154 0 1 0 0 4.308 2.154 2.154 0 0 0 0-4.308zm9.01 0a2.154 2.154 0 1 0 0 4.308 2.154 2.154 0 0 0 0-4.308zm-9.01 1.07a1.084 1.084 0 1 1 0 2.168 1.084 1.084 0 0 1 0-2.168zm9.01 0a1.084 1.084 0 1 1 0 2.168 1.084 1.084 0 0 1 0-2.168z"/></svg>'
+      'svg-tripadvisor': '<svg style="width:22px;height:22px;min-width:22px;fill:currentColor;" viewBox="0 0 24 24"><path d="M12.006 4.295c-2.67 0-5.338.784-7.645 2.352H1l1.804 1.96a5.38 5.38 0 0 0-.7 2.662 5.397 5.397 0 0 0 5.397 5.396 5.372 5.372 0 0 0 3.547-1.336l.952 1.03.952-1.03a5.374 5.374 0 0 0 3.548 1.336 5.397 5.397 0 0 0 5.397-5.396 5.38 5.38 0 0 0-.7-2.661L23 6.647h-3.36c-2.307-1.568-4.975-2.352-7.634-2.352zm-4.505 3.79a3.58 3.58 0 1 1 0 7.16 3.58 3.58 0 0 1 0-7.16zm9.01 0a3.58 3.58 0 1 1 0 7.16 3.58 3.58 0 0 1 0-7.16zm-9.01 1.426a2.154 2.154 0 1 0 0 4.308 2.154 2.154 0 0 0 0-4.308zm9.01 0a2.154 2.154 0 1 0 0 4.308 2.154 2.154 0 0 0 0-4.308zm-9.01 1.07a1.084 1.084 0 1 1 0 2.168 1.084 1.084 0 0 1 0-2.168zm9.01 0a1.084 1.084 0 1 1 0 2.168 1.084 1.084 0 0 1 0-2.168z"/></svg>'
     };
 
     function ic(cls) {
-      if (cls.indexOf('svg-') === 0 && SVG_ICONS[cls]) return SVG_ICONS[cls];
-      return "<i class='" + cls + "'></i>";
+      return (cls.indexOf('svg-') === 0 && SVG_ICONS[cls]) ? SVG_ICONS[cls] : "<i class='" + cls + "'></i>";
     }
 
-    function addBtn(cls, iconHtml, label, href, onclick) {
+    function addBtn(cls, iconHtml, label, href, onclickFn) {
       var el;
       if (href) {
         el = document.createElement('a');
-        el.href = href;
-        el.target = '_blank';
+        el.href = href; el.target = '_blank';
         el.className = 'abtn ' + cls;
-        // අලුතින් එකතු කළ Click Tracking කොටස
         el.onclick = function() { trackClick(label); };
       } else {
         el = document.createElement('button');
         el.className = 'abtn ' + cls;
-        el.onclick = onclick;
+        el.onclick = onclickFn;
       }
       el.innerHTML = iconHtml + "<span>" + label + "</span>";
       sec.appendChild(el);
     }
 
-    // ── Fixed system buttons ──
-    if (p.StoreStatus === 'Active')
-      addBtn('abtn-products', ic('fas fa-box-open'),      'Our Services & Products', '', function(){ openModal('prodModal'); });
-    if (p.InboxStatus === 'Active')
-      addBtn('abtn-feedback', ic('fas fa-comment-dots'),  'Feedback & Suggestions',  '', function(){ openModal('fbModal'); });
-    if (p.LoyaltyStatus === 'Active')
-      addBtn('abtn-loyalty',  ic('fas fa-gift'),          'My Loyalty Card',         '', function(){ openLoyalty(); });
+    if (p.StoreStatus  === 'Active') addBtn('abtn-products', ic('fas fa-box-open'),     'Our Services & Products', '', function(){ openModal('prodModal'); });
+    if (p.InboxStatus  === 'Active') addBtn('abtn-feedback', ic('fas fa-comment-dots'), 'Feedback & Suggestions',  '', function(){ openModal('fbModal');  });
+    if (p.LoyaltyStatus=== 'Active') addBtn('abtn-loyalty',  ic('fas fa-gift'),         'My Loyalty Card',         '', function(){ openLoyalty();         });
     if (p.GoogleReview && p.GoogleReview.trim())
-      addBtn('abtn-review',   "<i class='fab fa-google' style='color:#fbbc04'></i>", 'Rate Us on Google', p.GoogleReview, null);
-    if (p.BankDetails && p.BankDetails.trim())
-      addBtn('abtn-bank',     ic('fas fa-university'),    'Bank Details',            '', function(){ openModal('bankModal'); });
-    if (p.WhatsApp && p.WhatsApp.trim())
-      addBtn('abtn-wa',       ic('fab fa-whatsapp'),      'WhatsApp',                p.WhatsApp, null);
-    if (p.Maps && p.Maps.trim())
-      addBtn('abtn-maps',     ic('fas fa-map-marker-alt'),'Google Maps',             p.Maps, null);
-    if (p.Facebook && p.Facebook.trim())
-      addBtn('abtn-fb',       ic('fab fa-facebook-f'),    'Facebook',                p.Facebook, null);
-    if (p.Instagram && p.Instagram.trim())
-      addBtn('abtn-ig',       ic('fab fa-instagram'),     'Instagram',               p.Instagram, null);
-    if (p.TikTok && p.TikTok.trim())
-      addBtn('abtn-tiktok',   ic('fab fa-tiktok'),        'TikTok',                  p.TikTok, null);
-    if (p.Website && p.Website.trim())
-      addBtn('abtn-web',      ic('fas fa-globe'),         'Website',                 p.Website, null);
-    if (p.Email && p.Email.trim())
-      addBtn('abtn-email',    ic('fas fa-envelope'),      'Email Us',                'mailto:' + p.Email, null);
-    if (p.MenuPDF && p.MenuPDF.trim())
-      addBtn('abtn-menu',     ic('fas fa-file-pdf'),      'View Menu',               '', function(){ openMenuModal(); });
+      addBtn('abtn-review', "<i class='fab fa-google' style='color:#fbbc04'></i>", 'Rate Us on Google', p.GoogleReview, null);
+    if (p.BankDetails  && p.BankDetails.trim())
+      addBtn('abtn-bank', ic('fas fa-university'), 'Bank Details', '', function(){ openModal('bankModal'); });
+    if (p.WhatsApp  && p.WhatsApp.trim())   addBtn('abtn-wa',    ic('fab fa-whatsapp'),       'WhatsApp',     p.WhatsApp,  null);
+    if (p.Maps      && p.Maps.trim())       addBtn('abtn-maps',  ic('fas fa-map-marker-alt'), 'Google Maps',  p.Maps,      null);
+    if (p.Facebook  && p.Facebook.trim())   addBtn('abtn-fb',    ic('fab fa-facebook-f'),     'Facebook',     p.Facebook,  null);
+    if (p.Instagram && p.Instagram.trim())  addBtn('abtn-ig',    ic('fab fa-instagram'),      'Instagram',    p.Instagram, null);
+    if (p.TikTok    && p.TikTok.trim())     addBtn('abtn-tiktok',ic('fab fa-tiktok'),         'TikTok',       p.TikTok,    null);
+    if (p.Website   && p.Website.trim())    addBtn('abtn-web',   ic('fas fa-globe'),          'Website',      p.Website,   null);
+    if (p.Email     && p.Email.trim())      addBtn('abtn-email', ic('fas fa-envelope'),       'Email Us',     'mailto:' + p.Email, null);
+    if (p.MenuPDF   && p.MenuPDF.trim())    addBtn('abtn-menu',  ic('fas fa-file-pdf'),       'View Menu',    '', function(){ openMenuModal(); });
 
-    // ── Dynamic Custom Links (1–5) ──
     for (var n = 1; n <= 5; n++) {
       var url   = p['CustomLink' + n + 'URL'];
       var label = p['CustomLink' + n + 'Name'];
       if (!url || !url.trim()) continue;
       label = (label && label.trim()) ? label.trim() : 'Visit Link';
-
       var plt = detectPlatform(url);
       if (plt) {
-        // Known platform
         addBtn(plt.cls, ic(plt.icon), label, url, null);
       } else {
-        // Unknown site
         var fav = getFaviconUrl(url);
         var imgHtml = fav
           ? "<img class='btn-favicon' src='" + fav + "' onerror=\"this.style.display='none'\" alt=''>"
@@ -534,7 +512,7 @@
     if (!email || !email.includes('@')) { alert("නිවැරදි email ලිපිනය ඇතුළත් කරන්න."); return; }
     fetch(API, { method:'POST', body: JSON.stringify({ action:'subscribeEmail', shopId:shopId, email:email }) })
       .then(function(r){ return r.json(); })
-      .then(function(){ localStorage.setItem('subscribed_' + shopId,'1'); alert("Subscribe කළා! ස්තූතියි."); closeEp(); });
+      .then(function(){ localStorage.setItem('subscribed_' + shopId, '1'); alert("Subscribe කළා! ස්තූතියි."); closeEp(); });
   }
 
   // ════════════════════════════════════════════
@@ -547,8 +525,8 @@
   }
   function setView(mode) {
     viewMode = mode;
-    document.getElementById('lvBtn').className = 'vtbtn' + (mode==='lv' ? ' on' : '');
-    document.getElementById('gvBtn').className = 'vtbtn' + (mode==='gv' ? ' on' : '');
+    document.getElementById('lvBtn').className = 'vtbtn' + (mode === 'lv' ? ' on' : '');
+    document.getElementById('gvBtn').className = 'vtbtn' + (mode === 'gv' ? ' on' : '');
     renderProds();
   }
   function renderProds() {
@@ -559,12 +537,12 @@
     productsData.forEach(function(p) {
       var nm     = p.ProductName || p.Name || 'Item';
       var price  = parseFloat(p.Price || 0);
-      var pid    = p.ProductID || Math.random().toString(36).substr(2,5);
+      var pid    = p.ProductID || Math.random().toString(36).substr(2, 5);
       var img    = p.Image1 || p.Img1 || '';
-      var typ    = p.Type || 'Product';
-      var safeNm = nm.replace(/'/g,"\\'").replace(/"/g,'&quot;');
-      var imgHtml = img ? "<img class='pimg' src='" + img + "' onerror=\"this.style.display='none'\" alt=''>" : '';
-      var addBtnHtml = "<button class='btn-add' onclick='addToCart(\""+pid+"\",\""+safeNm+"\","+price+")'><i class='fas fa-plus'></i> Add</button>";
+      var typ    = p.Type   || 'Product';
+      var safeNm = nm.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      var imgHtml    = img ? "<img class='pimg' src='" + img + "' onerror=\"this.style.display='none'\" alt=''>" : '';
+      var addBtnHtml = "<button class='btn-add' onclick='addToCart(\"" + pid + "\",\"" + safeNm + "\"," + price + ")'><i class='fas fa-plus'></i> Add</button>";
       c.innerHTML += "<div class='pc'>" + imgHtml + "<div class='pi'><div class='ptyp'>" + typ + "</div><div class='pname'>" + nm + "</div><div class='pprice'>රු. " + price.toFixed(2) + "</div>" + addBtnHtml + "</div></div>";
     });
   }
@@ -573,53 +551,117 @@
   // CART
   // ════════════════════════════════════════════
   function addToCart(id, name, price) {
-    if (cart[id]) cart[id].qty++; else cart[id] = { name:name, price:price, qty:1 };
+    if (cart[id]) cart[id].qty++;
+    else cart[id] = { name: name, price: price, qty: 1 };
     updateCartUI();
   }
   function changeQty(id, d) {
     if (cart[id]) { cart[id].qty += d; if (cart[id].qty <= 0) delete cart[id]; updateCartUI(); }
   }
   function updateCartUI() {
-    var qty=0, total=0, html='';
+    var qty = 0, total = 0, html = '';
     for (var id in cart) {
       qty   += cart[id].qty;
       total += cart[id].price * cart[id].qty;
-      html  += "<div class='cart-item'><div style='flex:1;text-align:left;'><b>" + cart[id].name + "</b><br><span style='color:#d32f2f;'>රු. " + (cart[id].price * cart[id].qty).toFixed(2) + "</span></div><div class='qty-ctrl'><button class='qty-btn' onclick='changeQty(\"" + id + "\",-1)'>&#x2212;</button><b>" + cart[id].qty + "</b><button class='qty-btn' onclick='changeQty(\"" + id + "\",1)'>+</button></div></div>";
+      html  += "<div class='cart-item'>" +
+                 "<div style='flex:1;text-align:left;'><b>" + cart[id].name + "</b><br>" +
+                 "<span style='color:#d32f2f;'>රු. " + (cart[id].price * cart[id].qty).toFixed(2) + "</span></div>" +
+                 "<div class='qty-ctrl'>" +
+                   "<button class='qty-btn' onclick='changeQty(\"" + id + "\",-1)'>&#x2212;</button>" +
+                   "<b>" + cart[id].qty + "</b>" +
+                   "<button class='qty-btn' onclick='changeQty(\"" + id + "\",1)'>+</button>" +
+                 "</div></div>";
     }
-    document.getElementById('cartItems').innerHTML = html;
-    document.getElementById('cartTotal').innerText = "රු. " + total.toFixed(2);
-    document.getElementById('cartCount').innerText = qty;
+    document.getElementById('cartItems').innerHTML  = html;
+    document.getElementById('cartTotal').innerText  = "රු. " + total.toFixed(2);
+    document.getElementById('cartCount').innerText  = qty;
     var cb = document.getElementById('cartBtn');
     cb.style.display = qty > 0 ? 'flex' : 'none';
     if (qty === 0) closeModal('cartModal');
   }
   function setOrderType(t) {
     orderType = t;
-    document.getElementById('btnDI').className = 'ot-btn' + (t==='Dine-In' ? ' on' : '');
-    document.getElementById('btnTA').className = 'ot-btn' + (t==='Takeaway' ? ' on' : '');
-    document.getElementById('tableArea').style.display = t==='Dine-In' ? 'block' : 'none';
+    document.getElementById('btnDI').className = 'ot-btn' + (t === 'Dine-In' ? ' on' : '');
+    document.getElementById('btnTA').className = 'ot-btn' + (t === 'Takeaway' ? ' on' : '');
+    document.getElementById('tableArea').style.display = t === 'Dine-In' ? 'block' : 'none';
   }
+
+  // ════════════════════════════════════════════
+  // PLACE ORDER — FIX: field names now match Apps Script placeOrder()
+  //   name        ← customerName
+  //   phone       ← phone
+  //   items       ← array [{name, qty, price}]
+  //   total       ← totalAmount
+  //   orderType   ← 'Dine-In' / 'Takeaway'
+  //   tableNote   ← table number
+  // ════════════════════════════════════════════
   function placeOrder() {
-    var items={}, total=0;
-    for (var id in cart) { items[cart[id].name] = cart[id].qty; total += cart[id].price * cart[id].qty; }
-    if (Object.keys(items).length === 0) return;
-    var nm    = document.getElementById('orderName').value.trim();
     var msgEl = document.getElementById('orderMsg');
-    if (!nm) { msgEl.innerHTML="කරුණාකර ඔබගේ නම ඇතුළත් කරන්න."; msgEl.className='msg-text msg-err'; msgEl.style.display='block'; return; }
-    var tbl = orderType==='Dine-In' ? (autoTable || document.getElementById('tableInput').value || 'Not Specified') : 'Takeaway';
-    msgEl.innerHTML="Processing..."; msgEl.className='msg-text'; msgEl.style.display='block';
+
+    // Build items array
+    var itemsArr = [];
+    var total    = 0;
+    for (var id in cart) {
+      itemsArr.push({ name: cart[id].name, qty: cart[id].qty, price: cart[id].price });
+      total += cart[id].price * cart[id].qty;
+    }
+    if (itemsArr.length === 0) return;
+
+    var customerName = document.getElementById('orderName').value.trim();
+    if (!customerName) {
+      msgEl.innerHTML   = "කරුණාකර ඔබගේ නම ඇතුළත් කරන්න.";
+      msgEl.className   = 'msg-text msg-err';
+      msgEl.style.display = 'block';
+      return;
+    }
+
+    var tableNote = '';
+    if (orderType === 'Dine-In') {
+      tableNote = autoTable || document.getElementById('tableInput').value.trim() || 'Not Specified';
+    }
+
+    msgEl.innerHTML     = "Processing...";
+    msgEl.className     = 'msg-text';
+    msgEl.style.display = 'block';
     document.getElementById('placeBtn').disabled = true;
-    fetch(API, { method:'POST', body: JSON.stringify({ action:'placeOrder', shopId:shopId, tableNo:tbl, customerName:nm, phone:document.getElementById('orderPhone').value, items:items, totalAmount:total }) })
-      .then(function(r){ return r.json(); })
-      .then(function(d){
+
+    // ── Payload — field names EXACTLY matching Apps Script placeOrder(req) ──
+    var payload = {
+      action:    'placeOrder',
+      shopId:    shopId,
+      name:      customerName,
+      phone:     document.getElementById('orderPhone').value.trim(),
+      items:     itemsArr,           // array of {name, qty, price}
+      total:     total,              // number
+      orderType: orderType,          // 'Dine-In' or 'Takeaway'
+      tableNote: tableNote           // table string or ''
+    };
+
+    fetch(API, { method: 'POST', body: JSON.stringify(payload) })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
         document.getElementById('placeBtn').disabled = false;
         if (d.success) {
-          cart={}; updateCartUI();
-          msgEl.innerHTML="&#x2705; Order placed!"; msgEl.className='msg-text msg-ok';
-          setTimeout(function(){ closeModal('cartModal'); }, 2500);
+          cart = {}; updateCartUI();
+          msgEl.innerHTML     = "&#x2705; Order placed! #" + (d.orderId || '');
+          msgEl.className     = 'msg-text msg-ok';
+          msgEl.style.display = 'block';
+          // Clear inputs
+          document.getElementById('orderName').value  = '';
+          document.getElementById('orderPhone').value = '';
+          document.getElementById('tableInput').value = '';
+          setTimeout(function() { closeModal('cartModal'); msgEl.style.display = 'none'; }, 3000);
         } else {
-          msgEl.innerHTML = d.error || "Error"; msgEl.className='msg-text msg-err';
+          msgEl.innerHTML   = d.error || "Error occurred. Please try again.";
+          msgEl.className   = 'msg-text msg-err';
+          msgEl.style.display = 'block';
         }
+      })
+      .catch(function() {
+        document.getElementById('placeBtn').disabled = false;
+        msgEl.innerHTML   = "Network error! Please try again.";
+        msgEl.className   = 'msg-text msg-err';
+        msgEl.style.display = 'block';
       });
   }
 
@@ -628,79 +670,85 @@
   // ════════════════════════════════════════════
   function openLoyalty() { lSwitchView('lv-login'); openModal('loyModal'); }
   function lSwitchView(v) {
-    ['lv-login','lv-setup','lv-forgot','lv-card'].forEach(function(x){
-      document.getElementById(x).style.display = x===v ? 'block' : 'none';
+    ['lv-login','lv-setup','lv-forgot','lv-card'].forEach(function(x) {
+      document.getElementById(x).style.display = x === v ? 'block' : 'none';
     });
   }
   function checkLoyalty() {
-    var ph=document.getElementById('lPhone').value, pin=document.getElementById('lPin').value;
-    if (ph.length!==10) { showLMsg('lLoginMsg',"10-digit phone number enter කරන්න"); return; }
-    document.getElementById('lCheckBtn').innerText='Checking...';
-    fetch(API,{method:'POST',body:JSON.stringify({action:'loyaltyGet',shopId:shopId,phone:ph,pin:pin})})
-      .then(function(r){return r.json();})
-      .then(function(d){
-        document.getElementById('lCheckBtn').innerText='Check My Card';
-        if(d.success){
-          if(d.requiresSetup){ document.getElementById('sPhone').value=ph; lSwitchView('lv-setup'); }
-          else { drawCard(d.stamps,d.redeemed); lSwitchView('lv-card'); }
-        } else showLMsg('lLoginMsg',d.error);
+    var ph = document.getElementById('lPhone').value, pin = document.getElementById('lPin').value;
+    if (ph.length !== 10) { showLMsg('lLoginMsg', "10-digit phone number enter කරන්න"); return; }
+    document.getElementById('lCheckBtn').innerText = 'Checking...';
+    fetch(API, { method:'POST', body: JSON.stringify({ action:'loyaltyGet', shopId:shopId, phone:ph, pin:pin }) })
+      .then(function(r){ return r.json(); })
+      .then(function(d) {
+        document.getElementById('lCheckBtn').innerText = 'Check My Card';
+        if (d.success) {
+          if (d.requiresSetup) { document.getElementById('sPhone').value = ph; lSwitchView('lv-setup'); }
+          else { drawCard(d.stamps, d.redeemed); lSwitchView('lv-card'); }
+        } else showLMsg('lLoginMsg', d.error);
       });
   }
   function setupLoyalty() {
-    var ph=document.getElementById('sPhone').value, pin=document.getElementById('sPin').value, yr=document.getElementById('sYear').value;
-    if(ph.length!==10||pin.length!==4||yr.length!==4){showLMsg('lSetupMsg',"Details නිවැරදිව enter කරන්න");return;}
-    document.getElementById('lSetupBtn').innerText='Saving...';
-    fetch(API,{method:'POST',body:JSON.stringify({action:'loyaltySetup',shopId:shopId,phone:ph,pin:pin,birthYear:yr})})
-      .then(function(r){return r.json();})
-      .then(function(d){
-        document.getElementById('lSetupBtn').innerText='Create Account';
-        if(d.success){document.getElementById('lPhone').value=ph;lSwitchView('lv-login');alert("Account created!");}
-        else showLMsg('lSetupMsg',d.error);
+    var ph = document.getElementById('sPhone').value, pin = document.getElementById('sPin').value, yr = document.getElementById('sYear').value;
+    if (ph.length !== 10 || pin.length !== 4 || yr.length !== 4) { showLMsg('lSetupMsg', "Details නිවැරදිව enter කරන්න"); return; }
+    document.getElementById('lSetupBtn').innerText = 'Saving...';
+    fetch(API, { method:'POST', body: JSON.stringify({ action:'loyaltySetup', shopId:shopId, phone:ph, pin:pin, birthYear:yr }) })
+      .then(function(r){ return r.json(); })
+      .then(function(d) {
+        document.getElementById('lSetupBtn').innerText = 'Create Account';
+        if (d.success) { document.getElementById('lPhone').value = ph; lSwitchView('lv-login'); alert("Account created!"); }
+        else showLMsg('lSetupMsg', d.error);
       });
   }
   function resetPin() {
-    var ph=document.getElementById('fLPhone').value,yr=document.getElementById('fYear').value,np=document.getElementById('fNewPin').value;
-    if(ph.length!==10||yr.length!==4||np.length!==4){showLMsg('lForgotMsg',"Details නිවැරදිව enter කරන්න");return;}
-    fetch(API,{method:'POST',body:JSON.stringify({action:'loyaltyResetPinSelf',shopId:shopId,phone:ph,birthYear:yr,newPin:np})})
-      .then(function(r){return r.json();})
-      .then(function(d){
-        if(d.success){lSwitchView('lv-login');alert("PIN reset successful!");}
-        else showLMsg('lForgotMsg',d.error);
+    var ph = document.getElementById('fLPhone').value, yr = document.getElementById('fYear').value, np = document.getElementById('fNewPin').value;
+    if (ph.length !== 10 || yr.length !== 4 || np.length !== 4) { showLMsg('lForgotMsg', "Details නිවැරදිව enter කරන්න"); return; }
+    fetch(API, { method:'POST', body: JSON.stringify({ action:'loyaltyResetPinSelf', shopId:shopId, phone:ph, birthYear:yr, newPin:np }) })
+      .then(function(r){ return r.json(); })
+      .then(function(d) {
+        if (d.success) { lSwitchView('lv-login'); alert("PIN reset successful!"); }
+        else showLMsg('lForgotMsg', d.error);
       });
   }
-  function drawCard(stamps,redeemed) {
-    document.getElementById('stampText').innerText="You have "+stamps+" stamps!";
-    var grid=document.getElementById('stampGrid'); grid.innerHTML='';
-    for(var i=1;i<=stampsTarget;i++)
-      grid.innerHTML+="<div class='sc"+(i<=stamps?' on':'')+"'>"+(i<=stamps?"<i class='fas fa-gift'></i>":i)+"</div>";
-    document.getElementById('targetMsg').innerHTML="Collect "+stampsTarget+" stamps for a reward!<br><span style='background:#e8f5e9;color:#2e7d32;padding:4px 10px;border-radius:6px;font-weight:700;'>&#x1F3C6; Total Redeemed: "+(redeemed||0)+"</span>";
+  function drawCard(stamps, redeemed) {
+    document.getElementById('stampText').innerText = "You have " + stamps + " stamps!";
+    var grid = document.getElementById('stampGrid'); grid.innerHTML = '';
+    for (var i = 1; i <= stampsTarget; i++)
+      grid.innerHTML += "<div class='sc" + (i <= stamps ? ' on' : '') + "'>" + (i <= stamps ? "<i class='fas fa-gift'></i>" : i) + "</div>";
+    document.getElementById('targetMsg').innerHTML =
+      "Collect " + stampsTarget + " stamps for a reward!<br>" +
+      "<span style='background:#e8f5e9;color:#2e7d32;padding:4px 10px;border-radius:6px;font-weight:700;'>&#x1F3C6; Total Redeemed: " + (redeemed || 0) + "</span>";
   }
-  function showLMsg(id,txt){var el=document.getElementById(id);el.innerText=txt;el.style.display='block';}
+  function showLMsg(id, txt) { var el = document.getElementById(id); el.innerText = txt; el.style.display = 'block'; }
 
   // ════════════════════════════════════════════
   // FEEDBACK
   // ════════════════════════════════════════════
   function submitFeedback() {
-    var nm=document.getElementById('fbName').value, ph=document.getElementById('fbPhone').value,
-        msg=document.getElementById('fbMsg').value, fi=document.getElementById('fbFile');
-    if(!nm||!msg){alert("Name and message are required.");return;}
-    document.getElementById('fbSubmitBtn').innerText='Uploading...';
-    var payload={action:'submitFeedback',shopId:shopId,name:nm,phone:ph,message:msg};
-    if(fi.files.length>0){
-      var reader=new FileReader();
-      reader.onload=function(e){payload.imageBase64=e.target.result.split(',')[1];payload.mimeType=fi.files[0].type;sendFb(payload);};
+    var nm  = document.getElementById('fbName').value;
+    var ph  = document.getElementById('fbPhone').value;
+    var msg = document.getElementById('fbMsg').value;
+    var fi  = document.getElementById('fbFile');
+    if (!nm || !msg) { alert("Name and message are required."); return; }
+    document.getElementById('fbSubmitBtn').innerText = 'Uploading...';
+    var payload = { action:'submitFeedback', shopId:shopId, name:nm, phone:ph, message:msg };
+    if (fi.files.length > 0) {
+      var reader = new FileReader();
+      reader.onload = function(e) { payload.imageBase64 = e.target.result.split(',')[1]; payload.mimeType = fi.files[0].type; sendFb(payload); };
       reader.readAsDataURL(fi.files[0]);
-    } else sendFb(payload);
+    } else {
+      sendFb(payload);
+    }
   }
-  function sendFb(payload){
-    fetch(API,{method:'POST',body:JSON.stringify(payload)})
-      .then(function(r){return r.json();})
-      .then(function(d){
+  function sendFb(payload) {
+    fetch(API, { method:'POST', body: JSON.stringify(payload) })
+      .then(function(r){ return r.json(); })
+      .then(function(d) {
         alert(d.message);
-        document.getElementById('fbSubmitBtn').innerText='Submit Feedback';
-        document.getElementById('fbName').value='';
-        document.getElementById('fbMsg').value='';
-        document.getElementById('fbFile').value='';
+        document.getElementById('fbSubmitBtn').innerText = 'Submit Feedback';
+        document.getElementById('fbName').value  = '';
+        document.getElementById('fbMsg').value   = '';
+        document.getElementById('fbFile').value  = '';
         closeModal('fbModal');
       });
   }
@@ -708,20 +756,21 @@
   // ════════════════════════════════════════════
   // MENU
   // ════════════════════════════════════════════
-  function openMenuModal(){
-    var url=menuLink;
-    if(url.includes("drive.google.com")&&url.includes("/view")) url=url.replace(/\/view.*$/,"/preview");
-    document.getElementById('menuIframe').src=url; openModal('menuModal');
+  function openMenuModal() {
+    var url = menuLink;
+    if (url.includes("drive.google.com") && url.includes("/view")) url = url.replace(/\/view.*$/, "/preview");
+    document.getElementById('menuIframe').src = url;
+    openModal('menuModal');
   }
-  function closeMenuModal(){document.getElementById('menuIframe').src='';closeModal('menuModal');}
+  function closeMenuModal() { document.getElementById('menuIframe').src = ''; closeModal('menuModal'); }
 
   // ════════════════════════════════════════════
   // HELPERS
   // ════════════════════════════════════════════
-  function openModal(id){document.getElementById(id).style.display='flex';}
-  function closeModal(id){document.getElementById(id).style.display='none';}
-  function openLb(src){document.getElementById('lbImg').src=src;document.getElementById('lb').classList.add('open');}
-  function closeLb(){document.getElementById('lb').classList.remove('open');}
+  function openModal(id)  { document.getElementById(id).style.display = 'flex'; }
+  function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+  function openLb(src)    { document.getElementById('lbImg').src = src; document.getElementById('lb').classList.add('open'); }
+  function closeLb()      { document.getElementById('lb').classList.remove('open'); }
 </script>
 </body>
 </html>

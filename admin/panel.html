@@ -61,19 +61,25 @@
 
   <div class="container">
 
-    <!-- SYSTEM URL -->
     <div class="card" style="border-left: 5px solid #d32f2f;">
-      <h3 style="margin-top:0;"><i class="fas fa-cogs"></i> System URL Configuration</h3>
-      <p style="font-size: 13px; color: gray;">QR කේත නිවැරදිව ජනනය වීම සඳහා පද්ධතිය Host කර ඇති ප්‍රධාන ලින්ක් එක (Base URL) මෙහි ඇතුළත් කරන්න. (උදා: https://yourdomain.com/)</p>
-      <div style="display: flex; gap: 10px;">
-        <input type="url" id="sysBaseUrl" placeholder="https://..." value="">
-        <button class="btn btn-blue" style="white-space: nowrap;" onclick="saveBaseUrl()"><i class="fas fa-save"></i> Save URL</button>
+      <h3 style="margin-top:0;"><i class="fas fa-cogs"></i> System Configuration</h3>
+      <p style="font-size: 13px; color: gray;">Base URL එක සහ Apps Script URL එක මෙතැනින් යාවත්කාලීන කරන්න.</p>
+      
+      <div class="grid-2">
+        <div>
+          <label>Frontend Base URL (Host කර ඇති ප්‍රධාන ලින්ක් එක)</label>
+          <input type="url" id="sysBaseUrl" placeholder="උදා: https://yourdomain.com/" value="">
+        </div>
+        <div>
+          <label>Google Apps Script URL (Database Link)</label>
+          <input type="url" id="sysScriptUrl" placeholder="https://script.google.com/macros/s/.../exec" value="">
+        </div>
       </div>
+      <button class="btn btn-blue" onclick="saveSystemUrls()"><i class="fas fa-save"></i> Save Configuration</button>
     </div>
 
     <div class="grid-2">
 
-      <!-- CUSTOMER LIST CARD -->
       <div class="card">
         <h3 style="margin-top:0;"><i class="fas fa-users"></i> Customers / Shops</h3>
 
@@ -103,7 +109,6 @@
         </button>
       </div>
 
-      <!-- ANALYTICS -->
       <div class="card">
         <h3 style="margin-top:0;"><i class="fas fa-chart-pie"></i> Global / Shop Analytics</h3>
         <select id="analyticsShopId" onchange="loadAnalytics()">
@@ -128,7 +133,6 @@
       </div>
     </div>
 
-    <!-- CUSTOMER EDIT FORM -->
     <div class="card" id="customerFormCard">
       <h3 style="margin-top:0;" id="formTitle"><i class="fas fa-edit"></i> Customer / Shop Detailed Setup</h3>
       <div id="msg"></div>
@@ -153,14 +157,29 @@
         <div style="grid-column: 1 / -1;"><label><i class="fas fa-images"></i> Cover Image (Background)</label><input type="text" id="c_cover" placeholder="Image Direct Link"></div>
       </div>
 
-      <!-- PROMOTIONS -->
-      <div style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:8px;padding:15px;margin-bottom:15px;">
+      <div style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:8px;padding:15px;margin-bottom:15px;margin-top:15px;">
         <h4 style="margin:0 0 12px 0;color:#1b5e20;"><i class="fas fa-bullhorn"></i> Promotions & Video (Client App)</h4>
         <div><label><i class="fab fa-youtube"></i> Promo Video URL (YouTube හෝ Direct)</label><input type="text" id="c_promoVideo" placeholder="https://youtu.be/... හෝ direct mp4 link"></div>
         <div class="grid-3">
           <div><label><i class="fas fa-image"></i> Promo Image 1</label><input type="text" id="c_promoImg1" placeholder="Direct image link"></div>
           <div><label><i class="fas fa-image"></i> Promo Image 2</label><input type="text" id="c_promoImg2" placeholder="Direct image link"></div>
           <div><label><i class="fas fa-image"></i> Promo Image 3</label><input type="text" id="c_promoImg3" placeholder="Direct image link"></div>
+        </div>
+      </div>
+
+      <div style="background:#f3e5f5;border:1px solid #ce93d8;border-radius:8px;padding:15px;margin-bottom:15px;">
+        <h4 style="margin:0 0 12px 0;color:#6a1b9a;"><i class="fas fa-link"></i> Custom Links (අමතර ලින්ක් 5)</h4>
+        <div class="grid-2">
+          <div><label>Link 1 Name</label><input type="text" id="c_cl1_name" placeholder="උදා: Order Now"></div>
+          <div><label>Link 1 URL</label><input type="text" id="c_cl1_url" placeholder="https://..."></div>
+          <div><label>Link 2 Name</label><input type="text" id="c_cl2_name"></div>
+          <div><label>Link 2 URL</label><input type="text" id="c_cl2_url"></div>
+          <div><label>Link 3 Name</label><input type="text" id="c_cl3_name"></div>
+          <div><label>Link 3 URL</label><input type="text" id="c_cl3_url"></div>
+          <div><label>Link 4 Name</label><input type="text" id="c_cl4_name"></div>
+          <div><label>Link 4 URL</label><input type="text" id="c_cl4_url"></div>
+          <div><label>Link 5 Name</label><input type="text" id="c_cl5_name"></div>
+          <div><label>Link 5 URL</label><input type="text" id="c_cl5_url"></div>
         </div>
       </div>
 
@@ -198,7 +217,6 @@
       </div>
     </div>
 
-    <!-- QR GENERATOR -->
     <div class="card">
       <h3 style="margin-top:0;"><i class="fas fa-qrcode"></i> High Quality QR Generator</h3>
       <p style="font-size: 13px; color: gray;">අදාළ කඩහිමියා තෝරා ඔවුන්ගේ QRs සහ Links ලබාගන්න.</p>
@@ -239,7 +257,6 @@
       </div>
     </div>
 
-    <!-- PRODUCTS -->
     <div class="card" style="flex: 100%;">
       <h3 style="margin-top:0; color:#d32f2f;"><i class="fas fa-box-open"></i> Manage Products, Rooms & Packages</h3>
       <p style="font-size:13px; color:gray;">භාණ්ඩ, කාමර හෝ පැකේජ කළමනාකරණය සඳහා Shop ID එක ඇතුළත් කර Load බොත්තම ඔබන්න.</p>
@@ -262,7 +279,6 @@
       <div id="adminProductsList" style="margin-top:20px;"></div>
     </div>
 
-    <!-- FEEDBACK -->
     <div class="card" style="flex: 100%; margin-top: 10px;">
       <h3 style="margin-top:0; color:#607d8b;"><i class="fas fa-comment-alt"></i> Customer Feedbacks & Suggestions</h3>
       <div class="grid-2" style="max-width: 600px; background:#e0f7fa; padding:15px; border-radius:10px;">
@@ -275,7 +291,7 @@
   </div>
 
   <script>
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbH_bZzGRsrS_gzRAin7F3voc999Jlwqq5UYO-8wLQMjUeXyjSpSSDhPAFaKT5bzJx/exec";
+    let APPS_SCRIPT_URL = localStorage.getItem('sysScriptUrl') || "https://script.google.com/macros/s/AKfycbzbH_bZzGRsrS_gzRAin7F3voc999Jlwqq5UYO-8wLQMjUeXyjSpSSDhPAFaKT5bzJx/exec";
     let allCustomersData = [];
     let currentSelectedId = "";
 
@@ -284,19 +300,32 @@
       var staffName = sessionStorage.getItem('loggedInStaff');
       if (!staffName) { window.location.href = "index.html"; return; }
       document.getElementById('staffNameDisplay').innerText = "Logged in as: " + staffName;
+      
       var savedBase = localStorage.getItem('sysBaseUrl');
       if (savedBase) document.getElementById('sysBaseUrl').value = savedBase;
+      
+      var savedScript = localStorage.getItem('sysScriptUrl');
+      if (savedScript) document.getElementById('sysScriptUrl').value = savedScript;
+
       loadAllCustomers();
       loadAnalytics();
     };
 
-    function saveBaseUrl() {
-      var url = document.getElementById('sysBaseUrl').value.trim();
-      if (!url.endsWith('/')) url += '/';
-      localStorage.setItem('sysBaseUrl', url);
-      document.getElementById('sysBaseUrl').value = url;
-      alert("Base URL Saved!");
+    function saveSystemUrls() {
+      var baseUrl = document.getElementById('sysBaseUrl').value.trim();
+      var scriptUrl = document.getElementById('sysScriptUrl').value.trim();
+      
+      if (baseUrl && !baseUrl.endsWith('/')) baseUrl += '/';
+      
+      localStorage.setItem('sysBaseUrl', baseUrl);
+      localStorage.setItem('sysScriptUrl', scriptUrl);
+      
+      document.getElementById('sysBaseUrl').value = baseUrl;
+      if(scriptUrl) APPS_SCRIPT_URL = scriptUrl;
+      
+      alert("System Configuration Saved Successfully!");
       generateQRs();
+      loadAllCustomers(); // Reload with new script URL
     }
 
     function logout() {
@@ -304,9 +333,6 @@
       window.location.href = "index.html";
     }
 
-    // ══ HELPER: Google Sheet data වලින් field value ලබාගන්න ══
-    // Sheet columns different names වලින් එන්න පුළුවන් — ඒ නිසා
-    // possible keys list එකක් check කරලා first valid value return කරනවා
     function getField(obj, keys) {
       if (!obj) return '';
       for (var i = 0; i < keys.length; i++) {
@@ -320,6 +346,7 @@
 
     // ══ LOAD ALL CUSTOMERS ══
     function loadAllCustomers() {
+      if (!APPS_SCRIPT_URL) return;
       var container = document.getElementById('customerList');
       container.innerHTML = '<div style="padding: 20px; text-align: center; color: gray;"><i class="fas fa-spinner fa-spin"></i> Loading customers...</div>';
       fetch(APPS_SCRIPT_URL + "?action=getAll")
@@ -335,7 +362,7 @@
           }
         })
         .catch(function(err) {
-          container.innerHTML = '<div style="padding: 20px; text-align: center; color: red;">Network error. Please refresh.</div>';
+          container.innerHTML = '<div style="padding: 20px; text-align: center; color: red;">Network error. Please check Apps Script URL.</div>';
         });
     }
 
@@ -348,7 +375,6 @@
         return;
       }
       list.forEach(function(c) {
-        // ID field — possible key names
         var id   = getField(c, ['ID','id','ShopID','Shop ID','shopId']);
         var name = getField(c, ['BusinessName','Business Name','businessName','Name','name','ShopName']);
         var ph   = getField(c, ['ClientPhone','Client Phone','Phone','phone','clientPhone']);
@@ -400,9 +426,8 @@
       filterCustomers();
     }
 
-    // ══ SELECT CUSTOMER — FIX MAIN ══
+    // ══ SELECT CUSTOMER ══
     function selectCustomer(shopId) {
-      // ID possible keys හරහා හොයාගන්නවා
       var customer = allCustomersData.find(function(c) {
         var id = getField(c, ['ID','id','ShopID','Shop ID','shopId']);
         return id === shopId;
@@ -414,14 +439,12 @@
       }
 
       currentSelectedId = shopId;
-
-      // Banner update
       var name = getField(customer, ['BusinessName','Business Name','businessName','Name','name','ShopName']);
+      
       document.getElementById('selectedShopBanner').style.display = 'flex';
       document.getElementById('bannerName').innerText = name || 'No Name';
       document.getElementById('bannerId').innerText = 'ID: ' + shopId;
 
-      // List re-render with highlight
       var term = document.getElementById('searchInput').value.trim().toLowerCase();
       var list = term ? allCustomersData.filter(function(c) {
         var id2   = getField(c, ['ID','id','ShopID','Shop ID']).toLowerCase();
@@ -431,9 +454,7 @@
       }) : allCustomersData;
       renderCustomerList(list);
 
-      // ══ FORM FILL — ALL POSSIBLE COLUMN NAMES HANDLE කරනවා ══
       var g = function(keys) { return getField(customer, keys); };
-
       var safeDate = function(dt) {
         if (!dt) return '';
         try {
@@ -467,33 +488,35 @@
       document.getElementById('c_expiryDate').value   = safeDate(g(['ExpiryDate','Expiry Date','expiryDate','Expiry','expiry']));
       document.getElementById('c_status').value       = g(['Status','status']) || 'Active';
 
-      // Select dropdowns — value set කරන්නේ value exist නම් විතරයි
-      var loyVal = g(['LoyaltyStatus','Loyalty Status','loyaltyStatus','Loyalty']) || 'Inactive';
-      var stoVal = g(['StoreStatus','Store Status','storeStatus','Store']) || 'Active';
-      var inbVal = g(['InboxStatus','Inbox Status','inboxStatus','Inbox']) || 'Active';
-      var stmVal = g(['StampTarget','Stamp Target','stampTarget','Stamps']) || '10';
+      // Custom Links Load
+      document.getElementById('c_cl1_name').value = g(['CustomLink1Name']);
+      document.getElementById('c_cl1_url').value  = g(['CustomLink1URL']);
+      document.getElementById('c_cl2_name').value = g(['CustomLink2Name']);
+      document.getElementById('c_cl2_url').value  = g(['CustomLink2URL']);
+      document.getElementById('c_cl3_name').value = g(['CustomLink3Name']);
+      document.getElementById('c_cl3_url').value  = g(['CustomLink3URL']);
+      document.getElementById('c_cl4_name').value = g(['CustomLink4Name']);
+      document.getElementById('c_cl4_url').value  = g(['CustomLink4URL']);
+      document.getElementById('c_cl5_name').value = g(['CustomLink5Name']);
+      document.getElementById('c_cl5_url').value  = g(['CustomLink5URL']);
 
-      document.getElementById('c_loyaltyStatus').value = loyVal;
-      document.getElementById('c_storeStatus').value   = stoVal;
-      document.getElementById('c_inboxStatus').value   = inbVal;
-      document.getElementById('c_stampTarget').value   = stmVal;
+      document.getElementById('c_loyaltyStatus').value = g(['LoyaltyStatus','Loyalty Status','loyaltyStatus','Loyalty']) || 'Inactive';
+      document.getElementById('c_storeStatus').value   = g(['StoreStatus','Store Status','storeStatus','Store']) || 'Active';
+      document.getElementById('c_inboxStatus').value   = g(['InboxStatus','Inbox Status','inboxStatus','Inbox']) || 'Active';
+      document.getElementById('c_stampTarget').value   = g(['StampTarget','Stamp Target','stampTarget','Stamps']) || '10';
 
-      // Form title
       document.getElementById('formTitle').innerHTML = '<i class="fas fa-edit"></i> Editing: <span style="color:#d32f2f;">' + (name || shopId) + '</span>';
-
-      // Related data fields autofill
+      
       document.getElementById('p_shop_id').value = shopId;
       document.getElementById('f_shop_id').value = shopId;
       adminFetchProducts();
       adminFetchFeedback();
 
-      // Analytics & QR dropdowns
       document.getElementById('analyticsShopId').value = shopId;
       document.getElementById('qrShopSelect').value    = shopId;
       loadAnalytics();
       generateQRs();
 
-      // Scroll to form
       document.getElementById('customerFormCard').scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -511,7 +534,10 @@
       var fields = ['c_id','c_name','c_wa','c_maps','c_fb','c_ig','c_tiktok','c_web','c_email',
                     'c_menu','c_review','c_image','c_cover','c_bank','c_theme',
                     'c_promoVideo','c_promoImg1','c_promoImg2','c_promoImg3',
-                    'c_clientPhone','c_password','c_expiryDate'];
+                    'c_clientPhone','c_password','c_expiryDate',
+                    'c_cl1_name','c_cl1_url','c_cl2_name','c_cl2_url',
+                    'c_cl3_name','c_cl3_url','c_cl4_name','c_cl4_url',
+                    'c_cl5_name','c_cl5_url'];
       fields.forEach(function(f) { var el = document.getElementById(f); if(el) el.value = ''; });
       document.getElementById('c_type').value = 'profile';
       document.getElementById('c_loyaltyStatus').value = 'Inactive';
@@ -524,8 +550,10 @@
 
     // ══ SAVE ══
     function saveCustomerData() {
+      if (!APPS_SCRIPT_URL) { alert("Apps Script URL එක Settings වල ඇතුළත් කර Save කරන්න."); return; }
       var id = document.getElementById('c_id').value.trim();
       if (!id) { alert("සැලකිය යුතුයි: Shop ID එක අනිවාර්යයි."); return; }
+      
       var payload = {
         action: "saveCustomer",
         staffId: sessionStorage.getItem('loggedInStaff'),
@@ -558,11 +586,22 @@
           CustomPromoVideo: document.getElementById('c_promoVideo').value,
           CustomPromoImg1:  document.getElementById('c_promoImg1').value,
           CustomPromoImg2:  document.getElementById('c_promoImg2').value,
-          CustomPromoImg3:  document.getElementById('c_promoImg3').value
+          CustomPromoImg3:  document.getElementById('c_promoImg3').value,
+          CustomLink1Name:  document.getElementById('c_cl1_name').value,
+          CustomLink1URL:   document.getElementById('c_cl1_url').value,
+          CustomLink2Name:  document.getElementById('c_cl2_name').value,
+          CustomLink2URL:   document.getElementById('c_cl2_url').value,
+          CustomLink3Name:  document.getElementById('c_cl3_name').value,
+          CustomLink3URL:   document.getElementById('c_cl3_url').value,
+          CustomLink4Name:  document.getElementById('c_cl4_name').value,
+          CustomLink4URL:   document.getElementById('c_cl4_url').value,
+          CustomLink5Name:  document.getElementById('c_cl5_name').value,
+          CustomLink5URL:   document.getElementById('c_cl5_url').value
         }
       };
       var msg = document.getElementById('msg');
       msg.style.display = 'block'; msg.style.background = '#e3f2fd'; msg.innerHTML = "Processing...";
+      
       fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(function(res) { return res.json(); })
         .then(function(d) {
@@ -580,12 +619,7 @@
       if (!confirm("ඔබ සහතිකද? ID " + id + " සහිත පාරිභෝගිකයා සදහටම මැකීමට අවශ්‍යද?")) return;
       fetch(APPS_SCRIPT_URL, {
         method: "POST",
-        body: JSON.stringify({
-          action: "deleteCustomer",
-          id: id,
-          staffId: sessionStorage.getItem('loggedInStaff'),
-          staffName: sessionStorage.getItem('loggedInStaff')
-        })
+        body: JSON.stringify({ action: "deleteCustomer", id: id, staffId: sessionStorage.getItem('loggedInStaff'), staffName: sessionStorage.getItem('loggedInStaff') })
       })
         .then(function(res) { return res.json(); })
         .then(function(d) { alert(d.message); currentSelectedId = ""; loadAllCustomers(); newCustomerForm(); });
@@ -608,6 +642,7 @@
 
     // ══ ANALYTICS ══
     function loadAnalytics() {
+      if (!APPS_SCRIPT_URL) return;
       var shopId = document.getElementById('analyticsShopId').value;
       fetch(APPS_SCRIPT_URL + "?action=getClientStats&shopId=" + shopId)
         .then(function(res) { return res.json(); })
@@ -621,10 +656,10 @@
               for (var dest in data.linkStats) {
                 var showName = dest;
                 if (dest.includes("wa.me") || dest.includes("whatsapp")) showName = "<i class='fab fa-whatsapp' style='color:#25D366;'></i> WhatsApp Direct";
-                linkContainer.innerHTML += '<div class="link-stat-row"><span>' + showName + '</span><strong>' + data.linkStats[dest] + ' Scans</strong></div>';
+                linkContainer.innerHTML += '<div class="link-stat-row"><span>' + showName + '</span><strong>' + data.linkStats[dest] + ' Scans / Clicks</strong></div>';
               }
             } else {
-              linkContainer.innerHTML = '<div style="font-size:13px; color:gray;">No scan destinations recorded yet.</div>';
+              linkContainer.innerHTML = '<div style="font-size:13px; color:gray;">No scan/click destinations recorded yet.</div>';
             }
           }
         })
@@ -659,6 +694,7 @@
 
     // ══ PRODUCTS ══
     function adminFetchProducts() {
+      if (!APPS_SCRIPT_URL) return;
       var sid = document.getElementById('p_shop_id').value.trim();
       if (!sid) return;
       document.getElementById('adminProductsList').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
@@ -669,7 +705,8 @@
           if (d.success && d.data && d.data.length > 0) {
             d.data.forEach(function(p) {
               var pType  = p.Type || "Product";
-              var pName  = p.ProductName || p['Product Name'] || "නම නැත";
+              // මෙතැනින් තමයි Product Name ප්‍රශ්නය නිවැරදි කරලා තියෙන්නේ
+              var pName  = p.ProductName || p['Product Name'] || p.name || p.Name || "නම නැත"; 
               var pId    = p.ProductID || p['Product ID'] || "No-ID";
               var pPrice = p.Price || p['Product Price'] || 0;
               var imgs = "";
@@ -687,6 +724,7 @@
     }
 
     function adminAddProduct() {
+      if (!APPS_SCRIPT_URL) return;
       var sid = document.getElementById('p_shop_id').value.trim();
       var name = document.getElementById('new_p_name').value.trim();
       var price = document.getElementById('new_p_price').value.trim();
@@ -694,25 +732,20 @@
       fetch(APPS_SCRIPT_URL, {
         method: "POST",
         body: JSON.stringify({
-          action: "addProduct",
-          shopId: sid,
-          type: document.getElementById('new_p_type').value,
-          name: name,
-          price: price,
-          img1: document.getElementById('new_p_img1').value,
-          img2: document.getElementById('new_p_img2').value,
-          img3: document.getElementById('new_p_img3').value
+          action: "addProduct", shopId: sid, type: document.getElementById('new_p_type').value,
+          name: name, price: price, img1: document.getElementById('new_p_img1').value,
+          img2: document.getElementById('new_p_img2').value, img3: document.getElementById('new_p_img3').value
         })
       })
         .then(function(res) { return res.json(); })
         .then(function(d) {
-          alert(d.message);
-          adminFetchProducts();
+          alert(d.message); adminFetchProducts();
           ['new_p_name','new_p_price','new_p_img1','new_p_img2','new_p_img3'].forEach(function(f) { document.getElementById(f).value = ""; });
         });
     }
 
     function adminUpdatePrice(pid) {
+      if (!APPS_SCRIPT_URL) return;
       var sid = document.getElementById('p_shop_id').value.trim();
       var price = document.getElementById('ad_p_' + pid).value;
       fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "updatePrice", shopId: sid, productId: pid, price: price }) })
@@ -720,6 +753,7 @@
     }
 
     function adminDeleteProduct(pid) {
+      if (!APPS_SCRIPT_URL) return;
       var sid = document.getElementById('p_shop_id').value.trim();
       if (!confirm("Are you sure you want to delete this product?")) return;
       fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "deleteProduct", shopId: sid, productId: pid }) })
@@ -728,6 +762,7 @@
 
     // ══ FEEDBACK ══
     function adminFetchFeedback() {
+      if (!APPS_SCRIPT_URL) return;
       var sid = document.getElementById('f_shop_id').value.trim();
       if (!sid) return;
       document.getElementById('adminFeedbackList').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';

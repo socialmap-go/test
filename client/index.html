@@ -15,7 +15,7 @@
     .btn:active { transform: scale(0.97); }
 
     /* ── TABS ── */
-    .tab-container { display: flex; background: #eee; border-radius: 10px; margin-bottom: 18px; overflow: hidden; font-size: 11px; }
+    .tab-container { display: flex; background: #eee; border-radius: 10px; margin-bottom: 18px; overflow: hidden; font-size: 10px; }
     .tab { flex: 1; padding: 10px 2px; font-weight: 700; color: #777; cursor: pointer; transition: 0.2s; text-align: center; }
     .tab.active { background: #d32f2f; color: white; }
     .tab.disabled { color: #bbb; cursor: pointer; }
@@ -29,6 +29,12 @@
     .stat-number { font-size: 30px; font-weight: 900; color: #d32f2f; margin: 4px 0; }
     .stat-label { color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
     .locked-card { background: #f5f5f5; border: 1px dashed #ccc; padding: 14px; border-radius: 12px; margin-bottom: 12px; color: #aaa; font-weight: 700; font-size: 14px; }
+
+    /* ── SCAN DETAILS ── */
+    .scan-detail-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #f9f9f9; border-radius: 8px; margin-bottom: 6px; font-size: 13px; }
+    .scan-detail-dest { color: #555; flex: 1; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 230px; }
+    .scan-detail-count { font-weight: 900; color: #d32f2f; background: #ffeaea; padding: 3px 10px; border-radius: 20px; font-size: 12px; }
+    .scan-section-title { font-size: 12px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 1px; margin: 14px 0 8px; text-align: left; }
 
     .input-label { text-align: left; font-size: 13px; font-weight: 700; color: #555; display: block; margin-top: 10px; }
     .msg { padding: 13px; border-radius: 8px; font-weight: 700; display: none; margin-top: 10px; font-size: 14px; }
@@ -58,6 +64,27 @@
 
     .force-logout-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9998; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(5px); }
     .force-logout-box { background: white; padding: 28px; border-radius: 16px; width: 100%; max-width: 340px; text-align: center; }
+
+    /* ── ORDERS ── */
+    .order-card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 14px; margin-bottom: 12px; text-align: left; box-shadow: 0 2px 6px rgba(0,0,0,0.03); }
+    .order-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .order-id { font-size: 11px; color: #aaa; font-weight: 700; }
+    .order-status { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .order-status.pending { background: #fff8e1; color: #f9a825; }
+    .order-status.confirmed { background: #e8f5e9; color: #2e7d32; }
+    .order-status.cancelled { background: #fce4ec; color: #c62828; }
+    .order-items { font-size: 13px; color: #555; margin-bottom: 6px; line-height: 1.6; }
+    .order-total { font-weight: 900; color: #d32f2f; font-size: 16px; }
+    .order-meta { font-size: 12px; color: #888; margin-top: 6px; }
+    .order-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .order-actions button { flex: 1; padding: 9px; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; color: white; }
+    .btn-confirm { background: #2e7d32; }
+    .btn-cancel  { background: #d32f2f; }
+    .order-filter-row { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; }
+    .filter-chip { flex-shrink: 0; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; background: #eee; color: #777; border: none; }
+    .filter-chip.active { background: #d32f2f; color: white; }
+    .order-empty { text-align: center; color: #aaa; font-size: 14px; padding: 32px 0; }
+    .new-order-badge { display: inline-block; background: #d32f2f; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; font-weight: 900; line-height: 16px; text-align: center; margin-left: 3px; vertical-align: top; }
   </style>
 </head>
 <body>
@@ -101,11 +128,12 @@
       <button onclick="logout()" style="background:none;border:none;color:#888;text-decoration:underline;cursor:pointer;font-size:13px;">Logout</button>
     </div>
 
-    <!-- TABS (5 tabs) -->
+    <!-- TABS (6 tabs) -->
     <div class="tab-container">
       <div class="tab active" id="tab-stats"    onclick="switchTab('stats')">📊 Dash</div>
       <div class="tab"        id="tab-cashier"  onclick="switchTab('cashier')">🎁 Loyalty</div>
       <div class="tab"        id="tab-products" onclick="switchTab('products')">📦 Store</div>
+      <div class="tab"        id="tab-orders"   onclick="switchTab('orders')">🛒 Orders<span id="newOrderBadge" style="display:none;" class="new-order-badge" id="orderBadge">0</span></div>
       <div class="tab"        id="tab-feedback" onclick="switchTab('feedback')">📝 Inbox</div>
       <div class="tab"        id="tab-promo"    onclick="switchTab('promo')">📣 Promos</div>
     </div>
@@ -127,6 +155,13 @@
     <!-- ── STATS VIEW ── -->
     <div id="view-stats">
       <div class="stat-card"><div class="stat-label">Total Scans</div><div class="stat-number" id="scans">...</div></div>
+
+      <!-- Scan breakdown details -->
+      <div id="dashScanDetails" style="display:none;">
+        <div class="scan-section-title">📍 Scan Breakdown</div>
+        <div id="scanDetailsList"></div>
+      </div>
+
       <div id="dashLoyaltyStats">
         <div class="stat-card"><div class="stat-label">Loyalty Customers</div><div class="stat-number" id="loyaltyUsers">...</div></div>
         <div class="stat-card"><div class="stat-label">Total Stamps Given</div><div class="stat-number" id="stamps">...</div></div>
@@ -135,6 +170,12 @@
         <i class="fas fa-lock" style="font-size:22px;color:#ccc;margin-bottom:8px;display:block;"></i>
         Loyalty Stats Locked — Upgrade to unlock
       </div>
+
+      <!-- Orders stat -->
+      <div id="dashOrderStats" style="display:none;">
+        <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-number" id="totalOrders">...</div></div>
+      </div>
+
       <button class="btn" style="background:#555;padding:10px;margin-top:6px;" onclick="fetchStats()">🔄 Refresh Data</button>
     </div>
 
@@ -170,6 +211,18 @@
       <div id="productsList">Loading products...</div>
     </div>
 
+    <!-- ── ORDERS VIEW ── -->
+    <div id="view-orders" style="display:none;">
+      <div class="order-filter-row">
+        <button class="filter-chip active" id="chip-all"       onclick="filterOrders('all')">All</button>
+        <button class="filter-chip"        id="chip-pending"   onclick="filterOrders('pending')">⏳ Pending</button>
+        <button class="filter-chip"        id="chip-confirmed" onclick="filterOrders('confirmed')">✅ Confirmed</button>
+        <button class="filter-chip"        id="chip-cancelled" onclick="filterOrders('cancelled')">❌ Cancelled</button>
+      </div>
+      <div id="ordersList">Loading orders...</div>
+      <button class="btn" style="background:#555;padding:10px;margin-top:6px;font-size:13px;" onclick="fetchOrders()">🔄 Refresh Orders</button>
+    </div>
+
     <!-- ── FEEDBACK INBOX VIEW ── -->
     <div id="view-feedback" style="display:none;">
       <h4 style="text-align:left;color:#555;margin-top:0;">Customer Feedback & Suggestions</h4>
@@ -178,31 +231,23 @@
 
     <!-- ── PROMOTIONS VIEW ── -->
     <div id="view-promo" style="display:none;">
-
       <div id="promo-loading" class="promo-empty">
         <i class="fas fa-spinner fa-spin" style="font-size:24px;margin-bottom:8px;display:block;"></i>
         Loading promotions...
       </div>
-
-      <!-- Video section (hidden until loaded) -->
       <div id="promo-video-section" style="display:none;">
         <p class="promo-section-title">🎬 Latest Promotion Video</p>
         <div class="promo-video-wrap" id="promo-video-container"></div>
       </div>
-
-      <!-- Posts grid (hidden until loaded) -->
       <div id="promo-posts-section" style="display:none;">
         <p class="promo-section-title" style="margin-top:16px;">🖼️ Promotion Posts</p>
         <div class="promo-grid" id="promo-posts-grid"></div>
       </div>
-
-      <!-- Empty state -->
       <div id="promo-empty" class="promo-empty" style="display:none;">
         <i class="fas fa-image" style="font-size:32px;color:#ddd;margin-bottom:10px;display:block;"></i>
         Promotions නෑ.<br>
         <span style="font-size:12px;color:#ccc;">Admin panel ඇතුළේ promo links ඇතුළු කරන්න.</span>
       </div>
-
       <button class="btn" style="background:#555;padding:10px;margin-top:8px;font-size:13px;" onclick="fetchPromos()">🔄 Refresh</button>
     </div>
 
@@ -211,6 +256,8 @@
   <script>
     var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbH_bZzGRsrS_gzRAin7F3voc999Jlwqq5UYO-8wLQMjUeXyjSpSSDhPAFaKT5bzJx/exec";
     var liveCheckInterval;
+    var allOrders = [];
+    var currentFilter = 'all';
 
     // ══ LOGIN ══
     function login() {
@@ -225,9 +272,11 @@
           if (data.success) {
             localStorage.setItem('shopId',        data.shopId);
             localStorage.setItem('bName',         data.businessName);
+            // FIX: also store loyaltyStatus, storeStatus, inboxStatus, ordersStatus from login
             localStorage.setItem('loyaltyStatus', data.loyaltyStatus  || 'Inactive');
             localStorage.setItem('storeStatus',   data.storeStatus    || 'Active');
             localStorage.setItem('inboxStatus',   data.inboxStatus    || 'Active');
+            localStorage.setItem('ordersStatus',  data.ordersStatus   || 'Active');
             initApp();
           } else {
             var m = document.getElementById('loginMsg');
@@ -245,30 +294,70 @@
       document.getElementById('mainApp').style.display   = 'block';
       document.getElementById('shopName').innerText      = localStorage.getItem('bName');
       document.getElementById('shopIdDisplay').innerText = "ID: " + localStorage.getItem('shopId');
-      applyTabStyles();
+
+      // FIX: fetch live status FIRST before applying tab styles so we have fresh data
+      fetchLiveStatusThenInit();
+    }
+
+    // FIX: Fetch fresh status from server on every login/load, then apply styles
+    function fetchLiveStatusThenInit() {
+      var shopId = localStorage.getItem('shopId');
+      if (!shopId) { applyTabStyles(); fetchAll(); return; }
+
+      fetch(APPS_SCRIPT_URL + "?action=checkStatus&shopId=" + shopId)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) {
+            // Update localStorage with server values
+            localStorage.setItem('loyaltyStatus', data.loyaltyStatus || 'Inactive');
+            localStorage.setItem('storeStatus',   data.storeStatus   || 'Active');
+            localStorage.setItem('inboxStatus',   data.inboxStatus   || 'Active');
+            localStorage.setItem('ordersStatus',  data.ordersStatus  || 'Active');
+          }
+        })
+        .catch(function() {}) // silently fail - use cached values
+        .finally(function() {
+          applyTabStyles();
+          fetchAll();
+          // Start live check interval AFTER initial load
+          liveCheckInterval = setInterval(checkLiveStatus, 30000);
+        });
+    }
+
+    function fetchAll() {
       fetchStats();
       fetchProducts();
       fetchFeedback();
       fetchPromos();
-      liveCheckInterval = setInterval(checkLiveStatus, 20000);
+      fetchOrders();
     }
 
+    // FIX: checkLiveStatus now compares properly and only shows modal when truly changed
     function checkLiveStatus() {
       if (!localStorage.getItem('shopId')) return;
       fetch(APPS_SCRIPT_URL + "?action=checkStatus&shopId=" + localStorage.getItem('shopId'))
         .then(function(r) { return r.json(); })
         .then(function(data) {
           if (data.success) {
-            if (data.loyaltyStatus !== localStorage.getItem('loyaltyStatus') ||
-                data.storeStatus   !== localStorage.getItem('storeStatus')   ||
-                data.inboxStatus   !== localStorage.getItem('inboxStatus')) {
+            var changed =
+              data.loyaltyStatus !== localStorage.getItem('loyaltyStatus') ||
+              data.storeStatus   !== localStorage.getItem('storeStatus')   ||
+              data.inboxStatus   !== localStorage.getItem('inboxStatus');
+            // FIX: only show modal if something actually changed
+            if (changed) {
               document.getElementById('forceLogoutModal').style.display = 'flex';
             }
           }
-        });
+        })
+        .catch(function() {}); // silently fail on network issues
     }
 
     function applyTabStyles() {
+      // Reset all tabs first
+      ['cashier','products','orders','feedback'].forEach(function(t) {
+        document.getElementById('tab-' + t).classList.remove('disabled');
+      });
+
       if (localStorage.getItem('loyaltyStatus') === 'Inactive') {
         document.getElementById('tab-cashier').classList.add('disabled');
         document.getElementById('dashLoyaltyStats').style.display = 'none';
@@ -277,8 +366,14 @@
         document.getElementById('dashLoyaltyStats').style.display = 'block';
         document.getElementById('dashLoyaltyLocked').style.display = 'none';
       }
+
       if (localStorage.getItem('storeStatus')  === 'Inactive') document.getElementById('tab-products').classList.add('disabled');
       if (localStorage.getItem('inboxStatus')  === 'Inactive') document.getElementById('tab-feedback').classList.add('disabled');
+      if (localStorage.getItem('ordersStatus') === 'Inactive') {
+        document.getElementById('tab-orders').classList.add('disabled');
+      } else {
+        document.getElementById('dashOrderStats').style.display = 'block';
+      }
     }
 
     if (localStorage.getItem('shopId')) initApp();
@@ -288,15 +383,17 @@
       var statuses = {
         'cashier':  localStorage.getItem('loyaltyStatus') || 'Inactive',
         'products': localStorage.getItem('storeStatus')   || 'Active',
+        'orders':   localStorage.getItem('ordersStatus')  || 'Active',
         'feedback': localStorage.getItem('inboxStatus')   || 'Active',
         'promo':    'Active'
       };
-      ['stats','cashier','products','feedback','promo'].forEach(function(t) {
+      ['stats','cashier','products','orders','feedback','promo'].forEach(function(t) {
         document.getElementById('tab-' + t).classList.remove('active');
         var v = document.getElementById('view-' + t);
         if (v) v.style.display = 'none';
       });
       document.getElementById('view-upgrade').style.display = 'none';
+
       if (tab !== 'stats' && tab !== 'promo' && statuses[tab] === 'Inactive') {
         document.getElementById('tab-' + tab).classList.add('active');
         document.getElementById('view-upgrade').style.display = 'block';
@@ -304,6 +401,11 @@
       }
       document.getElementById('tab-' + tab).classList.add('active');
       document.getElementById('view-' + tab).style.display = 'block';
+
+      // Clear new order badge when opening orders tab
+      if (tab === 'orders') {
+        document.getElementById('newOrderBadge').style.display = 'none';
+      }
     }
 
     // ══ STATS ══
@@ -312,9 +414,30 @@
         .then(function(r) { return r.json(); })
         .then(function(data) {
           if (data.success) {
-            document.getElementById('scans').innerText       = data.totalScans       || 0;
+            document.getElementById('scans').innerText        = data.totalScans       || 0;
             document.getElementById('loyaltyUsers').innerText = data.loyaltyCustomers || 0;
             document.getElementById('stamps').innerText       = data.totalStamps      || 0;
+            document.getElementById('totalOrders').innerText  = data.totalOrders      || 0;
+
+            // FIX: Show scan breakdown details
+            if (data.linkStats && Object.keys(data.linkStats).length > 0) {
+              var detailsHtml = '';
+              var sorted = Object.keys(data.linkStats).sort(function(a, b) {
+                return data.linkStats[b] - data.linkStats[a];
+              });
+              sorted.forEach(function(dest) {
+                var label = dest;
+                if (dest === 'Smart Profile') label = '🔗 Profile View';
+                else if (dest.indexOf('wa.me') !== -1 || dest.indexOf('whatsapp') !== -1) label = '💬 WhatsApp';
+                else if (dest.indexOf('Link Clicked') !== -1 || dest === 'Link Clicked') label = '👆 Link Clicked';
+                else if (dest === 'N/A' || dest === 'Unknown') label = '❓ Other';
+                detailsHtml += '<div class="scan-detail-row"><span class="scan-detail-dest">' + label + '</span><span class="scan-detail-count">' + data.linkStats[dest] + '</span></div>';
+              });
+              document.getElementById('scanDetailsList').innerHTML = detailsHtml;
+              document.getElementById('dashScanDetails').style.display = 'block';
+            } else {
+              document.getElementById('dashScanDetails').style.display = 'none';
+            }
           }
         });
     }
@@ -366,11 +489,17 @@
               var pId    = p.ProductID || "";
               var pPrice = p.Price || 0;
               var pType  = p.Type || "Product";
+
+              // FIX: Build image HTML correctly - check multiple possible column name formats
               var imgs = "";
-              if (p.Image1) imgs += '<img src="' + p.Image1 + '" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid #ddd;">';
-              if (p.Image2) imgs += '<img src="' + p.Image2 + '" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid #ddd;">';
-              if (p.Image3) imgs += '<img src="' + p.Image3 + '" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid #ddd;">';
+              var imgFields = ['Image1','Image2','Image3','Img1','Img2','Img3'];
+              imgFields.forEach(function(f) {
+                if (p[f] && p[f].toString().trim() !== "" && p[f].toString().startsWith('http')) {
+                  imgs += '<img src="' + p[f] + '" style="width:70px;height:70px;object-fit:cover;border-radius:8px;border:1px solid #ddd;cursor:pointer;" onclick="openLightbox(\'' + p[f] + '\')">';
+                }
+              });
               var imgHtml = imgs ? '<div style="display:flex;gap:8px;margin-top:10px;overflow-x:auto;">' + imgs + '</div>' : '';
+
               list.innerHTML +=
                 '<div class="product-item">' +
                   '<div style="font-size:11px;background:#e3f2fd;color:#1565c0;padding:2px 7px;border-radius:4px;display:inline-block;margin-bottom:6px;font-weight:700;">' + pType + '</div>' +
@@ -423,6 +552,117 @@
         });
     }
 
+    // ══ ORDERS ══
+    function fetchOrders() {
+      var shopId = localStorage.getItem('shopId');
+      if (!shopId) return;
+      document.getElementById('ordersList').innerHTML = '<p style="color:#aaa;text-align:center;padding:20px;">Loading...</p>';
+      fetch(APPS_SCRIPT_URL + "?action=getOrders&shopId=" + shopId)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) {
+            allOrders = data.data || [];
+            // Count pending orders and show badge
+            var pendingCount = allOrders.filter(function(o) {
+              return (o.Status || 'pending').toLowerCase() === 'pending';
+            }).length;
+            if (pendingCount > 0) {
+              var badge = document.getElementById('newOrderBadge');
+              badge.innerText = pendingCount;
+              badge.style.display = 'inline-block';
+            }
+            // Update total orders count in dashboard
+            document.getElementById('totalOrders').innerText = allOrders.length;
+            renderOrders();
+          } else {
+            document.getElementById('ordersList').innerHTML = '<p style="color:#aaa;text-align:center;padding:20px;">Orders feature: ' + (data.error || 'No orders yet.') + '</p>';
+          }
+        })
+        .catch(function() {
+          document.getElementById('ordersList').innerHTML = '<p style="color:#aaa;text-align:center;padding:20px;">Orders data load කරන්න බැරිඋනා.</p>';
+        });
+    }
+
+    function filterOrders(status) {
+      currentFilter = status;
+      document.querySelectorAll('.filter-chip').forEach(function(c) { c.classList.remove('active'); });
+      document.getElementById('chip-' + status).classList.add('active');
+      renderOrders();
+    }
+
+    function renderOrders() {
+      var filtered = allOrders.filter(function(o) {
+        if (currentFilter === 'all') return true;
+        return (o.Status || 'pending').toLowerCase() === currentFilter;
+      });
+
+      // Sort newest first
+      filtered.sort(function(a, b) {
+        return new Date(b.Date || 0) - new Date(a.Date || 0);
+      });
+
+      var list = document.getElementById('ordersList');
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="order-empty"><i class="fas fa-shopping-bag" style="font-size:32px;color:#ddd;margin-bottom:10px;display:block;"></i>Orders නෑ.</div>';
+        return;
+      }
+
+      list.innerHTML = "";
+      filtered.forEach(function(o) {
+        var status = (o.Status || 'pending').toLowerCase();
+        var statusLabel = status === 'pending' ? '⏳ Pending' : status === 'confirmed' ? '✅ Confirmed' : '❌ Cancelled';
+        var dateStr = o.Date ? new Date(o.Date).toLocaleString() : '-';
+        var orderId = o.OrderID || '-';
+        var customerName = o.CustomerName || 'Unknown';
+        var phone = o.Phone || '-';
+        var orderType = o.OrderType || '-';
+        var tableNote = o.TableNote || '';
+        var itemsStr = o.Items || '-';
+        var total = o.Total || 0;
+
+        var actionBtns = '';
+        if (status === 'pending') {
+          actionBtns =
+            '<div class="order-actions">' +
+              '<button class="btn-confirm" onclick="updateOrderStatus(\'' + orderId + '\', \'confirmed\')">✅ Confirm</button>' +
+              '<button class="btn-cancel"  onclick="updateOrderStatus(\'' + orderId + '\', \'cancelled\')">❌ Cancel</button>' +
+            '</div>';
+        }
+
+        list.innerHTML +=
+          '<div class="order-card" id="order-' + orderId + '">' +
+            '<div class="order-card-header">' +
+              '<span class="order-id">🧾 #' + orderId + '</span>' +
+              '<span class="order-status ' + status + '">' + statusLabel + '</span>' +
+            '</div>' +
+            '<div class="order-items">' + itemsStr + '</div>' +
+            '<div class="order-total">Rs. ' + parseFloat(total).toLocaleString() + '</div>' +
+            '<div class="order-meta">👤 ' + customerName + ' | 📞 ' + phone + '<br>' +
+              '📦 ' + orderType + (tableNote ? ' — ' + tableNote : '') + '<br>' +
+              '🕐 ' + dateStr + '</div>' +
+            actionBtns +
+          '</div>';
+      });
+    }
+
+    function updateOrderStatus(orderId, newStatus) {
+      var shopId = localStorage.getItem('shopId');
+      fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updateOrderStatus', shopId: shopId, orderId: orderId, status: newStatus }) })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) {
+            // Update locally
+            allOrders.forEach(function(o) {
+              if ((o.OrderID || '').toString() === orderId.toString()) o.Status = newStatus;
+            });
+            renderOrders();
+          } else {
+            alert(data.error || "Error updating order.");
+          }
+        })
+        .catch(function() { alert("Network error!"); });
+    }
+
     // ══ FEEDBACK ══
     function fetchFeedback() {
       fetch(APPS_SCRIPT_URL + "?action=getFeedback&shopId=" + localStorage.getItem('shopId'))
@@ -452,35 +692,22 @@
     function fetchPromos() {
       var shopId = localStorage.getItem('shopId');
       if (!shopId) return;
-
-      // Reset state
-      document.getElementById('promo-loading').style.display     = 'block';
+      document.getElementById('promo-loading').style.display      = 'block';
       document.getElementById('promo-video-section').style.display = 'none';
       document.getElementById('promo-posts-section').style.display = 'none';
-      document.getElementById('promo-empty').style.display        = 'none';
+      document.getElementById('promo-empty').style.display         = 'none';
 
       fetch(APPS_SCRIPT_URL + "?action=profile&id=" + shopId)
         .then(function(r) { return r.json(); })
         .then(function(data) {
           document.getElementById('promo-loading').style.display = 'none';
-
-          if (!data.success || !data.data) {
-            document.getElementById('promo-empty').style.display = 'block';
-            return;
-          }
-
+          if (!data.success || !data.data) { document.getElementById('promo-empty').style.display = 'block'; return; }
           var d = data.data;
           var hasVideo = d.CustomPromoVideo && d.CustomPromoVideo.toString().trim() !== "";
           var imgs = [d.CustomPromoImg1, d.CustomPromoImg2, d.CustomPromoImg3].filter(function(x) {
             return x && x.toString().trim() !== "";
           });
-
-          if (!hasVideo && imgs.length === 0) {
-            document.getElementById('promo-empty').style.display = 'block';
-            return;
-          }
-
-          // ── VIDEO ──
+          if (!hasVideo && imgs.length === 0) { document.getElementById('promo-empty').style.display = 'block'; return; }
           if (hasVideo) {
             var videoUrl = d.CustomPromoVideo.toString().trim();
             var vCon = document.getElementById('promo-video-container');
@@ -492,15 +719,12 @@
             }
             document.getElementById('promo-video-section').style.display = 'block';
           }
-
-          // ── POSTS GRID ──
           if (imgs.length > 0) {
             var pGrid = document.getElementById('promo-posts-grid');
             pGrid.innerHTML = "";
             imgs.forEach(function(img) {
               pGrid.innerHTML += '<div class="promo-grid-item" onclick="openLightbox(\'' + img + '\')">' +
-                '<img src="' + img + '" loading="lazy" alt="Promo">' +
-                '</div>';
+                '<img src="' + img + '" loading="lazy" alt="Promo"></div>';
             });
             document.getElementById('promo-posts-section').style.display = 'block';
           }
@@ -508,8 +732,6 @@
         .catch(function() {
           document.getElementById('promo-loading').style.display = 'none';
           document.getElementById('promo-empty').style.display   = 'block';
-          document.getElementById('promo-empty').innerHTML       =
-            '<i class="fas fa-wifi" style="font-size:28px;color:#ddd;margin-bottom:8px;display:block;"></i>Network error. Refresh try කරන්න.';
         });
     }
 

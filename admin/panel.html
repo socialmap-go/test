@@ -692,24 +692,84 @@
         .catch(function() {});
     }
 
+    // ══ DOWNLOAD PDF ══
     function downloadPDF() {
-      var element = document.getElementById('analyticsCard');
+      // 1. Shop Details ලබා ගැනීම
       var shopSelect = document.getElementById('analyticsShopId');
       var shopName = shopSelect.options[shopSelect.selectedIndex].text;
-      
+
+      // 2. Date Range සැකසීම
+      var start = document.getElementById('statStartDate').value;
+      var end = document.getElementById('statEndDate').value;
+      var dateText = "";
+      if (start || end) {
+        dateText = "<p style='margin: 5px 0; color: #555; font-size: 14px;'>Date Range: " + (start ? start : 'All time') + "  👉  " + (end ? end : 'All time') + "</p>";
+      } else {
+        dateText = "<p style='margin: 5px 0; color: #555; font-size: 14px;'>Date Range: All Time</p>";
+      }
+
+      // 3. Stats Data ලබා ගැනීම
+      var scans = document.getElementById('a_scans').innerText;
+      var emails = document.getElementById('a_emails').innerText;
+      var linksHtml = document.getElementById('linkStatsContainer').innerHTML;
+
+      // 4. PDF එක සඳහාම පමණක් සැඟවුණු (Hidden) පිරිසිදු Layout එකක් සෑදීම
+      var pdfContainer = document.createElement('div');
+      pdfContainer.style.padding = '40px';
+      pdfContainer.style.fontFamily = 'Arial, sans-serif';
+      pdfContainer.style.background = '#ffffff';
+      pdfContainer.style.color = '#333';
+
+      pdfContainer.innerHTML = `
+        <div style="text-align: center; border-bottom: 2px solid #d32f2f; padding-bottom: 20px; margin-bottom: 30px;">
+          <h1 style="color: #d32f2f; font-size: 32px; margin: 0;">${shopName}</h1>
+          <h3 style="color: #333; margin: 10px 0 5px 0;">Performance & Analytics Report</h3>
+          ${dateText}
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-bottom: 40px;">
+          <div style="flex: 1; background: #e3f2fd; padding: 25px; border-radius: 10px; text-align: center; margin-right: 15px; border: 1px solid #90caf9;">
+            <h2 style="color: #1976d2; font-size: 36px; margin: 0;">${scans}</h2>
+            <p style="color: #1565c0; font-weight: bold; margin: 5px 0 0 0;">Total Scans / Actions</p>
+          </div>
+          <div style="flex: 1; background: #e8f5e9; padding: 25px; border-radius: 10px; text-align: center; margin-left: 15px; border: 1px solid #a5d6a7;">
+            <h2 style="color: #2e7d32; font-size: 36px; margin: 0;">${emails}</h2>
+            <p style="color: #1b5e20; font-weight: bold; margin: 5px 0 0 0;">Email Subscribers</p>
+          </div>
+        </div>
+
+        <div style="background: #fff3e0; padding: 20px; border-radius: 10px; border: 1px solid #ffb74d;">
+          <h3 style="color: #e65100; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid #ffe0b2; padding-bottom: 10px;">
+            Scan Destinations (Link Analytics)
+          </h3>
+          <div style="font-size: 15px; line-height: 1.8;">
+            ${linksHtml}
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(pdfContainer);
+      pdfContainer.style.position = 'absolute';
+      pdfContainer.style.top = '-9999px'; // තිරයේ නොපෙනී සිටීමට
+
+      // 5. PDF එක Generate කිරීම
       var opt = {
-        margin:       10,
-        filename:     'Report_' + shopName.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf',
+        margin:       15,
+        filename:     'Analytics_Report_' + shopName.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2 },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
-      
-      var btn = element.querySelector('button');
-      btn.style.display = 'none';
-      
-      html2pdf().set(opt).from(element).save().then(function(){
-        btn.style.display = 'block'; 
+
+      var btn = document.querySelector('#analyticsCard button');
+      var originalBtnHtml = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating Report...';
+      btn.disabled = true;
+
+      html2pdf().set(opt).from(pdfContainer).save().then(function() {
+        document.body.removeChild(pdfContainer); // Download වූ පසු සැඟවුණු කොටස මකා දැමීම
+        btn.innerHTML = originalBtnHtml;
+        btn.disabled = false;
       });
     }
 

@@ -3,14 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Profile | Social Map</title>
+  <title>Smart Profile | Mapa Solutions</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', sans-serif; background: #f4f6f8; display: flex; justify-content: center; min-height: 100vh; }
     .wrap { width: 100%; max-width: 430px; background: white; min-height: 100vh; position: relative; overflow-x: hidden; padding-bottom: 30px; }
-    .cover-div { width: 100%; height: 160px; background: #d32f2f; background-size: cover; background-position: center; }
-    .profile-row { padding: 0 18px 0; margin-top: -44px; margin-bottom: 0; }
+
+    /* ── COVER ── */
+    .cover-div {
+      width: 100%; height: 160px;
+      background: #d32f2f;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .cover-div .cover-img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .profile-row { padding: 0 18px 0; margin-top: -44px; margin-bottom: 0; position: relative; z-index: 10; }
     .logo-wrap { width: 88px; height: 88px; border-radius: 50%; border: 4px solid white; overflow: hidden; background: white; box-shadow: 0 3px 10px rgba(0,0,0,0.12); flex-shrink: 0; }
     .logo-wrap img { width: 100%; height: 100%; object-fit: cover; }
     .logo-wrap .init { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #d32f2f; color: white; font-size: 32px; font-weight: 900; }
@@ -60,9 +77,12 @@
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .modal-title { font-size: 17px; font-weight: 800; color: #1565c0; }
     .close-x { background: none; border: none; font-size: 24px; color: #aaa; cursor: pointer; }
-    .view-toggle { display: flex; gap: 5px; }
-    .vtbtn { padding: 6px 12px; border: none; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; background: #eee; color: #666; }
-    .vtbtn.on { background: #1565c0; color: white; }
+    
+    /* නවීකරණය කරන ලද List View / Grid View කහ පාට කොටුව */
+    .view-toggle { display: flex; gap: 5px; background: #fffde7; padding: 5px; border: 2px solid #fbc02d; border-radius: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+    .vtbtn { padding: 6px 12px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; background: transparent; color: #f57f17; }
+    .vtbtn.on { background: #fbc02d; color: #000; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    
     #prodContainer.lv { display: flex; flex-direction: column; gap: 12px; }
     #prodContainer.lv .pc { display: flex; gap: 12px; align-items: center; background: #fafafa; border: 1px solid #eee; border-radius: 12px; padding: 12px; }
     #prodContainer.lv .pc img.pimg { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
@@ -108,6 +128,11 @@
     .msg-text { font-size: 13px; font-weight: 700; padding: 10px; border-radius: 8px; margin-top: 8px; }
     .msg-err { background: #ffebee; color: #c62828; }
     .msg-ok  { background: #e8f5e9; color: #2e7d32; }
+    /* ── POWERED BY BADGE ── */
+    .powered-badge { display: flex; align-items: center; justify-content: center; gap: 7px; padding: 14px 18px 20px; text-decoration: none; }
+    .powered-badge .pb-text { font-size: 11px; color: #bbb; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+    .powered-badge .pb-logo { display: flex; align-items: center; gap: 5px; background: #d32f2f; color: white; padding: 4px 10px 4px 6px; border-radius: 20px; font-size: 12px; font-weight: 800; }
+    .powered-badge .pb-logo i { font-size: 13px; }
   </style>
 </head>
 <body>
@@ -121,14 +146,17 @@
     <div style="font-size:38px;color:#e65100;margin-bottom:8px;"><i class="fas fa-gift"></i></div>
     <h3 style="margin-bottom:6px;color:#e65100;">Special Offers!</h3>
     <p style="font-size:13px;color:#777;margin-bottom:14px;line-height:1.5;">සතිපතා special discounts සහ promotions ඔබගේ email ට ලැබෙන්නට subscribe කරන්න.</p>
-    <input type="email" id="subEmail" class="inp" placeholder="Your email address" style="text-align:center;">
+    <input type="email" id="subEmail" class="inp" placeholder="Your email address" autocomplete="off" autocorrect="off" autocapitalize="off" style="text-align:center;">
     <button class="btn-place" style="background:#e65100;" onclick="registerEmail()">Subscribe Now</button>
     <button style="background:none;border:none;color:#aaa;margin-top:12px;cursor:pointer;font-size:13px;" onclick="closeEp()">Later</button>
   </div>
 </div>
 
 <div class="wrap" id="mainWrap" style="display:none;">
-  <div class="cover-div" id="coverDiv"></div>
+  <div class="cover-div" id="coverDiv">
+    <img class="cover-img" id="coverImg" src="" alt="" style="display:none;"
+         onerror="this.style.display='none';">
+  </div>
   <div class="profile-row">
     <div class="logo-wrap" id="logoWrap"><div class="init" id="logoInit">?</div></div>
   </div>
@@ -139,35 +167,41 @@
   <div class="btns-section" id="btnsSection"></div>
   <div class="divider"></div>
   <div id="promoSection">
-    <div class="promo-header"><i class="fas fa-bullhorn"></i> Promotions &amp; Highlights</div>
+    <div class="promo-header"><i class="fas fa-bullhorn"></i> Promotions & Highlights</div>
     <div id="promoVideoWrap" style="display:none;" class="promo-video-wrap"></div>
     <div id="promoImgGrid" style="display:none;" class="promo-img-grid"></div>
   </div>
+
+  <a class="powered-badge" href="https://mapabiz.com" target="_blank">
+    <span class="pb-text">Powered by</span>
+    <span class="pb-logo">
+      <i class="fas fa-map-marked-alt"></i> Mapa Solutions
+    </span>
+  </a>
+
 </div>
 
-<!-- PRODUCTS MODAL -->
 <div class="modal" id="prodModal">
   <div class="modal-box">
     <div class="modal-header">
-      <span class="modal-title"><i class="fas fa-box-open"></i> Services &amp; Products</span>
+      <span class="modal-title"><i class="fas fa-box-open"></i> Services & Products</span>
       <div style="display:flex;align-items:center;gap:8px;">
         <div class="view-toggle">
           <button class="vtbtn" id="lvBtn" onclick="setView('lv')"><i class="fas fa-list"></i> List</button>
           <button class="vtbtn on" id="gvBtn" onclick="setView('gv')"><i class="fas fa-th"></i> Grid</button>
         </div>
-        <button class="close-x" onclick="closeModal('prodModal')">&#x2715;</button>
+        <button class="close-x" onclick="closeModal('prodModal')">✕</button>
       </div>
     </div>
     <div id="prodContainer" class="gv">Loading...</div>
   </div>
 </div>
 
-<!-- FEEDBACK MODAL -->
 <div class="modal" id="fbModal">
   <div class="modal-box">
     <div class="modal-header">
       <span class="modal-title" style="color:#546e7a;"><i class="fas fa-comment-dots"></i> Feedback</span>
-      <button class="close-x" onclick="closeModal('fbModal')">&#x2715;</button>
+      <button class="close-x" onclick="closeModal('fbModal')">✕</button>
     </div>
     <input type="text" id="fbName" class="fb-input" placeholder="Your Name">
     <input type="tel" id="fbPhone" class="fb-input" placeholder="Phone Number (optional)">
@@ -181,41 +215,38 @@
   </div>
 </div>
 
-<!-- BANK MODAL -->
 <div class="modal" id="bankModal">
   <div class="modal-box">
     <div class="modal-header">
       <span class="modal-title" style="color:#00695c;"><i class="fas fa-university"></i> Bank Details</span>
-      <button class="close-x" onclick="closeModal('bankModal')">&#x2715;</button>
+      <button class="close-x" onclick="closeModal('bankModal')">✕</button>
     </div>
     <div id="bankContent" class="bank-box">Loading...</div>
   </div>
 </div>
 
-<!-- MENU MODAL -->
 <div class="modal" id="menuModal">
   <div class="modal-box" style="padding:12px;height:86vh;">
     <div class="modal-header">
       <span class="modal-title" style="color:#673AB7;"><i class="fas fa-file-pdf"></i> Menu</span>
-      <button class="close-x" onclick="closeMenuModal()">&#x2715;</button>
+      <button class="close-x" onclick="closeMenuModal()">✕</button>
     </div>
     <iframe id="menuIframe" style="width:100%;height:calc(100% - 50px);border:none;border-radius:10px;" src=""></iframe>
   </div>
 </div>
 
-<!-- LOYALTY MODAL -->
 <div class="modal" id="loyModal">
   <div class="modal-box">
     <div class="modal-header">
       <span class="modal-title" style="color:#d32f2f;"><i class="fas fa-gift"></i> Loyalty Card</span>
-      <button class="close-x" onclick="closeModal('loyModal')">&#x2715;</button>
+      <button class="close-x" onclick="closeModal('loyModal')">✕</button>
     </div>
     <div id="lv-login">
       <input type="tel" id="lPhone" class="loyalty-input" placeholder="Phone (07XXXXXXXX)" maxlength="10">
       <input type="password" id="lPin" class="loyalty-input" placeholder="4-Digit PIN" maxlength="4">
       <button class="loyalty-btn" onclick="checkLoyalty()" id="lCheckBtn">Check My Card</button>
       <div style="text-align:center;">
-        <span class="link-text" onclick="lSwitchView('lv-setup')">No account? Register</span> &nbsp;
+        <span class="link-text" onclick="lSwitchView('lv-setup')">No account? Register</span>  
         <span class="link-text" onclick="lSwitchView('lv-forgot')">Forgot PIN?</span>
       </div>
       <div id="lLoginMsg" class="msg-text msg-err" style="display:none;"></div>
@@ -242,18 +273,16 @@
   </div>
 </div>
 
-<!-- FLOATING CART -->
 <div class="floating-cart" id="cartBtn" onclick="openModal('cartModal')">
   <i class="fas fa-shopping-cart"></i>
   <div class="cart-badge" id="cartCount">0</div>
 </div>
 
-<!-- CART / ORDER MODAL -->
 <div class="modal" id="cartModal" style="z-index:3000;">
   <div class="modal-box">
     <div class="modal-header">
       <span class="modal-title" style="color:#d32f2f;"><i class="fas fa-shopping-basket"></i> Your Order</span>
-      <button class="close-x" onclick="closeModal('cartModal')">&#x2715;</button>
+      <button class="close-x" onclick="closeModal('cartModal')">✕</button>
     </div>
     <div id="cartItems"></div>
     <div class="cart-total"><span>Total:</span><span id="cartTotal">රු. 0.00</span></div>
@@ -263,7 +292,7 @@
         <button class="ot-btn"    id="btnTA" onclick="setOrderType('Takeaway')"><i class="fas fa-shopping-bag"></i> Takeaway</button>
       </div>
       <div id="tableArea">
-        <div id="fixedTable" style="display:none;background:#e3f2fd;padding:11px;border-radius:8px;margin-bottom:10px;font-weight:700;color:#1565c0;text-align:center;border:1px dashed #1976d2;">&#127919; Table: <span id="fixedTableTxt"></span></div>
+        <div id="fixedTable" style="display:none;background:#e3f2fd;padding:11px;border-radius:8px;margin-bottom:10px;font-weight:700;color:#1565c0;text-align:center;border:1px dashed #1976d2;">🎯 Table: <span id="fixedTableTxt"></span></div>
         <input type="text" id="tableInput" class="inp" placeholder="Table Number (e.g. Table 03)">
       </div>
       <input type="text" id="orderName"  class="inp" placeholder="Your Name">
@@ -283,25 +312,24 @@
   var autoTable = new URLSearchParams(window.location.search).get('table');
   var cart = {}, orderType = 'Dine-In', stampsTarget = 10;
   var productsData = [], menuLink = "", viewMode = 'gv';
-  var promoObserved = false;
 
   // ════════════════════════════════════════════
   // PLATFORM DETECTION
   // ════════════════════════════════════════════
   var PLATFORMS = [
-    { m:['wa.me','whatsapp.com'],              cls:'abtn-wa',          icon:'fab fa-whatsapp'         },
-    { m:['facebook.com','fb.com','fb.me'],     cls:'abtn-fb',          icon:'fab fa-facebook-f'       },
-    { m:['instagram.com'],                     cls:'abtn-ig',          icon:'fab fa-instagram'        },
-    { m:['tiktok.com'],                        cls:'abtn-tiktok',      icon:'fab fa-tiktok'           },
-    { m:['maps.google','goo.gl/maps','maps.app.goo'], cls:'abtn-maps', icon:'fas fa-map-marker-alt'   },
-    { m:['youtube.com','youtu.be'],            cls:'abtn-youtube',     icon:'fab fa-youtube'          },
-    { m:['tripadvisor.com'],                   cls:'abtn-tripadvisor', icon:'svg-tripadvisor'         },
-    { m:['booking.com'],                       cls:'abtn-booking',     icon:'fas fa-bed'              },
-    { m:['airbnb.com'],                        cls:'abtn-airbnb',      icon:'fab fa-airbnb'           },
-    { m:['linkedin.com'],                      cls:'abtn-linkedin',    icon:'fab fa-linkedin'         },
-    { m:['twitter.com','x.com'],               cls:'abtn-twitter',     icon:'fab fa-x-twitter'        },
-    { m:['snapchat.com'],                      cls:'abtn-snapchat',    icon:'fab fa-snapchat'         },
-    { m:['pinterest.com'],                     cls:'abtn-pinterest',   icon:'fab fa-pinterest'        }
+    { m:['wa.me','whatsapp.com'],          cls:'abtn-wa',          icon:'fab fa-whatsapp'          },
+    { m:['facebook.com','fb.com','fb.me'],     cls:'abtn-fb',          icon:'fab fa-facebook-f'        },
+    { m:['instagram.com'],                     cls:'abtn-ig',          icon:'fab fa-instagram'         },
+    { m:['tiktok.com'],                        cls:'abtn-tiktok',      icon:'fab fa-tiktok'            },
+    { m:['maps.google','goo.gl/maps','maps.app.goo'], cls:'abtn-maps', icon:'fas fa-map-marker-alt'    },
+    { m:['youtube.com','youtu.be'],            cls:'abtn-youtube',     icon:'fab fa-youtube'           },
+    { m:['tripadvisor.com'],                   cls:'abtn-tripadvisor', icon:'svg-tripadvisor'          },
+    { m:['booking.com'],                       cls:'abtn-booking',     icon:'fas fa-bed'               },
+    { m:['airbnb.com'],                        cls:'abtn-airbnb',      icon:'fab fa-airbnb'            },
+    { m:['linkedin.com'],                      cls:'abtn-linkedin',    icon:'fab fa-linkedin'          },
+    { m:['twitter.com','x.com'],               cls:'abtn-twitter',     icon:'fab fa-x-twitter'         },
+    { m:['snapchat.com'],                      cls:'abtn-snapchat',    icon:'fab fa-snapchat'          },
+    { m:['pinterest.com'],                     cls:'abtn-pinterest',   icon:'fab fa-pinterest'         }
   ];
 
   function detectPlatform(url) {
@@ -347,6 +375,119 @@
   };
 
   // ════════════════════════════════════════════
+  // THEME SYSTEM
+  // FIX: applyTheme now also updates modal title colors to match theme
+  // ════════════════════════════════════════════
+  var THEMES = {
+    'default': {
+      cover: '#d32f2f', body: '#ffffff', text: '#222222', sub: '#888888',
+      logo: '#d32f2f', logoText: '#ffffff',
+      divider: '#f4f6f8', powered: '#d32f2f'
+    },
+    'dark': {
+      cover: '#0f0f0f', body: '#1a1a1a', text: '#f0f0f0', sub: '#888888',
+      logo: '#333333', logoText: '#ffffff',
+      divider: '#111111', powered: '#444444'
+    },
+    'ocean': {
+      cover: '#0077b6', body: '#f0f8ff', text: '#023e8a', sub: '#0096c7',
+      logo: '#0077b6', logoText: '#ffffff',
+      divider: '#e0f0ff', powered: '#0077b6'
+    },
+    'forest': {
+      cover: '#2d6a4f', body: '#f8fff6', text: '#1b4332', sub: '#52b788',
+      logo: '#2d6a4f', logoText: '#ffffff',
+      divider: '#e8f5e1', powered: '#2d6a4f'
+    },
+    'gold': {
+      cover: '#7c5c00', body: '#fffbf0', text: '#5c4000', sub: '#c9a227',
+      logo: '#c9a227', logoText: '#ffffff',
+      divider: '#fff8e1', powered: '#c9a227'
+    },
+    'minimal': {
+      cover: '#f5f5f5', body: '#ffffff', text: '#111111', sub: '#999999',
+      logo: '#222222', logoText: '#ffffff',
+      divider: '#f0f0f0', powered: '#222222'
+    },
+    'tech': {
+      cover: '#1a0533', body: '#120228', text: '#e2d9f3', sub: '#9d72ff',
+      logo: '#7c3aed', logoText: '#ffffff',
+      divider: '#1e0a3a', powered: '#7c3aed'
+    },
+    'food': {
+      cover: '#111111', body: '#1a1a1a', text: '#ffffff', sub: '#ff8c00',
+      logo: '#ff6b00', logoText: '#ffffff',
+      divider: '#0f0f0f', powered: '#ff6b00'
+    }
+  };
+
+  function applyTheme(name) {
+    // FIX: normalize to lowercase and trim so "Ocean", " dark", "FOOD" all work
+    var key = (name || '').toString().trim().toLowerCase();
+    var t   = THEMES[key] || THEMES['default'];
+
+    var wrap     = document.getElementById('mainWrap');
+    var coverDiv = document.getElementById('coverDiv');
+    var logoInit = document.getElementById('logoInit');
+
+    // body background + text
+    wrap.style.background = t.body;
+    document.getElementById('bizName').style.color = t.text;
+    document.getElementById('bizType').style.color = t.sub;
+
+    // cover background color (will sit behind cover-img if image present)
+    coverDiv.style.backgroundColor = t.cover;
+
+    // logo init bg
+    if (logoInit) { logoInit.style.background = t.logo; logoInit.style.color = t.logoText; }
+
+    // dividers
+    document.querySelectorAll('.divider').forEach(function(d) { d.style.background = t.divider; });
+
+    // powered badge
+    var pb = document.querySelector('.pb-logo');
+    if (pb) pb.style.background = t.powered;
+
+    // page background
+    var darkThemes = ['dark','tech','food'];
+    document.body.style.background = darkThemes.indexOf(key) !== -1 ? '#0a0a0a' : '#f4f6f8';
+
+    window._currentTheme = t;
+  }
+
+  // ════════════════════════════════════════════
+  // COVER IMAGE HELPER
+  // FIX: converts Google Drive /view links → direct image links
+  //      uses <img> tag (not backgroundImage) for reliable loading
+  // ════════════════════════════════════════════
+  function sanitizeCoverUrl(url) {
+    if (!url || !url.trim()) return '';
+    url = url.trim();
+
+    // Google Drive /view or /edit → direct image embed
+    // e.g. https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+    //  → https://lh3.googleusercontent.com/d/FILE_ID  (most reliable)
+    var driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (driveMatch) {
+      return 'https://lh3.googleusercontent.com/d/' + driveMatch[1];
+    }
+
+    // Google Drive uc?id=... → keep as is (direct download link)
+    // Already a direct link — return as is
+    return url;
+  }
+
+  function applyCoverImage(url) {
+    var img = document.getElementById('coverImg');
+    var sanitized = sanitizeCoverUrl(url);
+    if (!sanitized) { img.style.display = 'none'; return; }
+    img.src = sanitized;
+    img.style.display = 'block';
+    // Fallback: if img fails, hide it (cover-div background color shows)
+    img.onerror = function() { img.style.display = 'none'; };
+  }
+
+  // ════════════════════════════════════════════
   // LOAD PROFILE
   // ════════════════════════════════════════════
   function loadProfile() {
@@ -358,39 +499,56 @@
           return;
         }
         var p = d.data;
-        document.getElementById('loader').style.display  = 'none';
+        document.getElementById('loader').style.display   = 'none';
         document.getElementById('mainWrap').style.display = 'block';
 
-        // Cover
-        var cd = document.getElementById('coverDiv');
-        if (p.ThemeColor && p.ThemeColor.trim()) cd.style.background = p.ThemeColor;
-        if (p.CoverImage  && p.CoverImage.trim()) {
-          cd.style.backgroundImage    = "url('" + p.CoverImage + "')";
-          cd.style.backgroundSize     = 'cover';
-          cd.style.backgroundPosition = 'center';
-        }
+        // DEBUG — remove after confirming fix (check browser F12 Console)
+        console.log('[MapaProfile] Raw data keys:', Object.keys(p));
+        console.log('[MapaProfile] Theme value:', p.Theme, '| theme:', p.theme);
+        console.log('[MapaProfile] CoverImage:', p.CoverImage, '| CoverImg:', p.CoverImg);
+
+        // FIX: apply theme FIRST (sets bg colors)
+        // FIX: normalize — check both 'Theme' and 'theme' column names
+        var themeName = (p.Theme || p.theme || '').toString().trim().toLowerCase();
+        applyTheme(themeName);
+        console.log('[MapaProfile] applyTheme called with:', themeName);
+
+        // FIX: cover image applied via <img> tag after theme sets bg color
+        // Supports: direct URL, Google Drive share link, lh3 link
+        var coverUrl = p.CoverImage || p.CoverImg || p.coverImage || p.coverImg || '';
+        applyCoverImage(coverUrl);
+        console.log('[MapaProfile] applyCoverImage called with:', coverUrl);
 
         // Logo
         var lw = document.getElementById('logoWrap');
-        if (p.ProfileImage && p.ProfileImage.trim()) {
-          lw.innerHTML = "<img src='" + p.ProfileImage + "' onerror=\"this.parentNode.innerHTML='<div class=init>'+('" + (p.BusinessName||'?').charAt(0) + "')+'</div>'\">";
+        var logoUrl = p.ProfileImage || p.profileImage || '';
+        var bizInitial = (p.BusinessName || '?').charAt(0).toUpperCase();
+        if (logoUrl && logoUrl.trim()) {
+          lw.innerHTML = "<img src='" + sanitizeCoverUrl(logoUrl) + "' alt='' onerror=\"this.style.display='none';document.getElementById('logoInit').style.display='flex';\">";
+          document.getElementById('logoInit') && (document.getElementById('logoInit').innerText = bizInitial);
         } else {
-          document.getElementById('logoInit').innerText = (p.BusinessName || '?').charAt(0).toUpperCase();
+          document.getElementById('logoInit').innerText = bizInitial;
         }
 
         document.getElementById('bizName').innerText     = p.BusinessName || 'Welcome';
+        
+        // "Mapa Solutions" ඉවත් කරන ලදී (සංශෝධනය)
         document.getElementById('bizType').innerText     = p.Type === 'redirect' ? 'Smart Redirect' : 'Smart Profile';
+        
         document.getElementById('bankContent').innerText = p.BankDetails  || 'Bank details not available.';
 
-        if (p.MenuPDF    && p.MenuPDF.trim())    menuLink     = p.MenuPDF;
-        if (p.StampTarget)                        stampsTarget = parseInt(p.StampTarget) || 10;
+        if (p.MenuPDF && p.MenuPDF.trim())   menuLink     = p.MenuPDF;
+        if (p.StampTarget)                   stampsTarget = parseInt(p.StampTarget) || 10;
+
+        // Re-apply theme colors AFTER text is set (some browsers need this)
+        applyTheme(themeName);
 
         buildButtons(p);
         if (p.StoreStatus === 'Active') loadProducts();
         loadPromos(p);
-        setTimeout(function() { setupPromoObserver(); }, 800);
       })
-      .catch(function() {
+      .catch(function(err) {
+        console.error('Profile load error:', err);
         document.getElementById('loader').innerHTML = "<h2 style='color:red;text-align:center;padding:20px;'>Connection Error</h2>";
       });
   }
@@ -426,21 +584,21 @@
       sec.appendChild(el);
     }
 
-    if (p.StoreStatus  === 'Active') addBtn('abtn-products', ic('fas fa-box-open'),     'Our Services & Products', '', function(){ openModal('prodModal'); });
-    if (p.InboxStatus  === 'Active') addBtn('abtn-feedback', ic('fas fa-comment-dots'), 'Feedback & Suggestions',  '', function(){ openModal('fbModal');  });
-    if (p.LoyaltyStatus=== 'Active') addBtn('abtn-loyalty',  ic('fas fa-gift'),         'My Loyalty Card',         '', function(){ openLoyalty();         });
-    if (p.GoogleReview && p.GoogleReview.trim())
+    if (p.StoreStatus   === 'Active') addBtn('abtn-products', ic('fas fa-box-open'),      'Our Services & Products', '', function(){ openModal('prodModal'); });
+    if (p.InboxStatus   === 'Active') addBtn('abtn-feedback', ic('fas fa-comment-dots'), 'Feedback & Suggestions',  '', function(){ openModal('fbModal');  });
+    if (p.LoyaltyStatus === 'Active') addBtn('abtn-loyalty',  ic('fas fa-gift'),         'My Loyalty Card',         '', function(){ openLoyalty();         });
+    if (p.GoogleReview  && p.GoogleReview.trim())
       addBtn('abtn-review', "<i class='fab fa-google' style='color:#fbbc04'></i>", 'Rate Us on Google', p.GoogleReview, null);
-    if (p.BankDetails  && p.BankDetails.trim())
+    if (p.BankDetails   && p.BankDetails.trim())
       addBtn('abtn-bank', ic('fas fa-university'), 'Bank Details', '', function(){ openModal('bankModal'); });
-    if (p.WhatsApp  && p.WhatsApp.trim())   addBtn('abtn-wa',    ic('fab fa-whatsapp'),       'WhatsApp',     p.WhatsApp,  null);
-    if (p.Maps      && p.Maps.trim())       addBtn('abtn-maps',  ic('fas fa-map-marker-alt'), 'Google Maps',  p.Maps,      null);
-    if (p.Facebook  && p.Facebook.trim())   addBtn('abtn-fb',    ic('fab fa-facebook-f'),     'Facebook',     p.Facebook,  null);
-    if (p.Instagram && p.Instagram.trim())  addBtn('abtn-ig',    ic('fab fa-instagram'),      'Instagram',    p.Instagram, null);
-    if (p.TikTok    && p.TikTok.trim())     addBtn('abtn-tiktok',ic('fab fa-tiktok'),         'TikTok',       p.TikTok,    null);
-    if (p.Website   && p.Website.trim())    addBtn('abtn-web',   ic('fas fa-globe'),          'Website',      p.Website,   null);
-    if (p.Email     && p.Email.trim())      addBtn('abtn-email', ic('fas fa-envelope'),       'Email Us',     'mailto:' + p.Email, null);
-    if (p.MenuPDF   && p.MenuPDF.trim())    addBtn('abtn-menu',  ic('fas fa-file-pdf'),       'View Menu',    '', function(){ openMenuModal(); });
+    if (p.WhatsApp  && p.WhatsApp.trim())   addBtn('abtn-wa',     ic('fab fa-whatsapp'),       'WhatsApp',    p.WhatsApp,  null);
+    if (p.Maps      && p.Maps.trim())       addBtn('abtn-maps',   ic('fas fa-map-marker-alt'), 'Google Maps', p.Maps,      null);
+    if (p.Facebook  && p.Facebook.trim())   addBtn('abtn-fb',     ic('fab fa-facebook-f'),     'Facebook',    p.Facebook,  null);
+    if (p.Instagram && p.Instagram.trim())  addBtn('abtn-ig',     ic('fab fa-instagram'),      'Instagram',   p.Instagram, null);
+    if (p.TikTok    && p.TikTok.trim())     addBtn('abtn-tiktok', ic('fab fa-tiktok'),         'TikTok',      p.TikTok,    null);
+    if (p.Website   && p.Website.trim())    addBtn('abtn-web',    ic('fas fa-globe'),          'Website',     p.Website,   null);
+    if (p.Email     && p.Email.trim())      addBtn('abtn-email',  ic('fas fa-envelope'),       'Email Us',    'mailto:' + p.Email, null);
+    if (p.MenuPDF   && p.MenuPDF.trim())    addBtn('abtn-menu',   ic('fas fa-file-pdf'),       'View Menu',   '', function(){ openMenuModal(); });
 
     for (var n = 1; n <= 5; n++) {
       var url   = p['CustomLink' + n + 'URL'];
@@ -484,19 +642,14 @@
         grid.innerHTML += '<div class="promo-img-item" onclick="openLb(\'' + img + '\')"><img src="' + img + '" loading="lazy"></div>';
       });
     }
+    setupPromoObserver();
   }
 
   // ════════════════════════════════════════════
   // EMAIL POPUP
   // ════════════════════════════════════════════
   function setupPromoObserver() {
-    var promo = document.getElementById('promoSection');
-    if (!promo || promo.style.display === 'none') return;
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting && !promoObserved) { promoObserved = true; checkAndShowPopup(); }
-      }, { threshold: 0.1 }).observe(promo);
-    }
+    setTimeout(function() { checkAndShowPopup(); }, 10000);
   }
   function checkAndShowPopup() {
     if (localStorage.getItem('subscribed_' + shopId)) return;
@@ -539,8 +692,8 @@
       var price  = parseFloat(p.Price || 0);
       var pid    = p.ProductID || Math.random().toString(36).substr(2, 5);
       var img    = p.Image1 || p.Img1 || '';
-      var typ    = p.Type   || 'Product';
-      var safeNm = nm.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      var typ    = p.Type  || 'Product';
+      var safeNm = nm.replace(/'/g, "\\'").replace(/"/g, '"');
       var imgHtml    = img ? "<img class='pimg' src='" + img + "' onerror=\"this.style.display='none'\" alt=''>" : '';
       var addBtnHtml = "<button class='btn-add' onclick='addToCart(\"" + pid + "\",\"" + safeNm + "\"," + price + ")'><i class='fas fa-plus'></i> Add</button>";
       c.innerHTML += "<div class='pc'>" + imgHtml + "<div class='pi'><div class='ptyp'>" + typ + "</div><div class='pname'>" + nm + "</div><div class='pprice'>රු. " + price.toFixed(2) + "</div>" + addBtnHtml + "</div></div>";
@@ -567,7 +720,7 @@
                  "<div style='flex:1;text-align:left;'><b>" + cart[id].name + "</b><br>" +
                  "<span style='color:#d32f2f;'>රු. " + (cart[id].price * cart[id].qty).toFixed(2) + "</span></div>" +
                  "<div class='qty-ctrl'>" +
-                   "<button class='qty-btn' onclick='changeQty(\"" + id + "\",-1)'>&#x2212;</button>" +
+                   "<button class='qty-btn' onclick='changeQty(\"" + id + "\",-1)'>−</button>" +
                    "<b>" + cart[id].qty + "</b>" +
                    "<button class='qty-btn' onclick='changeQty(\"" + id + "\",1)'>+</button>" +
                  "</div></div>";
@@ -587,20 +740,11 @@
   }
 
   // ════════════════════════════════════════════
-  // PLACE ORDER — FIX: field names now match Apps Script placeOrder()
-  //   name        ← customerName
-  //   phone       ← phone
-  //   items       ← array [{name, qty, price}]
-  //   total       ← totalAmount
-  //   orderType   ← 'Dine-In' / 'Takeaway'
-  //   tableNote   ← table number
+  // PLACE ORDER
   // ════════════════════════════════════════════
   function placeOrder() {
-    var msgEl = document.getElementById('orderMsg');
-
-    // Build items array
-    var itemsArr = [];
-    var total    = 0;
+    var msgEl    = document.getElementById('orderMsg');
+    var itemsArr = [], total = 0;
     for (var id in cart) {
       itemsArr.push({ name: cart[id].name, qty: cart[id].qty, price: cart[id].price });
       total += cart[id].price * cart[id].qty;
@@ -609,8 +753,8 @@
 
     var customerName = document.getElementById('orderName').value.trim();
     if (!customerName) {
-      msgEl.innerHTML   = "කරුණාකර ඔබගේ නම ඇතුළත් කරන්න.";
-      msgEl.className   = 'msg-text msg-err';
+      msgEl.innerHTML = "කරුණාකර ඔබගේ නම ඇතුළත් කරන්න.";
+      msgEl.className = 'msg-text msg-err';
       msgEl.style.display = 'block';
       return;
     }
@@ -620,21 +764,20 @@
       tableNote = autoTable || document.getElementById('tableInput').value.trim() || 'Not Specified';
     }
 
-    msgEl.innerHTML     = "Processing...";
-    msgEl.className     = 'msg-text';
+    msgEl.innerHTML = "Processing...";
+    msgEl.className = 'msg-text';
     msgEl.style.display = 'block';
     document.getElementById('placeBtn').disabled = true;
 
-    // ── Payload — field names EXACTLY matching Apps Script placeOrder(req) ──
     var payload = {
       action:    'placeOrder',
       shopId:    shopId,
       name:      customerName,
       phone:     document.getElementById('orderPhone').value.trim(),
-      items:     itemsArr,           // array of {name, qty, price}
-      total:     total,              // number
-      orderType: orderType,          // 'Dine-In' or 'Takeaway'
-      tableNote: tableNote           // table string or ''
+      items:     itemsArr,
+      total:     total,
+      orderType: orderType,
+      tableNote: tableNote
     };
 
     fetch(API, { method: 'POST', body: JSON.stringify(payload) })
@@ -643,24 +786,23 @@
         document.getElementById('placeBtn').disabled = false;
         if (d.success) {
           cart = {}; updateCartUI();
-          msgEl.innerHTML     = "&#x2705; Order placed! #" + (d.orderId || '');
+          msgEl.innerHTML     = "✅ Order placed! #" + (d.orderId || '');
           msgEl.className     = 'msg-text msg-ok';
           msgEl.style.display = 'block';
-          // Clear inputs
           document.getElementById('orderName').value  = '';
           document.getElementById('orderPhone').value = '';
           document.getElementById('tableInput').value = '';
           setTimeout(function() { closeModal('cartModal'); msgEl.style.display = 'none'; }, 3000);
         } else {
-          msgEl.innerHTML   = d.error || "Error occurred. Please try again.";
-          msgEl.className   = 'msg-text msg-err';
+          msgEl.innerHTML = d.error || "Error occurred. Please try again.";
+          msgEl.className = 'msg-text msg-err';
           msgEl.style.display = 'block';
         }
       })
       .catch(function() {
         document.getElementById('placeBtn').disabled = false;
-        msgEl.innerHTML   = "Network error! Please try again.";
-        msgEl.className   = 'msg-text msg-err';
+        msgEl.innerHTML = "Network error! Please try again.";
+        msgEl.className = 'msg-text msg-err';
         msgEl.style.display = 'block';
       });
   }
@@ -717,7 +859,7 @@
       grid.innerHTML += "<div class='sc" + (i <= stamps ? ' on' : '') + "'>" + (i <= stamps ? "<i class='fas fa-gift'></i>" : i) + "</div>";
     document.getElementById('targetMsg').innerHTML =
       "Collect " + stampsTarget + " stamps for a reward!<br>" +
-      "<span style='background:#e8f5e9;color:#2e7d32;padding:4px 10px;border-radius:6px;font-weight:700;'>&#x1F3C6; Total Redeemed: " + (redeemed || 0) + "</span>";
+      "<span style='background:#e8f5e9;color:#2e7d32;padding:4px 10px;border-radius:6px;font-weight:700;'>🏆 Total Redeemed: " + (redeemed || 0) + "</span>";
   }
   function showLMsg(id, txt) { var el = document.getElementById(id); el.innerText = txt; el.style.display = 'block'; }
 

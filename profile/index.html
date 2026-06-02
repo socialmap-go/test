@@ -18,10 +18,13 @@
       overflow: hidden;
       flex-shrink: 0;
     }
-    .view-switch-overlay { position: absolute; top: 12px; right: 12px; display:flex; gap:6px; z-index:20; background:rgba(255,255,255,0.95);border-radius:8px;padding:4px;box-shadow:0 3px 12px rgba(0,0,0,0.2); }
+    
+    /* View Switch Overlay - Moved and Updated */
+    .view-switch-overlay { display:flex; gap:6px; z-index:20; background:rgba(255,255,255,0.95);border-radius:8px;padding:4px;box-shadow:0 3px 12px rgba(0,0,0,0.15); margin-bottom: 4px; }
     .vs-btn { padding:10px 12px;border-radius:6px;border:none;background:transparent;color:#333;font-weight:700;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:5px;transition:all 0.2s; }
     .vs-btn:hover { background:rgba(0,0,0,0.05); }
     .vs-btn.on { background:#1565c0;color:#fff; }
+    
     .cover-div .cover-img {
       position: absolute;
       top: 0; left: 0;
@@ -31,14 +34,22 @@
       display: block;
     }
 
-    .profile-row { padding: 0 18px 0; margin-top: -44px; margin-bottom: 0; position: relative; z-index: 10; }
+    /* Profile Row - Updated for flex alignment */
+    .profile-row { padding: 0 18px 0; margin-top: -44px; margin-bottom: 0; position: relative; z-index: 10; display: flex; justify-content: space-between; align-items: flex-end; }
+    
     .logo-wrap { width: 88px; height: 88px; border-radius: 50%; border: 4px solid white; overflow: hidden; background: white; box-shadow: 0 3px 10px rgba(0,0,0,0.12); flex-shrink: 0; }
     .logo-wrap img { width: 100%; height: 100%; object-fit: cover; }
     .logo-wrap .init { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #d32f2f; color: white; font-size: 32px; font-weight: 900; }
     .biz-info { padding: 8px 18px 14px; }
     .biz-name { font-size: 20px; font-weight: 800; color: #222; line-height: 1.2; }
     .biz-type { font-size: 12px; color: #888; margin-top: 3px; }
+    
     .btns-section { padding: 0 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 11px; justify-items: stretch; }
+    
+    /* New Classes for Main Buttons Toggle */
+    .btns-section.lv-mode { grid-template-columns: 1fr !important; }
+    .btns-section.gv-mode { grid-template-columns: repeat(2, 1fr) !important; }
+
     .abtn { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 15px 18px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 15px; color: white; border: none; cursor: pointer; width: 100%; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 3px 8px rgba(0,0,0,0.10); }
     .abtn span { display: block; text-align: center; }
     .abtn:active { transform: scale(0.97); }
@@ -81,7 +92,7 @@
       .cover-div { height: 140px; }
       .profile-row { padding: 0 14px; margin-top: -40px; }
       .biz-info { padding: 8px 14px 12px; }
-      .btns-section { grid-template-columns: 1fr; padding: 0 14px; }
+      .btns-section { padding: 0 14px; }
       .promo-img-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
       .prodContainer.gv { grid-template-columns: 1fr; }
       .prodContainer.lv .pc { flex-direction: column; align-items: stretch; }
@@ -175,18 +186,21 @@
   <div class="cover-div" id="coverDiv">
     <img class="cover-img" id="coverImg" src="" alt="" style="display:none;"
          onerror="this.style.display='none';">
+  </div>
+  
+  <div class="profile-row">
+    <div class="logo-wrap" id="logoWrap"><div class="init" id="logoInit">?</div></div>
     <div class="view-switch-overlay" id="viewSwitchOverlay" style="display:none;">
        <button class="vs-btn" id="vsListBtn" title="List View" onclick="setView('lv')"><i class="fas fa-list"></i> List</button>
        <button class="vs-btn on" id="vsGridBtn" title="Grid View" onclick="setView('gv')"><i class="fas fa-th"></i> Grid</button>
     </div>
   </div>
-  <div class="profile-row">
-    <div class="logo-wrap" id="logoWrap"><div class="init" id="logoInit">?</div></div>
-  </div>
+  
   <div class="biz-info">
     <div class="biz-name" id="bizName">Loading...</div>
     <div class="biz-type" id="bizType">Smart Profile</div>
   </div>
+  
   <div class="btns-section" id="btnsSection"></div>
   <div class="divider"></div>
   <div id="promoSection">
@@ -334,22 +348,18 @@
   function resolveShopId() {
     var params = new URLSearchParams(window.location.search);
     var id = params.get('id') || params.get('shop') || params.get('shopId') || params.get('s') || params.get('q') || params.get('data') || params.get('code');
-    // try hash as query
     if (!id && window.location.hash) {
       try { id = new URLSearchParams(window.location.hash.replace(/^#/, '?')).get('id') || new URLSearchParams(window.location.hash.replace(/^#/, '?')).get('shop'); } catch(e){}
     }
-    // try pathname last segment
     if (!id) {
       try {
         var seg = window.location.pathname.split('/').filter(Boolean).pop() || '';
         if (seg && /^[A-Za-z0-9_-]{3,}$/.test(seg)) id = seg;
       } catch(e){}
     }
-    // try referrer for id param
     if (!id && document.referrer) {
       try { id = new URL(document.referrer).searchParams.get('id') || id; } catch(e){}
     }
-    // fallback to last stored
     if (!id) id = localStorage.getItem('lastShopId') || '';
     if (id) localStorage.setItem('lastShopId', id);
     return id;
@@ -398,16 +408,13 @@
   function tryFallbackShopId(){
     var v=document.getElementById('fallbackShopId'); if(!v) return; var id=v.value.trim();
     if(!id){alert('Please enter a Shop ID.');return;} localStorage.setItem('lastShopId', id);
-    // update runtime shopId and load profile without full reload
     shopId = id; document.getElementById('loader').style.display = 'none'; loadProfile();
   }
 
   function openProductsModal() {
-    // ensure products are loaded before opening modal
     if (productsData.length === 0) { loadProducts(); }
     openModal('prodModal');
   }
-
 
   // ════════════════════════════════════════════
   // CLICK TRACKING
@@ -422,11 +429,8 @@
   // INIT
   // ════════════════════════════════════════════
   window.onload = function() {
-    console.debug('Profile load. location=', location.href, 'resolved shopId=', shopId);
     if (!shopId) {
-      // show friendly fallback allowing manual Shop ID input
       document.getElementById('loader').innerHTML = "<div style='text-align:center;padding:18px;'><h3 style='color:#c62828;margin-bottom:8px;'>No Shop ID found</h3><p style='color:#666;margin-bottom:12px;'>QR scan didn't provide an ID. Enter Shop ID to continue:</p><input id='fallbackShopId' placeholder='SHOP001' style='padding:10px;border-radius:8px;border:1px solid #ddd;margin-bottom:10px;width:220px;'><br><button onclick=tryFallbackShopId() style='background:#1565c0;color:#fff;padding:10px 14px;border-radius:8px;border:none;cursor:pointer;'>Load Profile</button></div>";
-      // prefill with last ID if available
       try { var last = localStorage.getItem('lastShopId'); if (last) document.getElementById('fallbackShopId').value = last; } catch(e){}
       return;
     }
@@ -440,104 +444,47 @@
 
   // ════════════════════════════════════════════
   // THEME SYSTEM
-  // FIX: applyTheme now also updates modal title colors to match theme
   // ════════════════════════════════════════════
   var THEMES = {
-    'default': {
-      cover: '#d32f2f', body: '#ffffff', text: '#222222', sub: '#888888',
-      logo: '#d32f2f', logoText: '#ffffff',
-      divider: '#f4f6f8', powered: '#d32f2f'
-    },
-    'dark': {
-      cover: '#0f0f0f', body: '#1a1a1a', text: '#f0f0f0', sub: '#888888',
-      logo: '#333333', logoText: '#ffffff',
-      divider: '#111111', powered: '#444444'
-    },
-    'ocean': {
-      cover: '#0077b6', body: '#f0f8ff', text: '#023e8a', sub: '#0096c7',
-      logo: '#0077b6', logoText: '#ffffff',
-      divider: '#e0f0ff', powered: '#0077b6'
-    },
-    'forest': {
-      cover: '#2d6a4f', body: '#f8fff6', text: '#1b4332', sub: '#52b788',
-      logo: '#2d6a4f', logoText: '#ffffff',
-      divider: '#e8f5e1', powered: '#2d6a4f'
-    },
-    'gold': {
-      cover: '#7c5c00', body: '#fffbf0', text: '#5c4000', sub: '#c9a227',
-      logo: '#c9a227', logoText: '#ffffff',
-      divider: '#fff8e1', powered: '#c9a227'
-    },
-    'minimal': {
-      cover: '#f5f5f5', body: '#ffffff', text: '#111111', sub: '#999999',
-      logo: '#222222', logoText: '#ffffff',
-      divider: '#f0f0f0', powered: '#222222'
-    },
-    'tech': {
-      cover: '#1a0533', body: '#120228', text: '#e2d9f3', sub: '#9d72ff',
-      logo: '#7c3aed', logoText: '#ffffff',
-      divider: '#1e0a3a', powered: '#7c3aed'
-    },
-    'food': {
-      cover: '#111111', body: '#1a1a1a', text: '#ffffff', sub: '#ff8c00',
-      logo: '#ff6b00', logoText: '#ffffff',
-      divider: '#0f0f0f', powered: '#ff6b00'
-    }
+    'default': { cover: '#d32f2f', body: '#ffffff', text: '#222222', sub: '#888888', logo: '#d32f2f', logoText: '#ffffff', divider: '#f4f6f8', powered: '#d32f2f' },
+    'dark':    { cover: '#0f0f0f', body: '#1a1a1a', text: '#f0f0f0', sub: '#888888', logo: '#333333', logoText: '#ffffff', divider: '#111111', powered: '#444444' },
+    'ocean':   { cover: '#0077b6', body: '#f0f8ff', text: '#023e8a', sub: '#0096c7', logo: '#0077b6', logoText: '#ffffff', divider: '#e0f0ff', powered: '#0077b6' },
+    'forest':  { cover: '#2d6a4f', body: '#f8fff6', text: '#1b4332', sub: '#52b788', logo: '#2d6a4f', logoText: '#ffffff', divider: '#e8f5e1', powered: '#2d6a4f' },
+    'gold':    { cover: '#7c5c00', body: '#fffbf0', text: '#5c4000', sub: '#c9a227', logo: '#c9a227', logoText: '#ffffff', divider: '#fff8e1', powered: '#c9a227' },
+    'minimal': { cover: '#f5f5f5', body: '#ffffff', text: '#111111', sub: '#999999', logo: '#222222', logoText: '#ffffff', divider: '#f0f0f0', powered: '#222222' },
+    'tech':    { cover: '#1a0533', body: '#120228', text: '#e2d9f3', sub: '#9d72ff', logo: '#7c3aed', logoText: '#ffffff', divider: '#1e0a3a', powered: '#7c3aed' },
+    'food':    { cover: '#111111', body: '#1a1a1a', text: '#ffffff', sub: '#ff8c00', logo: '#ff6b00', logoText: '#ffffff', divider: '#0f0f0f', powered: '#ff6b00' }
   };
 
   function applyTheme(name) {
-    // FIX: normalize to lowercase and trim so "Ocean", " dark", "FOOD" all work
     var key = (name || '').toString().trim().toLowerCase();
     var t   = THEMES[key] || THEMES['default'];
-
     var wrap     = document.getElementById('mainWrap');
     var coverDiv = document.getElementById('coverDiv');
     var logoInit = document.getElementById('logoInit');
 
-    // body background + text
     wrap.style.background = t.body;
     document.getElementById('bizName').style.color = t.text;
     document.getElementById('bizType').style.color = t.sub;
-
-    // cover background color (will sit behind cover-img if image present)
     coverDiv.style.backgroundColor = t.cover;
-
-    // logo init bg
     if (logoInit) { logoInit.style.background = t.logo; logoInit.style.color = t.logoText; }
-
-    // dividers
     document.querySelectorAll('.divider').forEach(function(d) { d.style.background = t.divider; });
-
-    // powered badge
     var pb = document.querySelector('.pb-logo');
     if (pb) pb.style.background = t.powered;
 
-    // page background
     var darkThemes = ['dark','tech','food'];
     document.body.style.background = darkThemes.indexOf(key) !== -1 ? '#0a0a0a' : '#f4f6f8';
-
     window._currentTheme = t;
   }
 
   // ════════════════════════════════════════════
   // COVER IMAGE HELPER
-  // FIX: converts Google Drive /view links → direct image links
-  //      uses <img> tag (not backgroundImage) for reliable loading
   // ════════════════════════════════════════════
   function sanitizeCoverUrl(url) {
     if (!url || !url.trim()) return '';
     url = url.trim();
-
-    // Google Drive /view or /edit → direct image embed
-    // e.g. https://drive.google.com/file/d/FILE_ID/view?usp=sharing
-    //  → https://lh3.googleusercontent.com/d/FILE_ID  (most reliable)
     var driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-    if (driveMatch) {
-      return 'https://lh3.googleusercontent.com/d/' + driveMatch[1];
-    }
-
-    // Google Drive uc?id=... → keep as is (direct download link)
-    // Already a direct link — return as is
+    if (driveMatch) return 'https://lh3.googleusercontent.com/d/' + driveMatch[1];
     return url;
   }
 
@@ -547,7 +494,6 @@
     if (!sanitized) { img.style.display = 'none'; return; }
     img.src = sanitized;
     img.style.display = 'block';
-    // Fallback: if img fails, hide it (cover-div background color shows)
     img.onerror = function() { img.style.display = 'none'; };
   }
 
@@ -566,24 +512,12 @@
         document.getElementById('loader').style.display   = 'none';
         document.getElementById('mainWrap').style.display = 'block';
 
-        // DEBUG — remove after confirming fix (check browser F12 Console)
-        console.log('[MapaProfile] Raw data keys:', Object.keys(p));
-        console.log('[MapaProfile] Theme value:', p.Theme, '| theme:', p.theme);
-        console.log('[MapaProfile] CoverImage:', p.CoverImage, '| CoverImg:', p.CoverImg);
-
-        // FIX: apply theme FIRST (sets bg colors)
-        // FIX: normalize — check both 'Theme' and 'theme' column names
         var themeName = (p.Theme || p.theme || '').toString().trim().toLowerCase();
         applyTheme(themeName);
-        console.log('[MapaProfile] applyTheme called with:', themeName);
 
-        // FIX: cover image applied via <img> tag after theme sets bg color
-        // Supports: direct URL, Google Drive share link, lh3 link
         var coverUrl = p.CoverImage || p.CoverImg || p.coverImage || p.coverImg || '';
         applyCoverImage(coverUrl);
-        console.log('[MapaProfile] applyCoverImage called with:', coverUrl);
 
-        // Logo
         var lw = document.getElementById('logoWrap');
         var logoUrl = p.ProfileImage || p.profileImage || '';
         var bizInitial = (p.BusinessName || '?').charAt(0).toUpperCase();
@@ -601,22 +535,20 @@
         if (p.MenuPDF && p.MenuPDF.trim())   menuLink     = p.MenuPDF;
         if (p.StampTarget)                   stampsTarget = parseInt(p.StampTarget) || 10;
 
-        // Re-apply theme colors AFTER text is set (some browsers need this)
         applyTheme(themeName);
-
         buildButtons(p);
+        
         if (p.StoreStatus === 'Active') {
           loadProducts();
-          // show overlay view toggles
           var ov = document.getElementById('viewSwitchOverlay'); if (ov) ov.style.display = 'flex';
-          // sync overlay buttons state
-          var vsL = document.getElementById('vsListBtn'); if(vsL) vsL.className = 'vs-btn' + (viewMode==='lv'?' on':'');
-          var vsG = document.getElementById('vsGridBtn'); if(vsG) vsG.className = 'vs-btn' + (viewMode==='gv'?' on':'');
         }
+        
+        // This ensures the main buttons inherit the correct layout view at startup
+        setView(viewMode); 
+        
         loadPromos(p);
       })
       .catch(function(err) {
-        console.error('Profile load error:', err);
         document.getElementById('loader').innerHTML = "<h2 style='color:red;text-align:center;padding:20px;'>Connection Error</h2>";
       });
   }
@@ -741,7 +673,7 @@
   }
 
   // ════════════════════════════════════════════
-  // PRODUCTS
+  // PRODUCTS & VIEW TOGGLE
   // ════════════════════════════════════════════
   function loadProducts() {
     fetch(API + "?action=getProducts&shopId=" + shopId + "&t=" + Date.now())
@@ -750,24 +682,39 @@
         if (d.success && d.data && d.data.length > 0) { 
           productsData = d.data; 
           renderProds();
-          console.log('[Mapa] Products loaded:', productsData.length, 'items');
-        } else {
-          console.log('[Mapa] No products found or error:', d);
-        }
-      })
-      .catch(function(e){ console.error('[Mapa] Product fetch error:', e); });
+        } 
+      });
   }
+  
   function setView(mode) {
     viewMode = mode;
-    document.getElementById('lvBtn').className = 'vtbtn' + (mode === 'lv' ? ' on' : '');
-    document.getElementById('gvBtn').className = 'vtbtn' + (mode === 'gv' ? ' on' : '');
+    
+    // Update Modal Buttons
+    var lvBtn = document.getElementById('lvBtn'); if(lvBtn) lvBtn.className = 'vtbtn' + (mode === 'lv' ? ' on' : '');
+    var gvBtn = document.getElementById('gvBtn'); if(gvBtn) gvBtn.className = 'vtbtn' + (mode === 'gv' ? ' on' : '');
+    
+    // Update Main UI Buttons
     var vsL = document.getElementById('vsListBtn'); if(vsL) vsL.className = 'vs-btn' + (mode==='lv'?' on':'');
     var vsG = document.getElementById('vsGridBtn'); if(vsG) vsG.className = 'vs-btn' + (mode==='gv'?' on':'');
+    
+    // Update Main Action Buttons Layout (Social/Links)
+    var btns = document.getElementById('btnsSection');
+    if (btns) {
+      if (mode === 'lv') {
+        btns.classList.remove('gv-mode');
+        btns.classList.add('lv-mode');
+      } else {
+        btns.classList.remove('lv-mode');
+        btns.classList.add('gv-mode');
+      }
+    }
+    
     renderProds();
   }
+  
   function renderProds() {
     var c = document.getElementById('prodContainer');
-    if (!c) { console.error('[Mapa] prodContainer not found'); return; }
+    if (!c) return;
     c.className = viewMode;
     if (!productsData || productsData.length === 0) { 
       c.innerHTML = '<div style="color:#999;padding:20px;text-align:center;grid-column:1/-1;">No products added yet. Check back soon!</div>'; 

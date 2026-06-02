@@ -784,15 +784,15 @@
 
   function newCustomerForm(){
     currentSelectedId='';document.getElementById('formTitle').innerHTML='<i class="fas fa-plus-circle"></i> New Shop';
-    ['c_id','c_name','c_wa','c_maps','c_fb','c_ig','c_tiktok','c_web','c_email','c_menu','c_review','c_image','c_cover','c_bank','c_theme','c_promoVideo','c_promoImg1','c_promoImg2','c_promoImg3','c_clientPhone','c_password','c_expiryDate','c_cl1_name','c_cl1_url','c_cl2_name','c_cl2_url','c_cl3_name','c_cl3_url','c_cl4_name','c_cl4_url','c_cl5_name','c_cl5_url'].forEach(function(f){var el=document.getElementById(f);if(el)el.value='';});
+    ['c_id','c_name','c_wa','c_maps','c_fb','c_ig','c_tiktok','c_web','c_email','c_menu','c_review','c_image','c_cover','c_bank','c_promoVideo','c_promoImg1','c_promoImg2','c_promoImg3','c_clientPhone','c_password','c_expiryDate','c_cl1_name','c_cl1_url','c_cl2_name','c_cl2_url','c_cl3_name','c_cl3_url','c_cl4_name','c_cl4_url','c_cl5_name','c_cl5_url'].forEach(function(f){var el=document.getElementById(f);if(el)el.value='';});
+    document.getElementById('c_theme').value='default'; applyThemeUI('default');
     document.getElementById('c_type').value='profile';document.getElementById('c_loyaltyStatus').value='Inactive';document.getElementById('c_storeStatus').value='Active';document.getElementById('c_inboxStatus').value='Active';document.getElementById('c_ordersStatus').value='Active';document.getElementById('c_stampTarget').value='10';document.getElementById('c_status').value='Active';
-    document.querySelectorAll('.theme-opt').forEach(function(o){o.classList.remove('active');});
   }
 
   function saveCustomerData(){
     if(!APPS_SCRIPT_URL){alert("Apps Script URL configure කරන්න.");return;}
     var id=document.getElementById('c_id').value.trim();if(!id){alert("Shop ID අනිවාර්යයි.");return;}
-    var payload={action:"saveCustomer",staffId:sessionStorage.getItem('loggedInStaff'),staffName:sessionStorage.getItem('loggedInStaff'),customerData:{ID:id,Type:document.getElementById('c_type').value,BusinessName:document.getElementById('c_name').value,WhatsApp:document.getElementById('c_wa').value,Maps:document.getElementById('c_maps').value,Facebook:document.getElementById('c_fb').value,Instagram:document.getElementById('c_ig').value,TikTok:document.getElementById('c_tiktok').value,Website:document.getElementById('c_web').value,Email:document.getElementById('c_email').value,MenuPDF:document.getElementById('c_menu').value,Theme:document.getElementById('c_theme').value,Status:document.getElementById('c_status').value,LoyaltyStatus:document.getElementById('c_loyaltyStatus').value,StoreStatus:document.getElementById('c_storeStatus').value,InboxStatus:document.getElementById('c_inboxStatus').value,OrdersStatus:document.getElementById('c_ordersStatus').value,StampTarget:document.getElementById('c_stampTarget').value,ClientPhone:document.getElementById('c_clientPhone').value,Password:document.getElementById('c_password').value,BankDetails:document.getElementById('c_bank').value,GoogleReview:document.getElementById('c_review').value,ProfileImage:document.getElementById('c_image').value,CoverImage:document.getElementById('c_cover').value,ExpiryDate:document.getElementById('c_expiryDate').value,CustomPromoVideo:document.getElementById('c_promoVideo').value,CustomPromoImg1:document.getElementById('c_promoImg1').value,CustomPromoImg2:document.getElementById('c_promoImg2').value,CustomPromoImg3:document.getElementById('c_promoImg3').value,CustomLink1Name:document.getElementById('c_cl1_name').value,CustomLink1URL:document.getElementById('c_cl1_url').value,CustomLink2Name:document.getElementById('c_cl2_name').value,CustomLink2URL:document.getElementById('c_cl2_url').value,CustomLink3Name:document.getElementById('c_cl3_name').value,CustomLink3URL:document.getElementById('c_cl3_url').value,CustomLink4Name:document.getElementById('c_cl4_name').value,CustomLink4URL:document.getElementById('c_cl4_url').value,CustomLink5Name:document.getElementById('c_cl5_name').value,CustomLink5URL:document.getElementById('c_cl5_url').value}};
+    var payload={action:"saveCustomer",staffId:sessionStorage.getItem('loggedInStaff'),staffName:sessionStorage.getItem('loggedInStaff'),customerData:{ID:id,Type:document.getElementById('c_type').value,BusinessName:document.getElementById('c_name').value,WhatsApp:document.getElementById('c_wa').value,Maps:document.getElementById('c_maps').value,Facebook:document.getElementById('c_fb').value,Instagram:document.getElementById('c_ig').value,TikTok:document.getElementById('c_tiktok').value,Website:document.getElementById('c_web').value,Email:document.getElementById('c_email').value,MenuPDF:document.getElementById('c_menu').value,Theme:document.getElementById('c_theme').value || 'default',Status:document.getElementById('c_status').value,LoyaltyStatus:document.getElementById('c_loyaltyStatus').value,StoreStatus:document.getElementById('c_storeStatus').value,InboxStatus:document.getElementById('c_inboxStatus').value,OrdersStatus:document.getElementById('c_ordersStatus').value,StampTarget:document.getElementById('c_stampTarget').value,ClientPhone:document.getElementById('c_clientPhone').value,Password:document.getElementById('c_password').value,BankDetails:document.getElementById('c_bank').value,GoogleReview:document.getElementById('c_review').value,ProfileImage:document.getElementById('c_image').value,CoverImage:document.getElementById('c_cover').value,ExpiryDate:document.getElementById('c_expiryDate').value,CustomPromoVideo:document.getElementById('c_promoVideo').value,CustomPromoImg1:document.getElementById('c_promoImg1').value,CustomPromoImg2:document.getElementById('c_promoImg2').value,CustomPromoImg3:document.getElementById('c_promoImg3').value,CustomLink1Name:document.getElementById('c_cl1_name').value,CustomLink1URL:document.getElementById('c_cl1_url').value,CustomLink2Name:document.getElementById('c_cl2_name').value,CustomLink2URL:document.getElementById('c_cl2_url').value,CustomLink3Name:document.getElementById('c_cl3_name').value,CustomLink3URL:document.getElementById('c_cl3_url').value,CustomLink4Name:document.getElementById('c_cl4_name').value,CustomLink4URL:document.getElementById('c_cl4_url').value,CustomLink5Name:document.getElementById('c_cl5_name').value,CustomLink5URL:document.getElementById('c_cl5_url').value}};
     var msg=document.getElementById('msg');msg.style.display='block';msg.style.background='#eff6ff';msg.style.color='#1565c0';msg.innerHTML='Saving...';
     fetch(APPS_SCRIPT_URL,{method:"POST",body:JSON.stringify(payload)}).then(function(r){return r.json();}).then(function(d){alert(d.message);loadAllCustomers();msg.style.display='none';}).catch(function(){alert("Error saving.");msg.style.display='none';});
   }
@@ -822,76 +822,883 @@
     }).catch(function(){});
   }
 
-  function downloadPDF(){var shopSelect=document.getElementById('analyticsShopId');var shopName=shopSelect.options[shopSelect.selectedIndex].text;var start=document.getElementById('statStartDate').value;var end=document.getElementById('statEndDate').value;var dateText=(start||end)?'Date Range: '+(start||'All')+' → '+(end||'All'):'Date Range: All Time';var scans=document.getElementById('a_scans').innerText;var emails=document.getElementById('a_emails').innerText;var linksHtml=document.getElementById('linkStatsContainer').innerHTML;var htmlContent='<div style="padding:40px;font-family:Arial,sans-serif;background:#fff;color:#333;"><div style="text-align:center;border-bottom:2px solid #c62828;padding-bottom:20px;margin-bottom:30px;"><h1 style="color:#c62828;font-size:32px;margin:0;">'+shopName+'</h1><h3 style="color:#333;margin:10px 0 5px 0;">Analytics Report</h3><p style="color:#555;">'+dateText+'</p></div><div style="display:flex;justify-content:space-between;margin-bottom:40px;"><div style="flex:1;background:#e3f2fd;padding:25px;border-radius:10px;text-align:center;margin-right:15px;"><h2 style="color:#1976d2;font-size:36px;margin:0;">'+scans+'</h2><p style="color:#1565c0;font-weight:bold;">Total Scans</p></div><div style="flex:1;background:#e8f5e9;padding:25px;border-radius:10px;text-align:center;margin-left:15px;"><h2 style="color:#2e7d32;font-size:36px;margin:0;">'+emails+'</h2><p style="color:#1b5e20;font-weight:bold;">Email Subscribers</p></div></div><div style="background:#fff3e0;padding:20px;border-radius:10px;"><h3 style="color:#e65100;margin-top:0;">Scan Destinations</h3>'+linksHtml+'</div></div>';html2pdf().set({margin:15,filename:'Analytics_'+shopName.replace(/[^a-zA-Z0-9]/g,'_')+'.pdf',html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(htmlContent).save();}
+  function downloadPDF(){var shopSelect=document.getElementById('analyticsShopId');var shopName=shopSelect.options[shopSelect.selectedIndex].text;var start=document.getElementById('statStartDate').value;var end=document.getElementById('statEndDate').value;var dateText=(start||end)?'Date Range: '+(start||'All')+' → '+(end||'All'):'Date Range: All Time';var scans=document.getElementById('a_scans').innerText;var emails=document.getElementById('a_emails').innerText;var linksHtml=document.getElementById('linkStatsContainer').innerHTML;var htmlContent='<div style="padding:40px;font-family:Arial,sans-serif;background:#fff;color:#333;"><div style="text-align:center;border-bottom:2px solid #c62828;padding-bottom:20px;margin-bottom:30px;"><h1 style="color:#c62828;font-size:32px;margin:0;">'+shopName+'</h1><h3 style="color:#333;margin:10px 0 5px 0;">Analytics Report</h3><p style="color:#555;">'+dateText+'</p></div><div style="display:flex;justify-content:space-between;margin-bottom:40px;"><div style="flex:1;background:#e3f2fd;padding:25px;border-radius:10px;text-align:center;margin-right:15px;"><h2 style="color:#1976d2;font-size:36px;margin:0;">'+scans+'</h2><p style="color:#1565c0;font-weight:bold;">Total Scans</p></div><div style="flex:1;background:#e8f5e9;padding:25px;border-radius:1අයියේ, කලින් මගෙන් වෙනත් භාෂාවකින් (Bengali) රිප්ලයි එකක් ආවට මට සමාවෙන්න. මල්ලි විදිහට මම ඒ වැරැද්ද වහාම නිවැරදි කරගන්නවා. 
 
-  // ══ QR ══
-  function generateQRs(){var shopId=document.getElementById('qrShopSelect').value;var baseUrl=localStorage.getItem('sysBaseUrl');if(!shopId){document.getElementById('qrDisplayArea').style.display='none';return;}if(!baseUrl){alert("Base URL configure කරන්න.");return;}document.getElementById('qrDisplayArea').style.display='grid';setQrBox('Main',baseUrl+'index.html?id='+shopId);setQrBox('Client',baseUrl+'client/index.html');setQrBox('Cashier',baseUrl+'cashier/index.html');}
-  function setQrBox(type,url){var qr='https://api.qrserver.com/v1/create-qr-code/?size=500x500&data='+encodeURIComponent(url)+'&margin=10';document.getElementById('link'+type).value=url;document.getElementById('img'+type+'Qr').src=qr;document.getElementById('dl'+type+'Qr').href=qr;}
-  function copyLink(id){var el=document.getElementById(id);el.select();navigator.clipboard.writeText(el.value);alert("Copied!");}
+පවතින සාක්ෂි මත පදනම්ව මම කෝඩ් දෙකම ඉතා හොඳින් (skeptical approach එකකින්) double-check කළා. අලුත් ෆීචර්ස් කිසිවක් වෙනස් නොකර, ඔබට බලපාපු ගැටලු දෙකක් මම මෙහිදී fix කරලා තියෙනවා:
 
-  // ══ PROMO ══
-  function syncPromoToSender(){document.getElementById('promoVideoUrl').value=document.getElementById('c_promoVideo').value;document.getElementById('promoImg1').value=document.getElementById('c_promoImg1').value;document.getElementById('promoImg2').value=document.getElementById('c_promoImg2').value;document.getElementById('promoImg3').value=document.getElementById('c_promoImg3').value;updateMediaDisplay();}
-  function loadFromPromoFields(){syncPromoToSender();}
-  function updateMediaDisplay(){var vid=document.getElementById('promoVideoUrl').value.trim();var img1=document.getElementById('promoImg1').value.trim();var img2=document.getElementById('promoImg2').value.trim();var img3=document.getElementById('promoImg3').value.trim();var pvVid=document.getElementById('pvVideoDisplay');var pvImg1=document.getElementById('pvImg1Display');var pvImg23=document.getElementById('pvImg23Display');pvVid.className='media-link'+(vid?'':' empty');pvVid.innerText=vid?vid.substring(0,50)+(vid.length>50?'...':''):'— not set —';pvImg1.className='media-link'+(img1?'':' empty');pvImg1.innerText=img1?img1.substring(0,50)+(img1.length>50?'...':''):'— not set —';var cnt=[img2,img3].filter(Boolean).length;pvImg23.className='media-link'+(cnt>0?'':' empty');pvImg23.innerText=cnt>0?cnt+' image(s) set':'— not set —';updatePromoPreview();}
-  function updatePromoPreview(){var subject=document.getElementById('promoSubject').value||'(No subject)';var body=document.getElementById('promoBody').value||'(Empty)';var vid=document.getElementById('promoVideoUrl')?document.getElementById('promoVideoUrl').value.trim():'';var img1=document.getElementById('promoImg1')?document.getElementById('promoImg1').value.trim():'';var img2=document.getElementById('promoImg2')?document.getElementById('promoImg2').value.trim():'';var img3=document.getElementById('promoImg3')?document.getElementById('promoImg3').value.trim():'';document.getElementById('pvSubject').innerText=subject;document.getElementById('pvBody').innerHTML=body;var chips='';if(vid)chips+='<span class="pv-chip pv-chip-vid"><i class="fab fa-youtube"></i> Video</span>';if(img1)chips+='<span class="pv-chip pv-chip-img"><i class="fas fa-image"></i> Img 1</span>';if(img2)chips+='<span class="pv-chip pv-chip-img3"><i class="fas fa-image"></i> Img 2</span>';if(img3)chips+='<span class="pv-chip pv-chip-img3"><i class="fas fa-image"></i> Img 3</span>';document.getElementById('pvChips').innerHTML=chips;}
-  function onPromoShopChange(){var shopId=document.getElementById('promoShopSelect').value;if(shopId)loadPromoSubscriberCount(shopId);else document.getElementById('promoShopStats').style.display='none';}
-  function loadPromoSubscriberCount(shopId){if(!APPS_SCRIPT_URL||!shopId)return;fetch(APPS_SCRIPT_URL+"?action=getSubscribers&shopId="+shopId).then(function(r){return r.json();}).then(function(d){if(d.success&&d.data){allSubscribersData=d.data;document.getElementById('promoSubCount').innerText=d.data.length;document.getElementById('promoShopStats').style.display='block';}}).catch(function(){});}
+1. **Admin Panel එකේ දෝෂය:** කලින් කෝඩ් එකේ අලුත් Shop එකක් හදද්දී හෝ තියෙන එකක් තෝරද්දී Theme එකක් click නොකළොත්, අගය හිස්ව (`""`) යැවෙනවා. ඒ නිසයි Sheet එකේ Theme තීරුව හිස්ව තිබුණේ. මම දැන් එය ස්වයංක්‍රීයව `default` ලෙස තේරෙන ලෙස සකසා ඇත[cite: 4].
+2. **Apps Script එකේ දෝෂය:** කලින් Apps Script එකේ කෝඩ් එකට අනුව Admin Panel එකෙන් නොයවන අගයන් (උදාහරණයක් විදිහට `PointValue` වගේ දේවල්) Sheet එකෙන් මැකිලා යනවා. අලුත් කෝඩ් එකේ ඒක fix කරලා, පරණ දත්ත සුරක්ෂිතව තියාගෙන අලුත් දත්ත පමණක් update වෙන විදිහට හැදුවා[cite: 3].
 
-  function sendPromoEmail(){
-    var shopId=document.getElementById('promoShopSelect').value;if(!shopId){alert("Shop select කරන්න.");return;}
-    var subject=document.getElementById('promoSubject').value.trim();var body=document.getElementById('promoBody').value.trim();var replyTo=document.getElementById('promoReplyTo').value.trim();
-    var vidUrl=document.getElementById('promoVideoUrl').value.trim();var imgUrl1=document.getElementById('promoImg1').value.trim();var imgUrl2=document.getElementById('promoImg2').value.trim();var imgUrl3=document.getElementById('promoImg3').value.trim();
-    if(!subject||!body){alert("Subject සහ Message අනිවාර්යයි.");return;}
-    var mediaHtml='';
-    if(imgUrl1)mediaHtml+='<div style="text-align:center;margin:18px 0;"><img src="'+imgUrl1+'" style="max-width:100%;border-radius:8px;"></div>';
-    if(imgUrl2)mediaHtml+='<div style="text-align:center;margin:10px 0;"><img src="'+imgUrl2+'" style="max-width:100%;border-radius:8px;"></div>';
-    if(imgUrl3)mediaHtml+='<div style="text-align:center;margin:10px 0;"><img src="'+imgUrl3+'" style="max-width:100%;border-radius:8px;"></div>';
-    if(vidUrl){var yt=vidUrl.match(/(?:youtu\.be\/|[?&]v=|embed\/)([A-Za-z0-9_-]{11})/);if(yt){mediaHtml+='<div style="text-align:center;margin:20px 0;"><a href="'+vidUrl+'" target="_blank" style="display:inline-block;background:#FF0000;color:white;padding:14px 28px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:16px;">&#9654; Watch on YouTube</a></div>';}else{mediaHtml+='<div style="text-align:center;margin:20px 0;"><a href="'+vidUrl+'" target="_blank" style="display:inline-block;background:#1565c0;color:white;padding:14px 28px;border-radius:8px;text-decoration:none;font-weight:bold;">&#9654; Watch Video</a></div>';}}
-    var finalHtml='<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:30px;background:#fff;">'+mediaHtml+'<div style="font-size:15px;line-height:1.8;color:#333;">'+body+'</div><div style="margin-top:30px;padding-top:16px;border-top:1px solid #eee;font-size:12px;color:#aaa;text-align:center;">Powered by Mapa Solutions</div></div>';
-    var btn=document.getElementById('sendPromoBtn');var msgEl=document.getElementById('promoSendMsg');
-    btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Sending...';msgEl.style.display='none';
-    fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'sendBulkEmails',shopId:shopId,clientEmail:replyTo,subject:subject,message:finalHtml})}).then(function(r){return r.json();}).then(function(d){btn.disabled=false;btn.innerHTML='<i class="fas fa-paper-plane"></i> Send to All Subscribers';msgEl.style.display='inline-block';if(d.success){msgEl.className='promo-send-msg success';msgEl.innerHTML='&#10003; '+(d.message||'Sent!');}else{msgEl.className='promo-send-msg error';msgEl.innerHTML='&#10007; '+(d.error||'Error.');}}).catch(function(){btn.disabled=false;btn.innerHTML='<i class="fas fa-paper-plane"></i> Send to All Subscribers';msgEl.style.display='inline-block';msgEl.className='promo-send-msg error';msgEl.innerHTML='&#10007; Network error!';});
+ඔබ ඉල්ලූ පරිදි සම්පූර්ණ කෝඩ් දෙකම පහතින් ලබා දී තිබෙනවා අයියේ. මේවා copy කරලා අදාළ තැන්වලට paste කරගන්න.
+
+### 1. Apps Script කෝඩ් එක (Code.gs)
+
+```javascript
+// ══════════════════════════════════════════
+//  SOCIAL MAP - APPS SCRIPT (FULLY UPDATED)
+//  FIXES:
+//    1. Phone numbers - setNumberFormat('@') → 0 drop වීම නෑ
+//    2. Orders instant update (no polling delay)
+//    3. Prevent wiping existing untouched sheet data on update
+//    4. All previous fixes retained
+// ══════════════════════════════════════════
+
+function doGet(e) {
+  var action = e.parameter.action;
+  var id = e.parameter.id;
+  try {
+    if (action === "profile")          return getProfileData(id);
+    else if (action === "login")       return staffLogin(e.parameter.staffId, e.parameter.password);
+    else if (action === "getAll")      return getAllCustomers();
+    else if (action === "scan")        return processScan(id, e.parameter.device || "Mobile Web");
+    else if (action === "clientLogin") return clientLogin(e.parameter.phone, e.parameter.password);
+    else if (action === "checkStatus") return checkStatus(e.parameter.shopId);
+    else if (action === "getClientStats") return getClientStats(e.parameter.shopId, e.parameter.start, e.parameter.end);
+    else if (action === "getProducts") return getProducts(e.parameter.shopId);
+    else if (action === "getFeedback") return getFeedback(e.parameter.shopId);
+    else if (action === "getCashierLoyalty") return getCashierLoyalty(e.parameter.shopId, e.parameter.phone);
+    else if (action === "getOrders")      return getOrders(e.parameter.shopId);
+    else if (action === "getSubscribers") return getSubscribers(e.parameter.shopId);
+    else return createJsonResponse({ error: "Invalid Action" });
+  } catch (error) {
+    return createJsonResponse({ error: error.message });
+  }
+}
+
+function doPost(e) {
+  try {
+    var req = JSON.parse(e.postData.contents);
+    if (req.action === "saveCustomer")        return saveCustomerSafe(req.customerData, req.staffId, req.staffName);
+    if (req.action === "deleteCustomer")      return deleteCustomer(req.id, req.staffId, req.staffName);
+    if (req.action === "loyaltyAddStamp")     return addStamp(req);
+    if (req.action === "loyaltyAddPoints")    return addLoyaltyPoints(req);
+    if (req.action === "loyaltyGet")          return getLoyalty(req);
+    if (req.action === "loyaltySetup")        return setupLoyalty(req);
+    if (req.action === "loyaltyResetPinSelf") return resetPinSelf(req);
+    if (req.action === "loyaltyCashierReset") return cashierResetPin(req);
+    if (req.action === "loyaltyRedeem")       return redeemReward(req);
+    if (req.action === "updatePrice")         return updatePrice(req);
+    if (req.action === "addProduct")          return addProduct(req);
+    if (req.action === "deleteProduct")       return deleteProduct(req.shopId, req.productId);
+    if (req.action === "submitFeedback")      return submitFeedback(req);
+    if (req.action === "subscribeEmail")      return subscribeEmail(req);
+    if (req.action === "sendBulkEmails")      return sendBulkEmails(req);
+    if (req.action === "logClick")            return logSpecificClick(req);
+    if (req.action === "placeOrder")          return placeOrder(req);
+    if (req.action === "updateOrderStatus")   return updateOrderStatus(req);
+    return createJsonResponse({ error: "Invalid POST action" });
+  } catch (error) {
+    return createJsonResponse({ error: error.message });
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  FIX #1: PHONE NUMBER FORMAT — 0 DROP PREVENTION
+//  Customers sheet eke phone columns walata '@' format set karanawa
+//  Run karanna: Apps Script → formatPhoneColumns() manually trigger
+// ══════════════════════════════════════════════════════════════
+function formatPhoneColumns() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // Customers sheet
+  var customersSheet = ss.getSheetByName("Customers");
+  if (customersSheet) {
+    var headers = customersSheet.getRange(1, 1, 1, customersSheet.getLastColumn()).getValues()[0];
+    headers.forEach(function(header, idx) {
+      // Phone-related columns text format karanawa
+      if (header && (
+        header.toString().toLowerCase().indexOf("phone") !== -1 ||
+        header.toString().toLowerCase().indexOf("mobile") !== -1 ||
+        header.toString().toLowerCase() === "clientphone"
+      )) {
+        var col = idx + 1;
+        var range = customersSheet.getRange(1, col, customersSheet.getMaxRows(), 1);
+        range.setNumberFormat('@'); // Plain text — 0 drop wenney na
+        Logger.log("Customers: Formatted column '" + header + "' (col " + col + ") as text");
+      }
+    });
+  }
+  
+  // Loyalty sheet
+  var loyaltySheet = ss.getSheetByName("Loyalty");
+  if (loyaltySheet) {
+    // Column B = Phone (index 1)
+    loyaltySheet.getRange(1, 2, loyaltySheet.getMaxRows(), 1).setNumberFormat('@');
+    Logger.log("Loyalty: Column B (Phone) formatted as text");
+  }
+  
+  // Orders sheet
+  var ordersSheet = ss.getSheetByName("Orders");
+  if (ordersSheet) {
+    var oHeaders = ordersSheet.getRange(1, 1, 1, ordersSheet.getLastColumn()).getValues()[0];
+    oHeaders.forEach(function(header, idx) {
+      if (header && header.toString().toLowerCase().indexOf("phone") !== -1) {
+        ordersSheet.getRange(1, idx + 1, ordersSheet.getMaxRows(), 1).setNumberFormat('@');
+        Logger.log("Orders: Formatted column '" + header + "' as text");
+      }
+    });
+  }
+  
+  // Feedback sheet
+  var feedbackSheet = ss.getSheetByName("Feedback");
+  if (feedbackSheet) {
+    var fHeaders = feedbackSheet.getRange(1, 1, 1, feedbackSheet.getLastColumn()).getValues()[0];
+    fHeaders.forEach(function(header, idx) {
+      if (header && header.toString().toLowerCase().indexOf("phone") !== -1) {
+        feedbackSheet.getRange(1, idx + 1, feedbackSheet.getMaxRows(), 1).setNumberFormat('@');
+      }
+    });
+  }
+  
+  SpreadsheetApp.getUi().alert('✅ Phone columns සියල්ල Text format කළා!\nදැන් 0 drop වෙන්නේ නෑ.');
+}
+
+// ══ Auto-format when new data saved ══
+// saveCustomerSafe eke phone columns format karanna
+function ensurePhoneFormat(sheet, headers) {
+  headers.forEach(function(header, idx) {
+    if (header && (
+      header.toString().toLowerCase().indexOf("phone") !== -1 ||
+      header.toString().toLowerCase() === "clientphone"
+    )) {
+      sheet.getRange(1, idx + 1, sheet.getMaxRows(), 1).setNumberFormat('@');
+    }
+  });
+}
+
+// ══ ORDERS SHEET helper ══
+function getOrdersSheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("Orders");
+  if (!sheet) {
+    sheet = ss.insertSheet("Orders");
+    sheet.appendRow(["OrderID", "ShopID", "Date", "CustomerName", "Phone", "Items", "Total", "OrderType", "TableNote", "Status"]);
+    // Format phone column immediately
+    sheet.getRange(1, 5, sheet.getMaxRows(), 1).setNumberFormat('@');
+  }
+  return sheet;
+}
+
+// Place a new order
+function placeOrder(req) {
+  var sheet = getOrdersSheet();
+  var data  = sheet.getDataRange().getValues();
+  var nextNum = data.length;
+  var orderId = "ORD" + nextNum.toString().padStart(4, '0');
+
+  var itemsStr = "";
+  if (Array.isArray(req.items)) {
+    itemsStr = req.items.map(function(i) {
+      return i.name + " x" + i.qty + " (Rs." + i.price + ")";
+    }).join(", ");
+  } else {
+    itemsStr = req.items || "";
   }
 
-  // ══ SUBSCRIBERS ══
-  function loadSubscribers(){
-    if(!APPS_SCRIPT_URL)return;var shopId=document.getElementById('subShopFilter').value;
-    document.getElementById('subscriberList').innerHTML='<div style="padding:16px;text-align:center;color:#94a3b8;font-size:13px;"><i class="fas fa-spinner fa-spin"></i></div>';
-    fetch(APPS_SCRIPT_URL+"?action=getSubscribers&shopId="+shopId).then(function(r){return r.json();}).then(function(d){if(d.success&&d.data&&d.data.length>0){allSubscribersData=d.data;renderSubscribers(allSubscribersData);}else{allSubscribersData=[];renderSubscribers([]);}}).catch(function(){document.getElementById('subscriberList').innerHTML='<div style="padding:16px;text-align:center;color:red;font-size:13px;">Error.</div>';});
+  sheet.appendRow([
+    orderId,
+    req.shopId   || "",
+    new Date(),
+    req.name     || "Unknown",
+    req.phone    || "",
+    itemsStr,
+    req.total    || 0,
+    req.orderType || "Dine-In",
+    req.tableNote || "",
+    "pending"
+  ]);
+  
+  // Ensure phone format after append
+  sheet.getRange(sheet.getLastRow(), 5).setNumberFormat('@');
+
+  return createJsonResponse({ success: true, message: "ඔබගේ order සාර්ථකව ලැබුණා!", orderId: orderId });
+}
+
+// ══════════════════════════════════════════════════════════════
+//  FIX #2: INSTANT ORDER UPDATE — no 30s delay
+//  updateOrderStatus now uses flush() for immediate write
+// ══════════════════════════════════════════════════════════════
+function updateOrderStatus(req) {
+  var sheet   = getOrdersSheet();
+  var data    = sheet.getDataRange().getValues();
+  var headers = data[0];
+  var orderIdIndex = headers.indexOf("OrderID");
+  var shopIdIndex  = headers.indexOf("ShopID");
+  var statusIndex  = headers.indexOf("Status");
+
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][orderIdIndex] && data[i][orderIdIndex].toString() === req.orderId.toString() &&
+        data[i][shopIdIndex]  && data[i][shopIdIndex].toString()  === req.shopId.toString()) {
+      sheet.getRange(i + 1, statusIndex + 1).setValue(req.status);
+      SpreadsheetApp.flush(); // ← INSTANT WRITE — 30s delay nathuwa sheet update wenawa
+      return createJsonResponse({ success: true, message: "Order " + req.status + "!" });
+    }
   }
-  function renderSubscribers(list){document.getElementById('subCountBadge').innerText=list.length+' subscribers';var c=document.getElementById('subscriberList');if(list.length===0){c.innerHTML='<div style="padding:16px;text-align:center;color:#94a3b8;font-size:13px;">Subscribers නෑ.</div>';return;}var h='';list.forEach(function(s){var email=s.Email||s.email||'-';var sid=s.ShopID||'-';var date=s.Date?new Date(s.Date).toLocaleDateString():'-';h+='<div class="email-sub-row"><div><span class="es-email">'+email+'</span><span style="font-size:10px;color:#94a3b8;margin-left:8px;">'+sid+'</span></div><span style="font-size:11px;color:#94a3b8;">'+date+'</span></div>';});c.innerHTML=h;}
-  function filterSubscribers(){var term=document.getElementById('subSearchInput').value.toLowerCase();var filtered=term?allSubscribersData.filter(function(s){return(s.Email||'').toLowerCase().includes(term);}):allSubscribersData;renderSubscribers(filtered);}
-  function exportSubscribersCSV(){if(allSubscribersData.length===0){alert("Load subscribers first.");return;}var rows=['"ShopID","Email","Date"'];allSubscribersData.forEach(function(s){rows.push('"'+(s.ShopID||'')+'","'+(s.Email||'')+'","'+(s.Date?new Date(s.Date).toLocaleDateString():'')+'\"');});var blob=new Blob([rows.join('\n')],{type:'text/csv;charset=utf-8;'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='subscribers_'+new Date().toISOString().slice(0,10)+'.csv';a.click();}
-  function exportSubscribersPDF(){
-    if(allSubscribersData&&allSubscribersData.length>0){buildSubscriberPDF();return;}
-    var shopId=document.getElementById('promoShopSelect').value||document.getElementById('subShopFilter').value;
-    if(!shopId||!APPS_SCRIPT_URL){alert("Shop select කරලා Load කරන්න.");return;}
-    fetch(APPS_SCRIPT_URL+"?action=getSubscribers&shopId="+shopId).then(function(r){return r.json();}).then(function(d){if(d.success&&d.data&&d.data.length>0){allSubscribersData=d.data;buildSubscriberPDF();}else{buildSubscriberPDFCountOnly(shopId,0);}}).catch(function(){buildSubscriberPDFCountOnly(shopId,0);});
+  return createJsonResponse({ error: "Order not found." });
+}
+
+// Get orders for a shop
+function getOrders(shopId) {
+  var sheet = getOrdersSheet();
+  var data  = sheet.getDataRange().getValues();
+  if (data.length <= 1) return createJsonResponse({ success: true, data: [] });
+
+  var headers = data[0];
+  var shopIdIndex = headers.indexOf("ShopID");
+  var orders = [];
+
+  for (var i = 1; i < data.length; i++) {
+    if (shopId === "ALL" || (data[i][shopIdIndex] && data[i][shopIdIndex].toString() === shopId.toString())) {
+      var order = {};
+      for (var j = 0; j < headers.length; j++) order[headers[j]] = data[i][j];
+      orders.push(order);
+    }
   }
-  function buildSubscriberPDFCountOnly(shopId,count){var shopSel=document.getElementById('promoShopSelect');var shopName=shopSel&&shopSel.value?shopSel.options[shopSel.selectedIndex].text:shopId;var html='<div style="padding:40px;font-family:Arial,sans-serif;"><h1 style="color:#c62828;">Email Subscribers</h1><h3>'+shopName+'</h3><p>Generated: '+new Date().toLocaleDateString()+'</p><div style="background:#e3f2fd;padding:20px;border-radius:8px;text-align:center;"><div style="font-size:36px;font-weight:700;color:#1565c0;">'+count+'</div><div>Total Subscribers</div></div></div>';html2pdf().set({margin:15,filename:'Subscribers.pdf',html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(html).save();}
-  function buildSubscriberPDF(){var shopSel=document.getElementById('promoShopSelect');var shopName=shopSel&&shopSel.selectedIndex>=0?shopSel.options[shopSel.selectedIndex].text:'All Shops';var rows=allSubscribersData.map(function(s,i){return '<tr style="background:'+(i%2===0?'#f9f9f9':'white')+';"><td style="padding:8px 12px;border-bottom:1px solid #eee;">'+(i+1)+'</td><td style="padding:8px 12px;border-bottom:1px solid #eee;color:#1565c0;font-weight:600;">'+(s.Email||'-')+'</td><td style="padding:8px 12px;border-bottom:1px solid #eee;color:#555;">'+(s.ShopID||'-')+'</td><td style="padding:8px 12px;border-bottom:1px solid #eee;color:#888;">'+(s.Date?new Date(s.Date).toLocaleDateString():'-')+'</td></tr>';}).join('');var html='<div style="padding:40px;font-family:Arial,sans-serif;"><div style="display:flex;justify-content:space-between;border-bottom:3px solid #c62828;padding-bottom:16px;margin-bottom:24px;"><div><h1 style="color:#c62828;margin:0;">Email Subscribers</h1><h3 style="margin:4px 0 0;">'+shopName+'</h3></div><div style="background:#e3f2fd;padding:14px 20px;border-radius:8px;text-align:center;"><div style="font-size:32px;font-weight:700;color:#1565c0;">'+allSubscribersData.length+'</div><div style="font-size:12px;color:#1565c0;">Total</div></div></div><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#1565c0;color:white;"><th style="padding:10px 12px;text-align:left;font-size:12px;">#</th><th style="padding:10px 12px;text-align:left;font-size:12px;">Email</th><th style="padding:10px 12px;text-align:left;font-size:12px;">Shop ID</th><th style="padding:10px 12px;text-align:left;font-size:12px;">Date</th></tr></thead><tbody>'+rows+'</tbody></table></div>';html2pdf().set({margin:15,filename:'Subscribers_'+new Date().toISOString().slice(0,10)+'.pdf',html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(html).save();}
+  return createJsonResponse({ success: true, data: orders });
+}
 
-  // ══ PRODUCTS ══
-  function adminFetchProducts(){if(!APPS_SCRIPT_URL)return;var sid=document.getElementById('p_shop_id').value.trim();if(!sid)return;document.getElementById('adminProductsList').innerHTML='<i class="fas fa-spinner fa-spin"></i>';fetch(APPS_SCRIPT_URL+"?action=getProducts&shopId="+sid+"&t="+Date.now()).then(function(r){return r.json();}).then(function(d){var h='';if(d.success&&d.data&&d.data.length>0){d.data.forEach(function(p){var pType=p.Type||'Product';var pName=p.ProductName||p.Name||'නම නැත';var pId=p.ProductID||'No-ID';var pPrice=p.Price||0;var imgs='';[p.Image1||p.Img1,p.Image2||p.Img2,p.Image3||p.Img3].forEach(function(img){if(img)imgs+='<img src="'+img+'" style="width:40px;height:40px;object-fit:cover;border-radius:4px;border:1px solid #ddd;">';});var imgH=imgs?'<div style="margin-top:6px;display:flex;gap:6px;">'+imgs+'</div>':'';h+='<div class="product-row"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;"><div><span class="badge b-'+pType+'">'+pType+'</span> <strong style="font-size:13px;">'+pName+'</strong><br><small style="color:#94a3b8;">(ID: '+pId+')</small>'+imgH+'</div><div style="display:flex;align-items:center;gap:4px;"><span style="font-weight:700;color:#777;font-size:13px;">රු.</span><input type="number" id="ad_p_'+pId+'" value="'+pPrice+'" style="padding:6px;width:90px;margin:0;font-size:13px;"><button class="btn btn-green" style="padding:6px 8px;" onclick="adminUpdatePrice(\''+pId+'\')"><i class="fas fa-check"></i></button><button class="btn btn-red" style="padding:6px 8px;" onclick="adminDeleteProduct(\''+pId+'\')"><i class="fas fa-trash-alt"></i></button></div></div></div>';});}else{h='<div style="padding:10px;color:#94a3b8;font-size:13px;">Items නෑ.</div>';}document.getElementById('adminProductsList').innerHTML=h;});}
-  function adminAddProduct(){var sid=document.getElementById('p_shop_id').value.trim();var name=document.getElementById('new_p_name').value.trim();var price=document.getElementById('new_p_price').value.trim();if(!sid||!name||!price){alert("Shop ID, නම, මිල අනිවාර්යයි.");return;}fetch(APPS_SCRIPT_URL,{method:"POST",body:JSON.stringify({action:"addProduct",shopId:sid,type:document.getElementById('new_p_type').value,name:name,price:price,img1:document.getElementById('new_p_img1').value,img2:document.getElementById('new_p_img2').value,img3:document.getElementById('new_p_img3').value})}).then(function(r){return r.json();}).then(function(d){alert(d.message);adminFetchProducts();['new_p_name','new_p_price','new_p_img1','new_p_img2','new_p_img3'].forEach(function(f){document.getElementById(f).value='';});});}
-  function adminUpdatePrice(pid){var sid=document.getElementById('p_shop_id').value.trim();fetch(APPS_SCRIPT_URL,{method:"POST",body:JSON.stringify({action:"updatePrice",shopId:sid,productId:pid,price:document.getElementById('ad_p_'+pid).value})}).then(function(r){return r.json();}).then(function(d){alert(d.message);});}
-  function adminDeleteProduct(pid){var sid=document.getElementById('p_shop_id').value.trim();if(!confirm("Delete?"))return;fetch(APPS_SCRIPT_URL,{method:"POST",body:JSON.stringify({action:"deleteProduct",shopId:sid,productId:pid})}).then(function(r){return r.json();}).then(function(d){alert(d.message);adminFetchProducts();});}
+function logSpecificClick(req) {
+  logCustomerScan(req.shopId, req.businessName || "Unknown", "Link Clicked", req.device || "Web", req.destination);
+  return createJsonResponse({ success: true });
+}
 
-  // ══ ORDERS ══
-  var adminAllOrders=[],adminOrderFilter='all';
-  function adminFetchOrders(){var sid=document.getElementById('o_shop_id').value.trim();if(!sid){alert("Shop ID ඇතුළත් කරන්න.");return;}document.getElementById('adminOrdersList').innerHTML='<i class="fas fa-spinner fa-spin"></i>';fetch(APPS_SCRIPT_URL+"?action=getOrders&shopId="+sid+"&t="+Date.now()).then(function(r){return r.json();}).then(function(d){if(d.success){adminAllOrders=d.data||[];document.getElementById('adminOrderFilters').style.display=adminAllOrders.length>0?'flex':'none';adminRenderOrders();}else{document.getElementById('adminOrdersList').innerHTML='<p style="color:#94a3b8;padding:10px;font-size:13px;">'+(d.error||'Error')+'</p>';}});}
-  function adminFilterOrders(status){adminOrderFilter=status;document.querySelectorAll('.filter-chip').forEach(function(c){c.classList.remove('active');});document.getElementById('admin-chip-'+status).classList.add('active');adminRenderOrders();}
-  function adminRenderOrders(){var filtered=adminAllOrders.filter(function(o){return adminOrderFilter==='all'||(o.Status||'pending').toLowerCase()===adminOrderFilter;});filtered.sort(function(a,b){return new Date(b.Date||0)-new Date(a.Date||0);});var list=document.getElementById('adminOrdersList');if(filtered.length===0){list.innerHTML='<div style="padding:12px;color:#94a3b8;text-align:center;font-size:13px;">Orders නෑ.</div>';return;}var h='';filtered.forEach(function(o){var s=(o.Status||'pending').toLowerCase();var bc=s==='pending'?'#f59e0b':s==='confirmed'?'#22c55e':'#ef4444';var sh=s==='pending'?'<span style="background:#fff7ed;color:#c2410c;padding:2px 7px;border-radius:12px;font-size:11px;font-weight:700;">⏳ Pending</span>':s==='confirmed'?'<span style="background:#f0fdf4;color:#166534;padding:2px 7px;border-radius:12px;font-size:11px;font-weight:700;">✅ Confirmed</span>':'<span style="background:#fef2f2;color:#991b1b;padding:2px 7px;border-radius:12px;font-size:11px;font-weight:700;">❌ Cancelled</span>';var ab=s==='pending'?'<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;"><button class="btn btn-green" style="padding:5px 12px;font-size:12px;" onclick="adminUpdateOrderStatus(\''+o.OrderID+'\',\'confirmed\')">✅ Confirm</button><button class="btn btn-red" style="padding:5px 12px;font-size:12px;" onclick="adminUpdateOrderStatus(\''+o.OrderID+'\',\'cancelled\')">❌ Cancel</button></div>':'';h+='<div style="background:#fff;border-left:4px solid '+bc+';border-radius:6px;padding:12px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-weight:700;font-size:13px;">🧾 #'+(o.OrderID||'-')+'</span>'+sh+'</div><div style="font-size:13px;color:#374151;margin-bottom:4px;">'+(o.Items||'-')+'</div><div style="font-size:14px;font-weight:700;color:#e65100;">Rs. '+parseFloat(o.Total||0).toLocaleString()+'</div><div style="font-size:11px;color:#6b7280;margin-top:4px;">👤 '+(o.CustomerName||'Unknown')+' | 📞 '+(o.Phone||'-')+'<br>📦 '+(o.OrderType||'-')+(o.TableNote?' — '+o.TableNote:'')+' | 🕐 '+(o.Date?new Date(o.Date).toLocaleString():'-')+'</div>'+ab+'</div>';});list.innerHTML=h;}
-  function adminUpdateOrderStatus(orderId,newStatus){var sid=document.getElementById('o_shop_id').value.trim();fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'updateOrderStatus',shopId:sid,orderId:orderId,status:newStatus})}).then(function(r){return r.json();}).then(function(d){if(d.success){adminAllOrders.forEach(function(o){if((o.OrderID||'').toString()===orderId.toString())o.Status=newStatus;});adminRenderOrders();}else alert(d.error||"Error.");});}
-  function adminExportOrders(){if(adminAllOrders.length===0){alert("Load orders first.");return;}var headers=['OrderID','ShopID','Date','CustomerName','Phone','Items','Total','OrderType','TableNote','Status'];var rows=[headers.join(',')];adminAllOrders.forEach(function(o){rows.push(headers.map(function(h){var v=(o[h]||'').toString().replace(/"/g,'""');return '"'+v+'"';}).join(','));});var blob=new Blob([rows.join('\n')],{type:'text/csv;charset=utf-8;'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='orders_'+document.getElementById('o_shop_id').value+'.csv';a.click();}
+function checkStatus(shopId) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Customers");
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  var loyaltyIndex = headers.indexOf("LoyaltyStatus");
+  var storeIndex   = headers.indexOf("StoreStatus");
+  var inboxIndex   = headers.indexOf("InboxStatus");
+  var ordersIndex  = headers.indexOf("OrdersStatus");
+  var expireIndex  = headers.indexOf("ExpiryDate");
 
-  // ══ FEEDBACK ══
-  function adminFetchFeedback(){if(!APPS_SCRIPT_URL)return;var sid=document.getElementById('f_shop_id').value.trim();if(!sid)return;document.getElementById('adminFeedbackList').innerHTML='<i class="fas fa-spinner fa-spin"></i>';fetch(APPS_SCRIPT_URL+"?action=getFeedback&shopId="+sid).then(function(r){return r.json();}).then(function(d){var h='';if(d.success&&d.data&&d.data.length>0){d.data.forEach(function(f){var imgH=(f.ImageURL&&f.ImageURL!=="No Image")?'<br><a href="'+f.ImageURL+'" target="_blank" style="color:blue;font-size:12px;font-weight:bold;">📸 View</a>':"";h+='<div class="product-row" style="border-left:4px solid #00796b;background:white;"><small style="color:#94a3b8;font-size:11px;">'+(f.Date?new Date(f.Date).toLocaleString():'N/A')+'</small><br><strong style="font-size:13px;">👤 '+(f.CustomerName||'Anonymous')+'</strong> <span style="font-size:11px;color:#94a3b8;">('+( f.Phone||'No Phone')+')</span><div style="margin-top:6px;padding:8px;background:#f4f6f8;border:1px solid #e2e8f0;border-radius:4px;font-size:13px;">'+f.Message+'</div>'+imgH+'</div>';});}else{h='<div style="padding:10px;color:#94a3b8;font-size:13px;">Feedback නෑ.</div>';}document.getElementById('adminFeedbackList').innerHTML=h;});}
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() === shopId.toString()) {
+      var expDate = (expireIndex !== -1 && data[i][expireIndex]) ? new Date(data[i][expireIndex]) : null;
+      var isExpired = expDate && !isNaN(expDate) ? (expDate < new Date()) : false;
+      return createJsonResponse({
+        success:       true,
+        isExpired:     isExpired,
+        loyaltyStatus: (loyaltyIndex !== -1 && data[i][loyaltyIndex]) ? data[i][loyaltyIndex].toString() : "Inactive",
+        storeStatus:   (storeIndex   !== -1 && data[i][storeIndex]   && data[i][storeIndex].toString()   !== "") ? data[i][storeIndex].toString()   : "Active",
+        inboxStatus:   (inboxIndex   !== -1 && data[i][inboxIndex]   && data[i][inboxIndex].toString()   !== "") ? data[i][inboxIndex].toString()   : "Active",
+        ordersStatus:  (ordersIndex  !== -1 && data[i][ordersIndex]  && data[i][ordersIndex].toString()  !== "") ? data[i][ordersIndex].toString()  : "Active"
+      });
+    }
+  }
+  return createJsonResponse({ error: "Not found" });
+}
 
-  // ══ BACKUP ══
-  function csvDownload(filename,headers,rows){var lines=[headers.join(',')];rows.forEach(function(row){lines.push(headers.map(function(h){var v=(row[h]!==undefined?row[h]:'').toString().replace(/"/g,'""');return '"'+v+'"';}).join(','));});var blob=new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8;'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();}
-  function exportCustomers(){if(!allCustomersData||allCustomersData.length===0){alert("Load customers first.");return;}csvDownload('customers_'+new Date().toISOString().slice(0,10)+'.csv',Object.keys(allCustomersData[0]),allCustomersData);document.getElementById('backupMsg').innerText='✅ '+allCustomersData.length+' records exported.';}
-  function exportAllFeedback(){fetch(APPS_SCRIPT_URL+"?action=getFeedback&shopId=ALL").then(function(r){return r.json();}).then(function(d){if(d.success&&d.data&&d.data.length>0){csvDownload('feedback_'+new Date().toISOString().slice(0,10)+'.csv',['ShopID','Date','CustomerName','Phone','Message','ImageURL'],d.data);document.getElementById('backupMsg').innerText='✅ '+d.data.length+' records exported.';}else{document.getElementById('backupMsg').innerText='Feedback data නෑ.';}});}
-</script>
-</body>
-</html>
+function processScan(targetId, device) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Customers");
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() === targetId.toString()) {
+      var expIndex = headers.indexOf("ExpiryDate");
+      var expDate = (expIndex !== -1 && data[i][expIndex]) ? new Date(data[i][expIndex]) : null;
+      if (expDate && !isNaN(expDate) && expDate < new Date()) {
+        return createJsonResponse({ error: "මෙම සේවාවේ වලංගු කාලය අවසන් වී ඇත. කරුණාකර අලුත් කරගන්න." });
+      }
+      var status = data[i][headers.indexOf("Status")] || "Active";
+      if (status !== "Active") return createJsonResponse({ error: "මෙම සේවාව තාවකාලිකව අත්හිටුවා ඇත." });
+      var type = data[i][headers.indexOf("Type")] || "profile";
+      var destination = type === "redirect" ? (data[i][headers.indexOf("WhatsApp")] || "#") : "Smart Profile";
+      logCustomerScan(targetId, data[i][headers.indexOf("BusinessName")] || "Unknown", "QR Scanned", device, destination);
+      return createJsonResponse({ success: true, type: type, destination: destination });
+    }
+  }
+  return createJsonResponse({ error: "Invalid QR Code" });
+}
+
+function logCustomerScan(customerId, businessName, action, device, destination) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Logs");
+  if (sheet) sheet.appendRow([new Date(), customerId, businessName, action, device, destination || "N/A"]);
+}
+
+function logAdminAction(staffId, staffName, action, targetId) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("AdminLogs");
+  if (sheet) sheet.appendRow([new Date(), staffId || "Admin", staffName || "System", action, targetId]);
+}
+
+function getClientStats(shopId, startDate, endDate) {
+  var logSheet     = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Logs");
+  var loyaltySheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Loyalty");
+  var emailSheet   = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Subscribers");
+  var ordersSheet  = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Orders");
+
+  var totalScans = 0;
+  var linkStats  = {};
+  var start = startDate ? new Date(startDate) : null;
+  var end   = endDate   ? new Date(endDate)   : null;
+  if (end) end.setHours(23, 59, 59, 999);
+
+  function isWithinRange(dateVal) {
+    if (!dateVal) return false;
+    var d = new Date(dateVal);
+    if (isNaN(d.getTime())) return false;
+    if (start && d < start) return false;
+    if (end   && d > end  ) return false;
+    return true;
+  }
+
+  if (logSheet) {
+    var scanLogs = logSheet.getDataRange().getValues();
+    for (var i = 1; i < scanLogs.length; i++) {
+      if ((shopId === "ALL" || scanLogs[i][1].toString() === shopId.toString()) && isWithinRange(scanLogs[i][0])) {
+        totalScans++;
+        var dest = scanLogs[i][5] || "Unknown";
+        linkStats[dest] = (linkStats[dest] || 0) + 1;
+      }
+    }
+  }
+
+  var totalCustomers = 0, totalStampsGiven = 0;
+  if (loyaltySheet) {
+    var loyaltyData = loyaltySheet.getDataRange().getValues();
+    for (var j = 1; j < loyaltyData.length; j++) {
+      if ((shopId === "ALL" || loyaltyData[j][0].toString() === shopId.toString()) && isWithinRange(loyaltyData[j][6])) {
+        totalCustomers++;
+        totalStampsGiven += (Number(loyaltyData[j][4]) || 0);
+      }
+    }
+  }
+
+  var totalEmails = 0;
+  if (emailSheet) {
+    var emailData = emailSheet.getDataRange().getValues();
+    for (var k = 1; k < emailData.length; k++) {
+      if ((shopId === "ALL" || emailData[k][0].toString() === shopId.toString()) && isWithinRange(emailData[k][1])) {
+        totalEmails++;
+      }
+    }
+  }
+
+  var totalOrders = 0;
+  if (ordersSheet) {
+    var orderData   = ordersSheet.getDataRange().getValues();
+    var oHeaders    = orderData[0];
+    var oShopIdx    = oHeaders.indexOf("ShopID");
+    var oDateIdx    = oHeaders.indexOf("Date");
+    for (var m = 1; m < orderData.length; m++) {
+      if ((shopId === "ALL" || orderData[m][oShopIdx].toString() === shopId.toString()) && isWithinRange(orderData[m][oDateIdx])) {
+        totalOrders++;
+      }
+    }
+  }
+
+  return createJsonResponse({
+    success:          true,
+    totalScans:       totalScans,
+    linkStats:        linkStats,
+    loyaltyCustomers: totalCustomers,
+    totalStamps:      totalStampsGiven,
+    totalEmails:      totalEmails,
+    totalOrders:      totalOrders
+  });
+}
+
+function saveCustomerSafe(customerData, staffId, staffName) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Customers");
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  
+  // FIX: Ensure phone columns always text format before saving
+  ensurePhoneFormat(sheet, headers);
+  
+  var rowIndex = -1;
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() === customerData.ID.toString()) {
+      rowIndex = i + 1; break;
+    }
+  }
+  
+  // FIX: Properly merge existing data so unspecified columns (like PointValue) aren't wiped
+  var rowData = headers.map(function(header, idx) {
+    if (customerData.hasOwnProperty(header)) {
+      return customerData[header];
+    } else {
+      return (rowIndex !== -1) ? data[rowIndex - 1][idx] : "";
+    }
+  });
+  
+  if (rowIndex !== -1) {
+    sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
+    logAdminAction(staffId, staffName, "Edit Customer", customerData.ID);
+    return createJsonResponse({ success: true, message: "තොරතුරු සාර්ථකව යාවත්කාලීන කළා! (Updated)" });
+  } else {
+    sheet.appendRow(rowData);
+    logAdminAction(staffId, staffName, "Add Customer", customerData.ID);
+    return createJsonResponse({ success: true, message: "නව පාරිභෝගිකයෙකු සාර්ථකව පද්ධතියට ඇතුළත් කළා!" });
+  }
+}
+
+function deleteCustomer(id, staffId, staffName) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Customers");
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() === id.toString()) {
+      sheet.deleteRow(i + 1);
+      logAdminAction(staffId, staffName, "Delete Customer", id);
+      return createJsonResponse({ success: true, message: "පාරිභෝගික ගිණුම සාර්ථකව පද්ධතියෙන් ඉවත් කරන ලදී!" });
+    }
+  }
+  return createJsonResponse({ error: "Customer not found." });
+}
+
+function getProfileData(targetId) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Customers");
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() === targetId.toString()) {
+      var profileData = {};
+      for (var j = 0; j < headers.length; j++) profileData[headers[j]] = data[i][j];
+      return createJsonResponse({ success: true, data: profileData });
+    }
+  }
+  return createJsonResponse({ error: "මේ ID එක Sheet එකේ නෑ!" });
+}
+
+function getAllCustomers() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Customers");
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  var customers = [];
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() !== "") {
+      var customer = {};
+      for (var j = 0; j < headers.length; j++) customer[headers[j]] = data[i][j];
+      customers.push(customer);
+    }
+  }
+  return createJsonResponse({ success: true, data: customers });
+}
+
+function clientLogin(phone, password) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Customers");
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  var phoneIndex   = headers.indexOf("ClientPhone");
+  var passIndex    = headers.indexOf("Password");
+  var nameIndex    = headers.indexOf("BusinessName");
+  var expireIndex  = headers.indexOf("ExpiryDate");
+  var loyaltyIndex = headers.indexOf("LoyaltyStatus");
+  var storeIndex   = headers.indexOf("StoreStatus");
+  var inboxIndex   = headers.indexOf("InboxStatus");
+  var ordersIndex  = headers.indexOf("OrdersStatus");
+
+  for (var i = 1; i < data.length; i++) {
+    var dbPhone = (phoneIndex !== -1 && data[i][phoneIndex]) ? data[i][phoneIndex].toString() : "";
+    var dbPass  = (passIndex  !== -1 && data[i][passIndex])  ? data[i][passIndex].toString()  : "";
+    if (dbPhone === phone && dbPass === password) {
+      var expDate  = (expireIndex !== -1 && data[i][expireIndex]) ? new Date(data[i][expireIndex]) : null;
+      var isExpired = expDate && !isNaN(expDate) ? (expDate < new Date()) : false;
+      return createJsonResponse({
+        success:       true,
+        shopId:        data[i][0],
+        businessName:  data[i][nameIndex],
+        isExpired:     isExpired,
+        loyaltyStatus: (loyaltyIndex !== -1 && data[i][loyaltyIndex]) ? data[i][loyaltyIndex].toString() : "Inactive",
+        storeStatus:   (storeIndex   !== -1 && data[i][storeIndex]   && data[i][storeIndex].toString()   !== "") ? data[i][storeIndex].toString()   : "Active",
+        inboxStatus:   (inboxIndex   !== -1 && data[i][inboxIndex]   && data[i][inboxIndex].toString()   !== "") ? data[i][inboxIndex].toString()   : "Active",
+        ordersStatus:  (ordersIndex  !== -1 && data[i][ordersIndex]  && data[i][ordersIndex].toString()  !== "") ? data[i][ordersIndex].toString()  : "Active"
+      });
+    }
+  }
+  return createJsonResponse({ error: "දුරකථන අංකය හෝ මුරපදය වැරදියි!" });
+}
+
+function staffLogin(staffId, password) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Staff");
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() === staffId && data[i][2].toString() === password) {
+      if (data[i][3] && data[i][3].toString() !== "Active") return createJsonResponse({ error: "Account is not active" });
+      logAdminAction(staffId, data[i][1].toString(), "System Login", "N/A");
+      return createJsonResponse({ success: true, staffId: staffId, name: data[i][1].toString() });
+    }
+  }
+  return createJsonResponse({ error: "ID එක හෝ Password එක වැරදියි" });
+}
+
+function getCustomerTarget(shopId) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Customers");
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() === shopId.toString()) {
+      var status     = data[i][headers.indexOf("LoyaltyStatus")] || "Inactive";
+      var target     = parseInt(data[i][headers.indexOf("StampTarget")]) || 10;
+      var pointValue = parseFloat(data[i][headers.indexOf("PointValue")]);
+      if (isNaN(pointValue)) pointValue = 1500;
+      return { status: status, target: target, pointValue: pointValue };
+    }
+  }
+  return { status: "Inactive", target: 10, pointValue: 1500 };
+}
+
+function getLoyaltySheet() { return SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Loyalty"); }
+
+function addStamp(req) {
+  var conf = getCustomerTarget(req.shopId);
+  if (conf.status !== "Active") return createJsonResponse({ error: "Loyalty පහසුකම ක්‍රියාත්මක කර නොමැත." });
+  var addCount = parseFloat(req.stampCount) || 1;
+  var sheet = getLoyaltySheet();
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() === req.shopId.toString() && data[i][1].toString() === req.phone.toString()) {
+      var currentStamps = parseFloat(data[i][4]) || 0;
+      if (currentStamps >= conf.target) return createJsonResponse({ error: "දැනටමත් ලකුණු " + conf.target + " පිරී ඇත! තෑග්ග ලබාදෙන්න." });
+      var newStamps = Math.min(currentStamps + addCount, conf.target);
+      sheet.getRange(i + 1, 5).setValue(newStamps);
+      sheet.getRange(i + 1, 7).setValue(new Date());
+      SpreadsheetApp.flush();
+      return createJsonResponse({ success: true, message: "ලකුණු " + addCount + "ක් සාර්ථකව එකතු කළා! (දැනට: " + newStamps + ")" });
+    }
+  }
+  var initialStamps = Math.min(addCount, conf.target);
+  sheet.appendRow([req.shopId.toString(), req.phone.toString(), "NOT_SET", "NOT_SET", initialStamps, 0, new Date()]);
+  // Format phone column
+  sheet.getRange(sheet.getLastRow(), 2).setNumberFormat('@');
+  SpreadsheetApp.flush();
+  return createJsonResponse({ success: true, message: "නව ගිණුමක් සෑදුවා! ලකුණු " + initialStamps + "ක් එකතු කළා." });
+}
+
+function addLoyaltyPoints(req) {
+  var conf = getCustomerTarget(req.shopId);
+  if (conf.status !== "Active") return createJsonResponse({ error: "Loyalty පහසුකම ක්‍රියාත්මක කර නොමැත." });
+  var billAmount = parseFloat(req.billAmount) || 0;
+  if (billAmount <= 0) return createJsonResponse({ error: "නිවැරදි බිල්පතේ වටිනාකම ඇතුළත් කරන්න." });
+  req.stampCount = parseFloat((billAmount / conf.pointValue).toFixed(2));
+  return addStamp(req);
+}
+
+function getLoyalty(req) {
+  var sheet = getLoyaltySheet();
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() === req.shopId.toString() && data[i][1].toString() === req.phone.toString()) {
+      if (data[i][2].toString() === "NOT_SET") return createJsonResponse({ success: true, requiresSetup: true });
+      if (data[i][2].toString() !== req.pin.toString()) return createJsonResponse({ error: "Incorrect PIN!" });
+      return createJsonResponse({ success: true, stamps: Number(data[i][4]) || 0, redeemed: Number(data[i][5]) || 0 });
+    }
+  }
+  return createJsonResponse({ error: "No account found." });
+}
+
+function getCashierLoyalty(shopId, phone) {
+  var sheet = getLoyaltySheet();
+  if (!sheet) return createJsonResponse({ error: "Loyalty sheet not found" });
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() === shopId.toString() && data[i][1].toString() === phone.toString()) {
+      return createJsonResponse({ success: true, stamps: Number(data[i][4]) || 0, redeemed: Number(data[i][5]) || 0 });
+    }
+  }
+  return createJsonResponse({ error: "Customer not registered yet." });
+}
+
+function setupLoyalty(req) {
+  var sheet = getLoyaltySheet();
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() === req.shopId.toString() && data[i][1].toString() === req.phone.toString()) {
+      sheet.getRange(i + 1, 3).setValue(req.pin);
+      sheet.getRange(i + 1, 4).setValue(req.birthYear);
+      SpreadsheetApp.flush();
+      return createJsonResponse({ success: true, message: "Account secured!" });
+    }
+  }
+  return createJsonResponse({ error: "Account not found." });
+}
+
+function resetPinSelf(req) {
+  var sheet = getLoyaltySheet();
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() === req.shopId.toString() && data[i][1].toString() === req.phone.toString()) {
+      if (data[i][3].toString() === req.birthYear.toString()) {
+        sheet.getRange(i + 1, 3).setValue(req.newPin);
+        SpreadsheetApp.flush();
+        return createJsonResponse({ success: true, message: "PIN changed!" });
+      } else { return createJsonResponse({ error: "Incorrect Birth Year!" }); }
+    }
+  }
+  return createJsonResponse({ error: "Account not found." });
+}
+
+function cashierResetPin(req) {
+  var sheet = getLoyaltySheet();
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() === req.shopId.toString() && data[i][1].toString() === req.phone.toString()) {
+      sheet.getRange(i + 1, 3).setValue("0000");
+      SpreadsheetApp.flush();
+      return createJsonResponse({ success: true, message: "PIN අංකය 0000 ලෙස Reset කළා." });
+    }
+  }
+  return createJsonResponse({ error: "මෙම අංකයට ගිණුමක් නොමැත." });
+}
+
+function redeemReward(req) {
+  var conf = getCustomerTarget(req.shopId);
+  var sheet = getLoyaltySheet();
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] && data[i][0].toString() === req.shopId.toString() && data[i][1].toString() === req.phone.toString()) {
+      var currentStamps = Number(data[i][4]) || 0;
+      var totalRedeemed = Number(data[i][5]) || 0;
+      if (currentStamps < conf.target) return createJsonResponse({ error: "තෑග්ග ලබාදීමට ලකුණු " + conf.target + "ක් අවශ්‍යයි." });
+      sheet.getRange(i + 1, 5).setValue(currentStamps - conf.target);
+      sheet.getRange(i + 1, 6).setValue(totalRedeemed + 1);
+      SpreadsheetApp.flush();
+      return createJsonResponse({ success: true, message: "තෑග්ග සාර්ථකව ලබාදුන්නා!" });
+    }
+  }
+  return createJsonResponse({ error: "ගිණුමක් සොයාගත නොහැක." });
+}
+
+function getProducts(shopId) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Products");
+  if (!sheet) return createJsonResponse({ success: true, data: [] });
+  var data = sheet.getDataRange().getValues();
+  if (data.length <= 1) return createJsonResponse({ success: true, data: [] });
+  var headers = data[0];
+  var shopIdIndex = headers.indexOf("ShopID");
+  var products = [];
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][shopIdIndex] && data[i][shopIdIndex].toString() === shopId.toString()) {
+      var product = {};
+      for (var j = 0; j < headers.length; j++) product[headers[j]] = data[i][j];
+      products.push(product);
+    }
+  }
+  return createJsonResponse({ success: true, data: products });
+}
+
+function updatePrice(req) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Products");
+  if (!sheet) return createJsonResponse({ error: "Products Sheet නොමැත." });
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  var shopIdIndex    = headers.indexOf("ShopID");
+  var productIdIndex = headers.indexOf("ProductID");
+  var priceIndex     = headers.indexOf("Price");
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][shopIdIndex]    && data[i][shopIdIndex].toString()    === req.shopId.toString() &&
+        data[i][productIdIndex] && data[i][productIdIndex].toString() === req.productId.toString()) {
+      sheet.getRange(i + 1, priceIndex + 1).setValue(req.price);
+      SpreadsheetApp.flush();
+      return createJsonResponse({ success: true, message: "මිල යාවත්කාලීන කළා!" });
+    }
+  }
+  return createJsonResponse({ error: "භාණ්ඩය සොයාගත නොහැක." });
+}
+
+function addProduct(req) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Products");
+  if (!sheet) return createJsonResponse({ error: "Products Sheet නොමැත." });
+  var data = sheet.getDataRange().getValues();
+  var nextId = "P001";
+  if (data.length > 1) {
+    var lastId = data[data.length - 1][1].toString();
+    var num = parseInt(lastId.replace("P", "")) + 1;
+    if (!isNaN(num)) nextId = "P" + num.toString().padStart(3, '0');
+  }
+  sheet.appendRow([req.shopId.toString(), nextId, req.type || "Product", req.name, req.price, req.img1 || "", req.img2 || "", req.img3 || ""]);
+  SpreadsheetApp.flush();
+  return createJsonResponse({ success: true, message: "සාර්ථකව ඇතුළත් කළා!" });
+}
+
+function deleteProduct(shopId, productId) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Products");
+  var data = sheet.getDataRange().getValues();
+  var shopIdIndex    = data[0].indexOf("ShopID");
+  var productIdIndex = data[0].indexOf("ProductID");
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][shopIdIndex]    && data[i][shopIdIndex].toString()    === shopId.toString() &&
+        data[i][productIdIndex] && data[i][productIdIndex].toString() === productId.toString()) {
+      sheet.deleteRow(i + 1);
+      return createJsonResponse({ success: true, message: "භාණ්ඩය ඉවත් කළා!" });
+    }
+  }
+  return createJsonResponse({ error: "Product not found." });
+}
+
+function submitFeedback(req) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("Feedback");
+  if (!sheet) {
+    sheet = ss.insertSheet("Feedback");
+    sheet.appendRow(["ShopID", "Date", "CustomerName", "Phone", "Message", "ImageURL"]);
+    sheet.getRange(1, 4, sheet.getMaxRows(), 1).setNumberFormat('@');
+  }
+  var imageUrl = "No Image";
+  if (req.imageBase64) {
+    try {
+      var decoded = Utilities.base64Decode(req.imageBase64);
+      var blob = Utilities.newBlob(decoded, req.mimeType || 'image/jpeg', "Feedback_" + req.shopId + "_" + new Date().getTime());
+      var file = DriveApp.createFile(blob);
+      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      imageUrl = file.getUrl();
+    } catch (e) { imageUrl = "Image Upload Error"; }
+  }
+  sheet.appendRow([req.shopId, new Date(), req.name, req.phone, req.message, imageUrl]);
+  // Ensure phone format
+  sheet.getRange(sheet.getLastRow(), 4).setNumberFormat('@');
+  return createJsonResponse({ success: true, message: "ඔබගේ අදහස් සාර්ථකව යොමු කරන ලදී." });
+}
+
+function getFeedback(shopId) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Feedback");
+  if (!sheet) return createJsonResponse({ success: true, data: [] });
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  var shopIdIndex = headers.indexOf("ShopID");
+  var feedbacks = [];
+  for (var i = 1; i < data.length; i++) {
+    if (shopId === "ALL" || (data[i][shopIdIndex] && data[i][shopIdIndex].toString() === shopId.toString())) {
+      var fb = {};
+      for (var j = 0; j < headers.length; j++) fb[headers[j]] = data[i][j];
+      feedbacks.push(fb);
+    }
+  }
+  return createJsonResponse({ success: true, data: feedbacks });
+}
+
+function subscribeEmail(req) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Subscribers");
+  if (!sheet) {
+    sheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet("Subscribers");
+    sheet.appendRow(["ShopID", "Date", "Email"]);
+  }
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0].toString() === req.shopId.toString() && data[i][2].toString() === req.email.toString())
+      return createJsonResponse({ success: true, message: "දැනටමත් ලියාපදිංචි වී ඇත." });
+  }
+  sheet.appendRow([req.shopId, new Date(), req.email]);
+  return createJsonResponse({ success: true, message: "ඊමේල් ලිපිනය එකතු කළා." });
+}
+
+function getSubscribers(shopId) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Subscribers");
+  if (!sheet) return createJsonResponse({ success: true, data: [] });
+  var data = sheet.getDataRange().getValues();
+  if (data.length <= 1) return createJsonResponse({ success: true, data: [] });
+  var headers    = data[0];
+  var shopIdx    = headers.indexOf("ShopID");
+  var dateIdx    = headers.indexOf("Date");
+  var emailIdx   = headers.indexOf("Email");
+  var subscribers = [];
+  for (var i = 1; i < data.length; i++) {
+    var rowShop = data[i][shopIdx] ? data[i][shopIdx].toString() : "";
+    if (!shopId || shopId === "ALL" || rowShop === shopId.toString()) {
+      subscribers.push({
+        ShopID: rowShop,
+        Date:   data[i][dateIdx]  ? data[i][dateIdx].toString()  : "",
+        Email:  data[i][emailIdx] ? data[i][emailIdx].toString() : ""
+      });
+    }
+  }
+  return createJsonResponse({ success: true, data: subscribers });
+}
+
+var USE_SES_DEFAULT = false;
+
+function sendBulkEmails(req) {
+  var conf = getCustomerTarget(req.shopId);
+  if (conf.status !== "Active") return createJsonResponse({ error: "සේවාව අක්‍රීය කර ඇත." });
+
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Subscribers");
+  if (!sheet) return createJsonResponse({ error: "Subscribers sheet නොමැත." });
+  var data = sheet.getDataRange().getValues();
+
+  var useSES = (req.useSES === true) || USE_SES_DEFAULT;
+  var sesConfig = null;
+
+  if (useSES) {
+    var props = PropertiesService.getScriptProperties();
+    sesConfig = {
+      accessKey: props.getProperty("SES_ACCESS_KEY") || "",
+      secretKey: props.getProperty("SES_SECRET_KEY") || "",
+      region:    props.getProperty("SES_REGION")     || "ap-southeast-1",
+      from:      props.getProperty("SES_FROM")       || ""
+    };
+    if (!sesConfig.accessKey || !sesConfig.secretKey || !sesConfig.from) {
+      return createJsonResponse({ error: "Amazon SES Script Properties set කර නෑ." });
+    }
+  }
+
+  var count = 0, errors = 0;
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0].toString() === req.shopId.toString()) {
+      var email = data[i][2] ? data[i][2].toString().trim() : "";
+      if (email && email.indexOf("@") !== -1) {
+        try {
+          if (useSES) {
+            sendViaSES(sesConfig, email, req.clientEmail || sesConfig.from, req.subject || "Special Promotion!", req.message);
+          } else {
+            MailApp.sendEmail({ to: email, replyTo: req.clientEmail || "", subject: req.subject || "Special Promotion!", htmlBody: req.message });
+          }
+          count++;
+        } catch (e) { errors++; Logger.log("Email error [" + email + "]: " + e.message); }
+      }
+    }
+  }
+
+  var mode = useSES ? " (Amazon SES)" : " (Gmail)";
+  return createJsonResponse({
+    success: true,
+    message: "ඊමේල් " + count + " ක් යවන ලදී!" + mode + (errors > 0 ? " | " + errors + " errors" : ""),
+    sent: count, errors: errors
+  });
+}
+
+function sendViaSES(cfg, toEmail, replyTo, subject, htmlBody) {
+  var region   = cfg.region;
+  var host     = "email." + region + ".amazonaws.com";
+  var endpoint = "https://" + host + "/v2/email/outbound-emails";
+  var payload = JSON.stringify({
+    FromEmailAddress: cfg.from,
+    Destination: { ToAddresses: [toEmail] },
+    ReplyToAddresses: [replyTo],
+    Content: { Simple: { Subject: { Data: subject, Charset: "UTF-8" }, Body: { Html: { Data: htmlBody, Charset: "UTF-8" } } } }
+  });
+  var now       = new Date();
+  var amzDate   = Utilities.formatDate(now, "UTC", "yyyyMMdd'T'HHmmss'Z'");
+  var dateStamp = Utilities.formatDate(now, "UTC", "yyyyMMdd");
+  var contentHash = bytesToHex(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, payload, Utilities.Charset.UTF_8));
+  var canonHeaders = "content-type:application/json\nhost:" + host + "\nx-amz-date:" + amzDate + "\n";
+  var signedHdrs   = "content-type;host;x-amz-date";
+  var canonReq     = ["POST", "/v2/email/outbound-emails", "", canonHeaders, signedHdrs, contentHash].join("\n");
+  var scope       = dateStamp + "/" + region + "/ses/aws4_request";
+  var reqHash     = bytesToHex(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, canonReq, Utilities.Charset.UTF_8));
+  var strToSign   = ["AWS4-HMAC-SHA256", amzDate, scope, reqHash].join("\n");
+  var kDate    = hmacBytes("AWS4" + cfg.secretKey, dateStamp);
+  var kRegion  = hmacBytes(kDate, region);
+  var kService = hmacBytes(kRegion, "ses");
+  var kSigning = hmacBytes(kService, "aws4_request");
+  var sig      = bytesToHex(hmacBytes(kSigning, strToSign));
+  var authHdr  = "AWS4-HMAC-SHA256 Credential=" + cfg.accessKey + "/" + scope + ", SignedHeaders=" + signedHdrs + ", Signature=" + sig;
+  var resp = UrlFetchApp.fetch(endpoint, {
+    method: "post",
+    headers: { "Content-Type": "application/json", "X-Amz-Date": amzDate, "Authorization": authHdr },
+    payload: payload, muteHttpExceptions: true
+  });
+  if (resp.getResponseCode() !== 200) throw new Error("SES " + resp.getResponseCode() + ": " + resp.getContentText());
+}
+
+function hmacBytes(key, msg) {
+  var keyBytes = (typeof key === "string") ? Utilities.newBlob(key, Utilities.Charset.UTF_8).getBytes() : key;
+  return Utilities.computeHmacSha256Signature(Utilities.newBlob(msg, Utilities.Charset.UTF_8).getBytes(), keyBytes);
+}
+
+function bytesToHex(bytes) {
+  return bytes.map(function(b){ return ('0' + (b & 0xff).toString(16)).slice(-2); }).join('');
+}
+
+function createJsonResponse(res) {
+  return ContentService.createTextOutput(JSON.stringify(res)).setMimeType(ContentService.MimeType.JSON);
+}

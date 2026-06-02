@@ -18,6 +18,9 @@
       overflow: hidden;
       flex-shrink: 0;
     }
+    .view-switch-overlay { position: absolute; top: 10px; right: 10px; display:flex; gap:8px; z-index:20; }
+    .vs-btn { padding:8px 10px;border-radius:8px;border:none;background:rgba(255,255,255,0.92);color:#333;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.12); }
+    .vs-btn.on { background:#1565c0;color:#fff; }
     .cover-div .cover-img {
       position: absolute;
       top: 0; left: 0;
@@ -171,6 +174,10 @@
   <div class="cover-div" id="coverDiv">
     <img class="cover-img" id="coverImg" src="" alt="" style="display:none;"
          onerror="this.style.display='none';">
+    <div class="view-switch-overlay" id="viewSwitchOverlay" style="display:none;">
+      <button class="vs-btn" id="vsListBtn" onclick="setView('lv')"><i class="fas fa-list"></i></button>
+      <button class="vs-btn on" id="vsGridBtn" onclick="setView('gv')"><i class="fas fa-th"></i></button>
+    </div>
   </div>
   <div class="profile-row">
     <div class="logo-wrap" id="logoWrap"><div class="init" id="logoInit">?</div></div>
@@ -389,7 +396,9 @@
 
   function tryFallbackShopId(){
     var v=document.getElementById('fallbackShopId'); if(!v) return; var id=v.value.trim();
-    if(!id){alert('Please enter a Shop ID.');return;} localStorage.setItem('lastShopId', id); window.location.search = '?id='+encodeURIComponent(id);
+    if(!id){alert('Please enter a Shop ID.');return;} localStorage.setItem('lastShopId', id);
+    // update runtime shopId and load profile without full reload
+    shopId = id; document.getElementById('loader').style.display = 'none'; loadProfile();
   }
 
   // ════════════════════════════════════════════
@@ -409,6 +418,8 @@
     if (!shopId) {
       // show friendly fallback allowing manual Shop ID input
       document.getElementById('loader').innerHTML = "<div style='text-align:center;padding:18px;'><h3 style='color:#c62828;margin-bottom:8px;'>No Shop ID found</h3><p style='color:#666;margin-bottom:12px;'>QR scan didn't provide an ID. Enter Shop ID to continue:</p><input id='fallbackShopId' placeholder='SHOP001' style='padding:10px;border-radius:8px;border:1px solid #ddd;margin-bottom:10px;width:220px;'><br><button onclick=tryFallbackShopId() style='background:#1565c0;color:#fff;padding:10px 14px;border-radius:8px;border:none;cursor:pointer;'>Load Profile</button></div>";
+      // prefill with last ID if available
+      try { var last = localStorage.getItem('lastShopId'); if (last) document.getElementById('fallbackShopId').value = last; } catch(e){}
       return;
     }
     if (autoTable) {
@@ -586,7 +597,14 @@
         applyTheme(themeName);
 
         buildButtons(p);
-        if (p.StoreStatus === 'Active') loadProducts();
+        if (p.StoreStatus === 'Active') {
+          loadProducts();
+          // show overlay view toggles
+          var ov = document.getElementById('viewSwitchOverlay'); if (ov) ov.style.display = 'flex';
+          // sync overlay buttons state
+          var vsL = document.getElementById('vsListBtn'); if(vsL) vsL.className = 'vs-btn' + (viewMode==='lv'?' on':'');
+          var vsG = document.getElementById('vsGridBtn'); if(vsG) vsG.className = 'vs-btn' + (viewMode==='gv'?' on':'');
+        }
         loadPromos(p);
       })
       .catch(function(err) {
@@ -617,6 +635,8 @@
         el.href = href; el.target = '_blank';
         el.className = 'abtn ' + cls;
         el.onclick = function() { trackClick(label); };
+        el.title = href;
+        el.rel = 'noopener noreferrer';
       } else {
         el = document.createElement('button');
         el.className = 'abtn ' + cls;
@@ -724,6 +744,8 @@
     viewMode = mode;
     document.getElementById('lvBtn').className = 'vtbtn' + (mode === 'lv' ? ' on' : '');
     document.getElementById('gvBtn').className = 'vtbtn' + (mode === 'gv' ? ' on' : '');
+    var vsL = document.getElementById('vsListBtn'); if(vsL) vsL.className = 'vs-btn' + (mode==='lv'?' on':'');
+    var vsG = document.getElementById('vsGridBtn'); if(vsG) vsG.className = 'vs-btn' + (mode==='gv'?' on':'');
     renderProds();
   }
   function renderProds() {

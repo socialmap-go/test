@@ -323,8 +323,18 @@
   // CONFIG
   // ════════════════════════════════════════════
   var API       = "https://script.google.com/macros/s/AKfycbzbH_bZzGRsrS_gzRAin7F3voc999Jlwqq5UYO-8wLQMjUeXyjSpSSDhPAFaKT5bzJx/exec";
-  var shopId    = new URLSearchParams(window.location.search).get('id');
-  var autoTable = new URLSearchParams(window.location.search).get('table');
+  function resolveShopId() {
+    var params = new URLSearchParams(window.location.search);
+    var id = params.get('id') || params.get('shop') || params.get('shopId');
+    if (!id && window.location.hash) {
+      try { id = new URLSearchParams(window.location.hash.replace(/^#/, '?')).get('id'); } catch(e){}
+    }
+    if (!id) id = localStorage.getItem('lastShopId') || '';
+    if (id) localStorage.setItem('lastShopId', id);
+    return id;
+  }
+  var shopId    = resolveShopId();
+  var autoTable = new URLSearchParams(window.location.search).get('table') || new URLSearchParams(window.location.hash.replace(/^#/, '?')).get('table');
   var cart = {}, orderType = 'Dine-In', stampsTarget = 10;
   var productsData = [], menuLink = "", viewMode = 'gv';
 

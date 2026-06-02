@@ -18,8 +18,9 @@
       overflow: hidden;
       flex-shrink: 0;
     }
-    .view-switch-overlay { position: absolute; top: 10px; right: 10px; display:flex; gap:8px; z-index:20; }
-    .vs-btn { padding:8px 10px;border-radius:8px;border:none;background:rgba(255,255,255,0.92);color:#333;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.12); }
+    .view-switch-overlay { position: absolute; top: 12px; right: 12px; display:flex; gap:6px; z-index:20; background:rgba(255,255,255,0.95);border-radius:8px;padding:4px;box-shadow:0 3px 12px rgba(0,0,0,0.2); }
+    .vs-btn { padding:10px 12px;border-radius:6px;border:none;background:transparent;color:#333;font-weight:700;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:5px;transition:all 0.2s; }
+    .vs-btn:hover { background:rgba(0,0,0,0.05); }
     .vs-btn.on { background:#1565c0;color:#fff; }
     .cover-div .cover-img {
       position: absolute;
@@ -175,8 +176,8 @@
     <img class="cover-img" id="coverImg" src="" alt="" style="display:none;"
          onerror="this.style.display='none';">
     <div class="view-switch-overlay" id="viewSwitchOverlay" style="display:none;">
-      <button class="vs-btn" id="vsListBtn" onclick="setView('lv')"><i class="fas fa-list"></i></button>
-      <button class="vs-btn on" id="vsGridBtn" onclick="setView('gv')"><i class="fas fa-th"></i></button>
+       <button class="vs-btn" id="vsListBtn" title="List View" onclick="setView('lv')"><i class="fas fa-list"></i> List</button>
+       <button class="vs-btn on" id="vsGridBtn" title="Grid View" onclick="setView('gv')"><i class="fas fa-th"></i> Grid</button>
     </div>
   </div>
   <div class="profile-row">
@@ -400,6 +401,13 @@
     // update runtime shopId and load profile without full reload
     shopId = id; document.getElementById('loader').style.display = 'none'; loadProfile();
   }
+
+  function openProductsModal() {
+    // ensure products are loaded before opening modal
+    if (productsData.length === 0) { loadProducts(); }
+    openModal('prodModal');
+  }
+
 
   // ════════════════════════════════════════════
   // CLICK TRACKING
@@ -646,7 +654,7 @@
       sec.appendChild(el);
     }
 
-    if (p.StoreStatus   === 'Active') addBtn('abtn-products', ic('fas fa-box-open'),     'Our Services & Products', '', function(){ openModal('prodModal'); });
+    if (p.StoreStatus   === 'Active') addBtn('abtn-products', ic('fas fa-box-open'),     'Our Services & Products', '', function(){ openProductsModal(); });
     if (p.InboxStatus   === 'Active') addBtn('abtn-feedback', ic('fas fa-comment-dots'), 'Feedback & Suggestions',  '', function(){ openModal('fbModal');  });
     if (p.LoyaltyStatus === 'Active') addBtn('abtn-loyalty',  ic('fas fa-gift'),         'My Loyalty Card',         '', function(){ openLoyalty();         });
     if (p.GoogleReview  && p.GoogleReview.trim())
@@ -738,7 +746,16 @@
   function loadProducts() {
     fetch(API + "?action=getProducts&shopId=" + shopId + "&t=" + Date.now())
       .then(function(r){ return r.json(); })
-      .then(function(d){ if (d.success && d.data) { productsData = d.data; renderProds(); } });
+      .then(function(d){ 
+        if (d.success && d.data && d.data.length > 0) { 
+          productsData = d.data; 
+          renderProds();
+          console.log('[Mapa] Products loaded:', productsData.length, 'items');
+        } else {
+          console.log('[Mapa] No products found or error:', d);
+        }
+      })
+      .catch(function(e){ console.error('[Mapa] Product fetch error:', e); });
   }
   function setView(mode) {
     viewMode = mode;
@@ -750,8 +767,12 @@
   }
   function renderProds() {
     var c = document.getElementById('prodContainer');
+    if (!c) { console.error('[Mapa] prodContainer not found'); return; }
     c.className = viewMode;
-    if (productsData.length === 0) { c.innerHTML = '<p style="color:gray;padding:20px;text-align:center;">No items yet.</p>'; return; }
+    if (!productsData || productsData.length === 0) { 
+      c.innerHTML = '<div style="color:#999;padding:20px;text-align:center;grid-column:1/-1;">No products added yet. Check back soon!</div>'; 
+      return; 
+    }
     c.innerHTML = '';
     productsData.forEach(function(p) {
       var nm     = p.ProductName || p.Name || 'Item';

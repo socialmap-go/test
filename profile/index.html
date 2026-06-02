@@ -325,10 +325,23 @@
   var API       = "https://script.google.com/macros/s/AKfycbzbH_bZzGRsrS_gzRAin7F3voc999Jlwqq5UYO-8wLQMjUeXyjSpSSDhPAFaKT5bzJx/exec";
   function resolveShopId() {
     var params = new URLSearchParams(window.location.search);
-    var id = params.get('id') || params.get('shop') || params.get('shopId');
+    var id = params.get('id') || params.get('shop') || params.get('shopId') || params.get('s') || params.get('q') || params.get('data') || params.get('code');
+    // try hash as query
     if (!id && window.location.hash) {
-      try { id = new URLSearchParams(window.location.hash.replace(/^#/, '?')).get('id'); } catch(e){}
+      try { id = new URLSearchParams(window.location.hash.replace(/^#/, '?')).get('id') || new URLSearchParams(window.location.hash.replace(/^#/, '?')).get('shop'); } catch(e){}
     }
+    // try pathname last segment
+    if (!id) {
+      try {
+        var seg = window.location.pathname.split('/').filter(Boolean).pop() || '';
+        if (seg && /^[A-Za-z0-9_-]{3,}$/.test(seg)) id = seg;
+      } catch(e){}
+    }
+    // try referrer for id param
+    if (!id && document.referrer) {
+      try { id = new URL(document.referrer).searchParams.get('id') || id; } catch(e){}
+    }
+    // fallback to last stored
     if (!id) id = localStorage.getItem('lastShopId') || '';
     if (id) localStorage.setItem('lastShopId', id);
     return id;
@@ -374,6 +387,11 @@
     } catch(e) { return ''; }
   }
 
+  function tryFallbackShopId(){
+    var v=document.getElementById('fallbackShopId'); if(!v) return; var id=v.value.trim();
+    if(!id){alert('Please enter a Shop ID.');return;} localStorage.setItem('lastShopId', id); window.location.search = '?id='+encodeURIComponent(id);
+  }
+
   // ════════════════════════════════════════════
   // CLICK TRACKING
   // ════════════════════════════════════════════
@@ -387,8 +405,10 @@
   // INIT
   // ════════════════════════════════════════════
   window.onload = function() {
+    console.debug('Profile load. location=', location.href, 'resolved shopId=', shopId);
     if (!shopId) {
-      document.getElementById('loader').innerHTML = "<h2 style='color:red;padding:20px;text-align:center;'>Invalid QR Code</h2>";
+      // show friendly fallback allowing manual Shop ID input
+      document.getElementById('loader').innerHTML = "<div style='text-align:center;padding:18px;'><h3 style='color:#c62828;margin-bottom:8px;'>No Shop ID found</h3><p style='color:#666;margin-bottom:12px;'>QR scan didn't provide an ID. Enter Shop ID to continue:</p><input id='fallbackShopId' placeholder='SHOP001' style='padding:10px;border-radius:8px;border:1px solid #ddd;margin-bottom:10px;width:220px;'><br><button onclick=tryFallbackShopId() style='background:#1565c0;color:#fff;padding:10px 14px;border-radius:8px;border:none;cursor:pointer;'>Load Profile</button></div>";
       return;
     }
     if (autoTable) {

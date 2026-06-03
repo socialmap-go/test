@@ -32,7 +32,6 @@
     .cover-div:hover .cover-img { transform: scale(1.05); }
 
     /* ── DYNAMIC PROFILE ROW ── */
-    /* ALL Profiles are now Centered for a premium look */
     .profile-row { padding: 0 20px; margin-top: -50px; position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; text-align: center; }
     
     .logo-wrap { width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--theme-bg); overflow: hidden; background: var(--theme-bg); box-shadow: 0 8px 20px rgba(0,0,0,0.15); flex-shrink: 0; z-index: 10; transition: all 0.4s ease; }
@@ -56,7 +55,6 @@
     body.theme-ocean { --cover-radius: 30px; }
     body.theme-ocean .abtn { background: rgba(255,255,255,0.2) !important; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.5); color: #0077b6 !important; box-shadow: 0 8px 32px rgba(0,119,182,0.1) !important; }
 
-    /* For completely dark themes, only use variables to maintain text clarity */
     body.theme-dark .abtn { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1); color: #fff !important; }
 
     /* ── VIEW SWITCHER ── */
@@ -88,7 +86,6 @@
     .abtn i { font-size: 22px; min-width: 26px; text-align: center; z-index: 2; }
     .abtn img.btn-favicon { width: 24px; height: 24px; object-fit: contain; border-radius: 6px; min-width: 24px; background: white; padding: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 2; }
 
-    /* Specific Premium Button Gradients (All links added back) */
     .abtn-wa          { background: linear-gradient(135deg, #25D366, #128C7E) !important; color: white !important; }
     .abtn-maps        { background: linear-gradient(135deg, #EA4335, #C33126) !important; color: white !important; }
     .abtn-fb          { background: linear-gradient(135deg, #1877F2, #0d5cbf) !important; color: white !important; }
@@ -107,7 +104,6 @@
     .abtn-custom      { background: linear-gradient(135deg, #455a64, #263238) !important; color: white !important; }
     .abtn-youtube     { background: linear-gradient(135deg, #FF0000, #cc0000) !important; color: white !important; }
     
-    /* Missing Custom Links Fixed */
     .abtn-tripadvisor { background: linear-gradient(135deg, #34e0a1, #1e9e6e) !important; color: #111 !important; }
     .abtn-booking     { background: linear-gradient(135deg, #003580, #001a40) !important; color: white !important; }
     .abtn-twitter     { background: linear-gradient(135deg, #000000, #333333) !important; color: white !important; }
@@ -157,14 +153,12 @@
     #prodContainer.gv .pc img.pimg { width: 100%; height: 140px; object-fit: cover; }
     #prodContainer.gv .pc .pi { padding: 12px; }
 
-    /* Contrast fixed for product texts in all themes */
     .pc .pname { font-weight: 800; font-size: 15px; color: var(--theme-text); margin-bottom: 4px; }
     .pc .pprice { color: var(--theme-primary); font-weight: 800; font-size: 14px; }
     .pc .ptyp { font-size: 10px; background: var(--theme-divider); color: var(--theme-text); padding: 3px 8px; border-radius: 10px; display: inline-block; margin-bottom: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
     
     .btn-add { background: var(--theme-primary); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 800; font-size: 13px; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: transform 0.2s; }
     .btn-add:active { transform: scale(0.95); }
-    .btn-add.disabled-btn { background: var(--theme-divider); color: var(--theme-sub); cursor: not-allowed; box-shadow: none; }
     
     /* ── CART & OTHER INPUTS ── */
     .floating-cart { position: fixed; bottom: 25px; right: 25px; background: linear-gradient(135deg, var(--theme-primary), #000); color: white; width: 65px; height: 65px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); cursor: pointer; z-index: 2000; transition: transform 0.3s; border: 2px solid rgba(255,255,255,0.2); }
@@ -176,7 +170,6 @@
     .qty-btn { border: none; background: var(--theme-bg); width: 28px; height: 28px; border-radius: 50%; font-weight: 800; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); color: var(--theme-text); }
     .cart-total { font-size: 20px; font-weight: 800; color: var(--theme-primary); display: flex; justify-content: space-between; margin-top: 16px; border-top: 2px solid var(--theme-divider); padding-top: 16px; }
     
-    /* Contrast fixed for inputs in all themes */
     .inp, .loyalty-input, .fb-input { width: 100%; padding: 14px; border: 2px solid var(--theme-divider); border-radius: 12px; margin-bottom: 12px; font-size: 15px; background: var(--theme-bg); color: var(--theme-text); transition: all 0.3s; font-family: inherit; }
     .inp:focus, .loyalty-input:focus, .fb-input:focus { border-color: var(--theme-primary); outline: none; box-shadow: 0 0 0 4px rgba(21, 101, 192, 0.1); }
     .btn-place, .loyalty-btn { background: linear-gradient(135deg, var(--theme-primary), #000); color: white; padding: 16px; border: none; border-radius: 14px; width: 100%; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.2); transition: transform 0.2s; margin-top: 10px; }
@@ -433,7 +426,7 @@
   var cart = {}, orderType = 'Dine-In', stampsTarget = 10;
   var productsData = [], menuLink = "", viewMode = 'gv';
   
-  // ✅ New Global Variable to track Orders Status
+  // ✅ Global Order Status Tracker
   var isOrderActive = true; 
 
   // ════════════════════════════════════════════
@@ -479,7 +472,11 @@
   }
 
   function openProductsModal() {
-    if (productsData.length === 0) { loadProducts(); }
+    if (productsData.length === 0) { 
+      // Add smooth loading text instead of sudden notification pop
+      document.getElementById('prodContainer').innerHTML = '<div style="padding:30px; text-align:center; color:var(--theme-primary); font-weight:800;"><i class="fas fa-spinner fa-spin fa-2x"></i><br><br>Loading items...</div>';
+      loadProducts(); 
+    }
     openModal('prodModal');
   }
 
@@ -572,8 +569,24 @@
         }
         var p = d.data;
         
-        // ✅ Determine if Orders are Allowed (Fallback to 'Active' if undefined)
-        isOrderActive = (p.OrdersStatus === 'Active' || p.OrderStatus === 'Active' || p.OrdersStatus === undefined);
+        // ✅ DEEP KEY SCAN: Find any status key securely to prevent "Undefined" defaulting to Active
+        isOrderActive = true; 
+        var rawStatus = p.OrdersStatus || p.OrderStatus || p['Order Status'] || p.ordersStatus || p.orderStatus;
+        
+        if (rawStatus) {
+            isOrderActive = (String(rawStatus).trim().toLowerCase() !== 'inactive');
+        } else {
+            // Scan all keys just in case Apps Script backend returns it under a strange name
+            for (var k in p) {
+                var clean = k.toLowerCase().replace(/[^a-z]/g, '');
+                if (clean === 'ordersstatus' || clean === 'orderstatus') {
+                    if (String(p[k]).trim().toLowerCase() === 'inactive') {
+                        isOrderActive = false;
+                    }
+                    break;
+                }
+            }
+        }
         
         document.getElementById('loader').style.display   = 'none';
         document.getElementById('mainWrap').style.display = 'block';
@@ -745,7 +758,12 @@
         if (d.success && d.data && d.data.length > 0) { 
           productsData = d.data; 
           renderProds();
-        } 
+        } else {
+          document.getElementById('prodContainer').innerHTML = '<div style="color:var(--theme-sub);padding:20px;text-align:center;grid-column:1/-1;">No products added yet. Check back soon!</div>'; 
+        }
+      })
+      .catch(function(){
+        document.getElementById('prodContainer').innerHTML = '<div style="color:red;padding:20px;text-align:center;grid-column:1/-1;">Error loading products.</div>';
       });
   }
   
@@ -772,17 +790,17 @@
       }
     }
     
-    renderProds();
+    if (productsData.length > 0) {
+        renderProds();
+    }
   }
   
   function renderProds() {
     var c = document.getElementById('prodContainer');
     if (!c) return;
     c.className = viewMode;
-    if (!productsData || productsData.length === 0) { 
-      c.innerHTML = '<div style="color:var(--theme-sub);padding:20px;text-align:center;grid-column:1/-1;">No products added yet. Check back soon!</div>'; 
-      return; 
-    }
+    if (!productsData || productsData.length === 0) return;
+    
     c.innerHTML = '';
     productsData.forEach(function(p) {
       var nm     = p.ProductName || p.Name || 'Item';
@@ -793,10 +811,10 @@
       var safeNm = nm.replace(/'/g, "\\'").replace(/"/g, '"');
       var imgHtml    = img ? "<img class='pimg' src='" + img + "' onerror=\"this.style.display='none'\" alt=''>" : '';
       
-      // ✅ Add Btn conditionally displayed if isOrderActive is True, else visually disabled
+      // ✅ VISUAL LOCK: If orders are closed, entirely remove the Add button structure and replace with a static closed badge.
       var addBtnHtml = isOrderActive 
         ? "<button class='btn-add' onclick='addToCart(\"" + pid + "\",\"" + safeNm + "\"," + price + ")'><i class='fas fa-plus'></i> Add</button>" 
-        : "<button class='btn-add disabled-btn' disabled>Orders Closed</button>";
+        : "<div style='margin-top:8px; padding:6px 12px; background:var(--theme-divider); color:var(--theme-text); font-size:12px; font-weight:800; border-radius:12px; display:inline-block; border:1px solid #ddd;'><i class='fas fa-ban' style='color:#e65100; margin-right:4px;'></i> Not Available</div>";
         
       c.innerHTML += "<div class='pc'>" + imgHtml + "<div class='pi'><div class='ptyp'>" + typ + "</div><div class='pname'>" + nm + "</div><div class='pprice'>රු. " + price.toFixed(2) + "</div>" + addBtnHtml + "</div></div>";
     });
@@ -806,14 +824,19 @@
   // CART
   // ════════════════════════════════════════════
   function addToCart(id, name, price) {
-    if (!isOrderActive) return; // Prevent any sneaky additions
+    if (!isOrderActive) { 
+        alert("Orders are currently closed for this shop."); 
+        return; 
+    } 
     if (cart[id]) cart[id].qty++;
     else cart[id] = { name: name, price: price, qty: 1 };
     updateCartUI();
   }
+  
   function changeQty(id, d) {
     if (cart[id]) { cart[id].qty += d; if (cart[id].qty <= 0) delete cart[id]; updateCartUI(); }
   }
+  
   function updateCartUI() {
     var qty = 0, total = 0, html = '';
     for (var id in cart) {
@@ -833,10 +856,10 @@
     document.getElementById('cartCount').innerText  = qty;
     var cb = document.getElementById('cartBtn');
     
-    // ✅ Keep floating cart hidden if Orders are inactive, even if they somehow had items
     cb.style.display = (qty > 0 && isOrderActive) ? 'flex' : 'none';
     if (qty === 0) closeModal('cartModal');
   }
+  
   function setOrderType(t) {
     orderType = t;
     document.getElementById('btnDI').className = 'ot-btn' + (t === 'Dine-In' ? ' on' : '');
@@ -848,7 +871,14 @@
   // PLACE ORDER
   // ════════════════════════════════════════════
   function placeOrder() {
-    if (!isOrderActive) { alert("Orders are currently closed."); return; } // Additional check
+    if (!isOrderActive) { 
+        alert("Orders are currently closed."); 
+        cart = {}; 
+        updateCartUI(); 
+        closeModal('cartModal'); 
+        return; 
+    } 
+    
     var msgEl    = document.getElementById('orderMsg');
     var itemsArr = [], total = 0;
     for (var id in cart) {

@@ -267,10 +267,8 @@
 </head>
 <body>
 
-<!-- SIDEBAR OVERLAY -->
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-left">
     <button class="mob-menu-btn" onclick="toggleSidebar()">&#9776;</button>
@@ -286,7 +284,6 @@
 </div>
 <div class="shell">
 
-  <!-- SIDEBAR -->
   <nav class="sidebar" id="mainSidebar">
     <div class="sidebar-nav">
       <div class="nav-item active" onclick="showTab('overview')" id="nav-overview"><i class="fas fa-chart-pie"></i> Overview</div>
@@ -303,10 +300,8 @@
     </div>
   </nav>
 
-  <!-- MAIN -->
   <div class="main">
 
-    <!-- ══ OVERVIEW ══ -->
     <div class="tab-panel active" id="tab-overview">
       <div class="g4" style="margin-bottom:14px;">
         <div class="stat-card"><div class="stat-icon" style="background:#fef2f2;color:#c62828;"><i class="fas fa-eye"></i></div><div><div class="stat-val" id="ov_scans">—</div><div class="stat-lbl">Total Scans</div></div></div>
@@ -339,7 +334,6 @@
       </div>
     </div>
 
-    <!-- ══ CUSTOMERS ══ -->
     <div class="tab-panel" id="tab-customers">
       <div class="g2">
         <div class="card">
@@ -447,7 +441,6 @@
       </div>
     </div>
 
-    <!-- ══ EMAIL MARKETING ══ -->
     <div class="tab-panel" id="tab-email">
       <div class="promo-section">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
@@ -466,6 +459,11 @@
         </div>
         <div class="promo-input-group"><label><i class="fas fa-heading"></i> Subject</label><input type="text" id="promoSubject" placeholder="Special Offer! 🎉" oninput="updatePromoPreview()"></div>
         <div class="promo-input-group"><label><i class="fas fa-align-left"></i> Message</label><textarea id="promoBody" rows="4" placeholder="Promotion message..." oninput="updatePromoPreview()"></textarea></div>
+
+        <div class="promo-input-group" style="background:#1e3a5f; padding:10px; border-radius:6px; border:1px solid #2d5080; display:flex; align-items:center; gap:8px;">
+          <input type="checkbox" id="promoAwsSes" style="width:auto; margin:0; cursor:pointer;">
+          <label for="promoAwsSes" style="color:#e2e8f0; font-size:12px; margin:0; text-transform:none; letter-spacing:normal; cursor:pointer;"><i class="fab fa-aws" style="color:#ff9900;"></i> AWS SES හරහා යවන්න (High Deliverability)</label>
+        </div>
 
         <div style="background:#0d1b35;border:1px solid #1e3a5f;border-radius:8px;padding:12px;margin-bottom:12px;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
@@ -523,7 +521,6 @@
       </div>
     </div>
 
-    <!-- ══ PRODUCTS ══ -->
     <div class="tab-panel" id="tab-products">
       <div class="card">
         <div class="card-title"><i class="fas fa-box-open"></i> Products, Rooms & Packages</div>
@@ -549,7 +546,6 @@
       </div>
     </div>
 
-    <!-- ══ ORDERS ══ -->
     <div class="tab-panel" id="tab-orders">
       <div class="card">
         <div class="card-title"><i class="fas fa-shopping-bag" style="color:#e65100;"></i> Orders Management</div>
@@ -568,7 +564,6 @@
       </div>
     </div>
 
-    <!-- ══ FEEDBACK ══ -->
     <div class="tab-panel" id="tab-feedback">
       <div class="card">
         <div class="card-title"><i class="fas fa-comment-alt" style="color:#607d8b;"></i> Customer Feedbacks</div>
@@ -580,7 +575,6 @@
       </div>
     </div>
 
-    <!-- ══ QR ══ -->
     <div class="tab-panel" id="tab-qr">
       <div class="card">
         <div class="card-title"><i class="fas fa-qrcode"></i> QR Generator</div>
@@ -593,7 +587,6 @@
       </div>
     </div>
 
-    <!-- ══ BACKUP ══ -->
     <div class="tab-panel" id="tab-backup">
       <div class="card">
         <div class="card-title"><i class="fas fa-database" style="color:#7b1fa2;"></i> Data Backup</div>
@@ -605,7 +598,6 @@
       </div>
     </div>
 
-    <!-- ══ CONFIG ══ -->
     <div class="tab-panel" id="tab-config">
       <div class="card">
         <div class="card-title"><i class="fas fa-cogs"></i> System Configuration</div>
@@ -617,10 +609,7 @@
       </div>
     </div>
 
-  </div><!-- /main -->
-</div><!-- /shell -->
-
-<script>
+  </div></div><script>
   let APPS_SCRIPT_URL = localStorage.getItem('sysScriptUrl') || "https://script.google.com/macros/s/AKfycbzbH_bZzGRsrS_gzRAin7F3voc999Jlwqq5UYO-8wLQMjUeXyjSpSSDhPAFaKT5bzJx/exec";
   let allCustomersData = [], currentSelectedId = "", allSubscribersData = [];
 
@@ -769,7 +758,8 @@
     document.getElementById('c_loyaltyStatus').value=g(['LoyaltyStatus'])||'Inactive';
     document.getElementById('c_storeStatus').value=g(['StoreStatus'])||'Active';
     document.getElementById('c_inboxStatus').value=g(['InboxStatus'])||'Active';
-    document.getElementById('c_ordersStatus').value=g(['OrdersStatus'])||'Active';
+    // ✅ Check for both OrdersStatus and OrderStatus backend keys just in case.
+    document.getElementById('c_ordersStatus').value=g(['OrdersStatus','OrderStatus'])||'Active';
     document.getElementById('c_stampTarget').value=g(['StampTarget'])||'10';
     var theme=g(['Theme','theme','ThemeColor']);document.getElementById('c_theme').value=theme;applyThemeUI(theme);
     document.getElementById('formTitle').innerHTML='<i class="fas fa-edit"></i> Editing: <span style="color:#c62828;">'+(name||shopId)+'</span>';
@@ -793,7 +783,48 @@
   function saveCustomerData(){
     if(!APPS_SCRIPT_URL){alert("Apps Script URL configure කරන්න.");return;}
     var id=document.getElementById('c_id').value.trim();if(!id){alert("Shop ID අනිවාර්යයි.");return;}
-    var payload={action:"saveCustomer",staffId:sessionStorage.getItem('loggedInStaff'),staffName:sessionStorage.getItem('loggedInStaff'),customerData:{ID:id,Type:document.getElementById('c_type').value,BusinessName:document.getElementById('c_name').value,WhatsApp:document.getElementById('c_wa').value,Maps:document.getElementById('c_maps').value,Facebook:document.getElementById('c_fb').value,Instagram:document.getElementById('c_ig').value,TikTok:document.getElementById('c_tiktok').value,Website:document.getElementById('c_web').value,Email:document.getElementById('c_email').value,MenuPDF:document.getElementById('c_menu').value,Theme:document.getElementById('c_theme').value || 'default',Status:document.getElementById('c_status').value,LoyaltyStatus:document.getElementById('c_loyaltyStatus').value,StoreStatus:document.getElementById('c_storeStatus').value,InboxStatus:document.getElementById('c_inboxStatus').value,OrdersStatus:document.getElementById('c_ordersStatus').value,StampTarget:document.getElementById('c_stampTarget').value,ClientPhone:document.getElementById('c_clientPhone').value,Password:document.getElementById('c_password').value,BankDetails:document.getElementById('c_bank').value,GoogleReview:document.getElementById('c_review').value,ProfileImage:document.getElementById('c_image').value,CoverImage:document.getElementById('c_cover').value,ExpiryDate:document.getElementById('c_expiryDate').value,CustomPromoVideo:document.getElementById('c_promoVideo').value,CustomPromoImg1:document.getElementById('c_promoImg1').value,CustomPromoImg2:document.getElementById('c_promoImg2').value,CustomPromoImg3:document.getElementById('c_promoImg3').value,CustomLink1Name:document.getElementById('c_cl1_name').value,CustomLink1URL:document.getElementById('c_cl1_url').value,CustomLink2Name:document.getElementById('c_cl2_name').value,CustomLink2URL:document.getElementById('c_cl2_url').value,CustomLink3Name:document.getElementById('c_cl3_name').value,CustomLink3URL:document.getElementById('c_cl3_url').value,CustomLink4Name:document.getElementById('c_cl4_name').value,CustomLink4URL:document.getElementById('c_cl4_url').value,CustomLink5Name:document.getElementById('c_cl5_name').value,CustomLink5URL:document.getElementById('c_cl5_url').value}};
+    var payload={
+      action:"saveCustomer",
+      staffId:sessionStorage.getItem('loggedInStaff'),
+      staffName:sessionStorage.getItem('loggedInStaff'),
+      customerData:{
+        ID:id,Type:document.getElementById('c_type').value,
+        BusinessName:document.getElementById('c_name').value,
+        WhatsApp:document.getElementById('c_wa').value,
+        Maps:document.getElementById('c_maps').value,
+        Facebook:document.getElementById('c_fb').value,
+        Instagram:document.getElementById('c_ig').value,
+        TikTok:document.getElementById('c_tiktok').value,
+        Website:document.getElementById('c_web').value,
+        Email:document.getElementById('c_email').value,
+        MenuPDF:document.getElementById('c_menu').value,
+        Theme:document.getElementById('c_theme').value || 'default',
+        Status:document.getElementById('c_status').value,
+        LoyaltyStatus:document.getElementById('c_loyaltyStatus').value,
+        StoreStatus:document.getElementById('c_storeStatus').value,
+        InboxStatus:document.getElementById('c_inboxStatus').value,
+        // ✅ Saving as OrdersStatus AND OrderStatus to ensure Backend picks it up if naming differs
+        OrdersStatus:document.getElementById('c_ordersStatus').value,
+        OrderStatus:document.getElementById('c_ordersStatus').value,
+        StampTarget:document.getElementById('c_stampTarget').value,
+        ClientPhone:document.getElementById('c_clientPhone').value,
+        Password:document.getElementById('c_password').value,
+        BankDetails:document.getElementById('c_bank').value,
+        GoogleReview:document.getElementById('c_review').value,
+        ProfileImage:document.getElementById('c_image').value,
+        CoverImage:document.getElementById('c_cover').value,
+        ExpiryDate:document.getElementById('c_expiryDate').value,
+        CustomPromoVideo:document.getElementById('c_promoVideo').value,
+        CustomPromoImg1:document.getElementById('c_promoImg1').value,
+        CustomPromoImg2:document.getElementById('c_promoImg2').value,
+        CustomPromoImg3:document.getElementById('c_promoImg3').value,
+        CustomLink1Name:document.getElementById('c_cl1_name').value,CustomLink1URL:document.getElementById('c_cl1_url').value,
+        CustomLink2Name:document.getElementById('c_cl2_name').value,CustomLink2URL:document.getElementById('c_cl2_url').value,
+        CustomLink3Name:document.getElementById('c_cl3_name').value,CustomLink3URL:document.getElementById('c_cl3_url').value,
+        CustomLink4Name:document.getElementById('c_cl4_name').value,CustomLink4URL:document.getElementById('c_cl4_url').value,
+        CustomLink5Name:document.getElementById('c_cl5_name').value,CustomLink5URL:document.getElementById('c_cl5_url').value
+      }
+    };
     var msg=document.getElementById('msg');msg.style.display='block';msg.style.background='#eff6ff';msg.style.color='#1565c0';msg.innerHTML='Saving...';
     fetch(APPS_SCRIPT_URL,{method:"POST",body:JSON.stringify(payload)}).then(function(r){return r.json();}).then(function(d){alert(d.message);loadAllCustomers();msg.style.display='none';}).catch(function(){alert("Error saving.");msg.style.display='none';});
   }
@@ -842,6 +873,10 @@
     var shopId=document.getElementById('promoShopSelect').value;if(!shopId){alert("Shop select කරන්න.");return;}
     var subject=document.getElementById('promoSubject').value.trim();var body=document.getElementById('promoBody').value.trim();var replyTo=document.getElementById('promoReplyTo').value.trim();
     var vidUrl=document.getElementById('promoVideoUrl').value.trim();var imgUrl1=document.getElementById('promoImg1').value.trim();var imgUrl2=document.getElementById('promoImg2').value.trim();var imgUrl3=document.getElementById('promoImg3').value.trim();
+    
+    // ✅ AWS SES status pick up
+    var useAwsSes = document.getElementById('promoAwsSes') ? document.getElementById('promoAwsSes').checked : false;
+
     if(!subject||!body){alert("Subject සහ Message අනිවාර්යයි.");return;}
     var mediaHtml='';
     if(imgUrl1)mediaHtml+='<div style="text-align:center;margin:18px 0;"><img src="'+imgUrl1+'" style="max-width:100%;border-radius:8px;"></div>';
@@ -851,7 +886,19 @@
     var finalHtml='<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:30px;background:#fff;">'+mediaHtml+'<div style="font-size:15px;line-height:1.8;color:#333;">'+body+'</div><div style="margin-top:30px;padding-top:16px;border-top:1px solid #eee;font-size:12px;color:#aaa;text-align:center;">Powered by Mapa Solutions</div></div>';
     var btn=document.getElementById('sendPromoBtn');var msgEl=document.getElementById('promoSendMsg');
     btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Sending...';msgEl.style.display='none';
-    fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'sendBulkEmails',shopId:shopId,clientEmail:replyTo,subject:subject,message:finalHtml})}).then(function(r){return r.json();}).then(function(d){btn.disabled=false;btn.innerHTML='<i class="fas fa-paper-plane"></i> Send to All Subscribers';msgEl.style.display='inline-block';if(d.success){msgEl.className='promo-send-msg success';msgEl.innerHTML='&#10003; '+(d.message||'Sent!');}else{msgEl.className='promo-send-msg error';msgEl.innerHTML='&#10007; '+(d.error||'Error.');}}).catch(function(){btn.disabled=false;btn.innerHTML='<i class="fas fa-paper-plane"></i> Send to All Subscribers';msgEl.style.display='inline-block';msgEl.className='promo-send-msg error';msgEl.innerHTML='&#10007; Network error!';});
+    
+    // ✅ useAwsSes passed in the payload payload
+    fetch(APPS_SCRIPT_URL,{
+      method:'POST',
+      body:JSON.stringify({
+        action:'sendBulkEmails',
+        shopId:shopId,
+        clientEmail:replyTo,
+        subject:subject,
+        message:finalHtml,
+        useAwsSes:useAwsSes 
+      })
+    }).then(function(r){return r.json();}).then(function(d){btn.disabled=false;btn.innerHTML='<i class="fas fa-paper-plane"></i> Send to All Subscribers';msgEl.style.display='inline-block';if(d.success){msgEl.className='promo-send-msg success';msgEl.innerHTML='&#10003; '+(d.message||'Sent!');}else{msgEl.className='promo-send-msg error';msgEl.innerHTML='&#10007; '+(d.error||'Error.');}}).catch(function(){btn.disabled=false;btn.innerHTML='<i class="fas fa-paper-plane"></i> Send to All Subscribers';msgEl.style.display='inline-block';msgEl.className='promo-send-msg error';msgEl.innerHTML='&#10007; Network error!';});
   }
 
   // ══ SUBSCRIBERS ══

@@ -161,8 +161,10 @@
     .pc .pname { font-weight: 800; font-size: 15px; color: var(--theme-text); margin-bottom: 4px; }
     .pc .pprice { color: var(--theme-primary); font-weight: 800; font-size: 14px; }
     .pc .ptyp { font-size: 10px; background: var(--theme-divider); color: var(--theme-text); padding: 3px 8px; border-radius: 10px; display: inline-block; margin-bottom: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    
     .btn-add { background: var(--theme-primary); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 800; font-size: 13px; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: transform 0.2s; }
     .btn-add:active { transform: scale(0.95); }
+    .btn-add.disabled-btn { background: var(--theme-divider); color: var(--theme-sub); cursor: not-allowed; box-shadow: none; }
     
     /* ── CART & OTHER INPUTS ── */
     .floating-cart { position: fixed; bottom: 25px; right: 25px; background: linear-gradient(135deg, var(--theme-primary), #000); color: white; width: 65px; height: 65px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); cursor: pointer; z-index: 2000; transition: transform 0.3s; border: 2px solid rgba(255,255,255,0.2); }
@@ -345,7 +347,7 @@
       <input type="password" id="lPin" class="loyalty-input" placeholder="4-Digit PIN" maxlength="4">
       <button class="loyalty-btn" onclick="checkLoyalty()" id="lCheckBtn">Check My Card</button>
       <div style="text-align:center;margin-top:10px;">
-        <span class="link-text" onclick="lSwitchView('lv-setup')">No account? Register</span> &nbsp;|&nbsp; 
+        <span class="link-text" onclick="lSwitchView('lv-setup')">No account? Register</span>  |  
         <span class="link-text" onclick="lSwitchView('lv-forgot')">Forgot PIN?</span>
       </div>
       <div id="lLoginMsg" class="msg-text msg-err" style="display:none;"></div>
@@ -430,24 +432,27 @@
   var autoTable = new URLSearchParams(window.location.search).get('table') || new URLSearchParams(window.location.hash.replace(/^#/, '?')).get('table');
   var cart = {}, orderType = 'Dine-In', stampsTarget = 10;
   var productsData = [], menuLink = "", viewMode = 'gv';
+  
+  // ✅ New Global Variable to track Orders Status
+  var isOrderActive = true; 
 
   // ════════════════════════════════════════════
   // PLATFORM DETECTION
   // ════════════════════════════════════════════
   var PLATFORMS = [
-    { m:['wa.me','whatsapp.com'],          cls:'abtn-wa',          icon:'fab fa-whatsapp'         },
-    { m:['facebook.com','fb.com','fb.me'],     cls:'abtn-fb',          icon:'fab fa-facebook-f'       },
-    { m:['instagram.com'],                     cls:'abtn-ig',          icon:'fab fa-instagram'        },
-    { m:['tiktok.com'],                        cls:'abtn-tiktok',      icon:'fab fa-tiktok'           },
-    { m:['maps.google','goo.gl/maps','maps.app.goo'], cls:'abtn-maps', icon:'fas fa-map-marker-alt'   },
-    { m:['youtube.com','youtu.be'],            cls:'abtn-youtube',     icon:'fab fa-youtube'          },
-    { m:['tripadvisor.com'],                   cls:'abtn-tripadvisor', icon:'svg-tripadvisor'         },
-    { m:['booking.com'],                       cls:'abtn-booking',     icon:'fas fa-bed'              },
-    { m:['airbnb.com'],                        cls:'abtn-airbnb',      icon:'fab fa-airbnb'           },
-    { m:['linkedin.com'],                      cls:'abtn-linkedin',    icon:'fab fa-linkedin'         },
-    { m:['twitter.com','x.com'],               cls:'abtn-twitter',     icon:'fab fa-x-twitter'        },
-    { m:['snapchat.com'],                      cls:'abtn-snapchat',    icon:'fab fa-snapchat'         },
-    { m:['pinterest.com'],                     cls:'abtn-pinterest',   icon:'fab fa-pinterest'        }
+    { m:['wa.me','whatsapp.com'],          cls:'abtn-wa',          icon:'fab fa-whatsapp'          },
+    { m:['facebook.com','fb.com','fb.me'],       cls:'abtn-fb',          icon:'fab fa-facebook-f'        },
+    { m:['instagram.com'],                       cls:'abtn-ig',          icon:'fab fa-instagram'         },
+    { m:['tiktok.com'],                          cls:'abtn-tiktok',      icon:'fab fa-tiktok'            },
+    { m:['maps.google','goo.gl/maps','maps.app.goo'], cls:'abtn-maps', icon:'fas fa-map-marker-alt'    },
+    { m:['youtube.com','youtu.be'],              cls:'abtn-youtube',     icon:'fab fa-youtube'           },
+    { m:['tripadvisor.com'],                     cls:'abtn-tripadvisor', icon:'svg-tripadvisor'          },
+    { m:['booking.com'],                         cls:'abtn-booking',     icon:'fas fa-bed'               },
+    { m:['airbnb.com'],                          cls:'abtn-airbnb',      icon:'fab fa-airbnb'            },
+    { m:['linkedin.com'],                        cls:'abtn-linkedin',    icon:'fab fa-linkedin'          },
+    { m:['twitter.com','x.com'],                 cls:'abtn-twitter',     icon:'fab fa-x-twitter'         },
+    { m:['snapchat.com'],                        cls:'abtn-snapchat',    icon:'fab fa-snapchat'          },
+    { m:['pinterest.com'],                       cls:'abtn-pinterest',   icon:'fab fa-pinterest'         }
   ];
 
   function detectPlatform(url) {
@@ -566,6 +571,10 @@
           return;
         }
         var p = d.data;
+        
+        // ✅ Determine if Orders are Allowed (Fallback to 'Active' if undefined)
+        isOrderActive = (p.OrdersStatus === 'Active' || p.OrderStatus === 'Active' || p.OrdersStatus === undefined);
+        
         document.getElementById('loader').style.display   = 'none';
         document.getElementById('mainWrap').style.display = 'block';
 
@@ -783,7 +792,12 @@
       var typ    = p.Type  || 'Product';
       var safeNm = nm.replace(/'/g, "\\'").replace(/"/g, '"');
       var imgHtml    = img ? "<img class='pimg' src='" + img + "' onerror=\"this.style.display='none'\" alt=''>" : '';
-      var addBtnHtml = "<button class='btn-add' onclick='addToCart(\"" + pid + "\",\"" + safeNm + "\"," + price + ")'><i class='fas fa-plus'></i> Add</button>";
+      
+      // ✅ Add Btn conditionally displayed if isOrderActive is True, else visually disabled
+      var addBtnHtml = isOrderActive 
+        ? "<button class='btn-add' onclick='addToCart(\"" + pid + "\",\"" + safeNm + "\"," + price + ")'><i class='fas fa-plus'></i> Add</button>" 
+        : "<button class='btn-add disabled-btn' disabled>Orders Closed</button>";
+        
       c.innerHTML += "<div class='pc'>" + imgHtml + "<div class='pi'><div class='ptyp'>" + typ + "</div><div class='pname'>" + nm + "</div><div class='pprice'>රු. " + price.toFixed(2) + "</div>" + addBtnHtml + "</div></div>";
     });
   }
@@ -792,6 +806,7 @@
   // CART
   // ════════════════════════════════════════════
   function addToCart(id, name, price) {
+    if (!isOrderActive) return; // Prevent any sneaky additions
     if (cart[id]) cart[id].qty++;
     else cart[id] = { name: name, price: price, qty: 1 };
     updateCartUI();
@@ -802,7 +817,7 @@
   function updateCartUI() {
     var qty = 0, total = 0, html = '';
     for (var id in cart) {
-      qty   += cart[id].qty;
+      qty  += cart[id].qty;
       total += cart[id].price * cart[id].qty;
       html  += "<div class='cart-item'>" +
                  "<div style='flex:1;text-align:left;'><b>" + cart[id].name + "</b><br>" +
@@ -817,7 +832,9 @@
     document.getElementById('cartTotal').innerText  = "රු. " + total.toFixed(2);
     document.getElementById('cartCount').innerText  = qty;
     var cb = document.getElementById('cartBtn');
-    cb.style.display = qty > 0 ? 'flex' : 'none';
+    
+    // ✅ Keep floating cart hidden if Orders are inactive, even if they somehow had items
+    cb.style.display = (qty > 0 && isOrderActive) ? 'flex' : 'none';
     if (qty === 0) closeModal('cartModal');
   }
   function setOrderType(t) {
@@ -831,6 +848,7 @@
   // PLACE ORDER
   // ════════════════════════════════════════════
   function placeOrder() {
+    if (!isOrderActive) { alert("Orders are currently closed."); return; } // Additional check
     var msgEl    = document.getElementById('orderMsg');
     var itemsArr = [], total = 0;
     for (var id in cart) {

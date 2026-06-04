@@ -22,11 +22,7 @@
       --cover-radius: 0;
     }
 
-    /* BUG FIX #1: Remove background from global transition - CSS variables don't
-       transition via this shorthand, it was causing stale paint on dynamic themes.
-       Only keep transform & border transitions which are intentional. */
-    * { box-sizing: border-box; margin: 0; padding: 0; transition: border-color 0.3s, transform 0.3s; }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.3s, border-color 0.3s, transform 0.3s; }
     body { font-family: 'Segoe UI', sans-serif; background: var(--body-bg); color: var(--theme-text); display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
     .wrap { width: 100%; max-width: 430px; background: var(--theme-bg); min-height: 100vh; position: relative; overflow-x: hidden; padding-bottom: 20px; margin: 0 auto; box-shadow: 0 0 40px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
 
@@ -493,6 +489,7 @@
 
   function openProductsModal() {
     if (productsData.length === 0) { 
+      // Add smooth loading text instead of sudden notification pop
       document.getElementById('prodContainer').innerHTML = '<div style="padding:30px; text-align:center; color:var(--theme-primary); font-weight:800;"><i class="fas fa-spinner fa-spin fa-2x"></i><br><br>Loading items...</div>';
       loadProducts(); 
     }
@@ -526,7 +523,7 @@
   };
 
   // ════════════════════════════════════════════
-  // CSS VARIABLES THEME SYSTEM
+  // CSS VARIABLES THEME SYSTEM (IMPROVED CONTRAST)
   // ════════════════════════════════════════════
   var THEMES = {
     'default': { primary: '#1565c0', cover: '#d32f2f', bg: '#ffffff', text: '#222222', sub: '#888888', divider: '#f4f6f8', bodyBg: '#eef2f5' },
@@ -539,40 +536,20 @@
     'food':    { primary: '#ff8c00', cover: '#111111', bg: '#1a1a1a', text: '#ffffff', sub: '#ffb74d', divider: '#333333', bodyBg: '#0a0a0a' }
   };
 
-  // ════════════════════════════════════════════
-  // BUG FIX #1 & #2: applyTheme with forced repaint
-  // 
-  // ROOT CAUSE: CSS custom properties (variables) set via JS do NOT trigger
-  // automatic repaints on elements that use var() inside transitions.
-  // Also, setting variables on a display:none element means the browser
-  // may batch-defer the paint until after display:flex — at which point
-  // the transition fires FROM the old value, visually showing wrong colours.
-  //
-  // FIX: We set variables, force a synchronous reflow via offsetHeight read,
-  // then reveal the element. This forces the browser to commit the new
-  // variable values before the first paint of the element occurs.
-  // ════════════════════════════════════════════
   function applyTheme(name) {
     var key = (name || '').toString().trim().toLowerCase();
     var t   = THEMES[key] || THEMES['default'];
     var root = document.documentElement;
     
-    // Set body class for theme-specific CSS overrides (gold, minimal, ocean, dark)
-    document.body.className = 'theme-' + (key || 'default');
+    document.body.className = 'theme-' + key;
 
-    // Apply all CSS variables to :root
     root.style.setProperty('--theme-primary', t.primary);
-    root.style.setProperty('--theme-cover',   t.cover);
-    root.style.setProperty('--theme-bg',      t.bg);
-    root.style.setProperty('--theme-text',    t.text);
-    root.style.setProperty('--theme-sub',     t.sub);
+    root.style.setProperty('--theme-cover', t.cover);
+    root.style.setProperty('--theme-bg', t.bg);
+    root.style.setProperty('--theme-text', t.text);
+    root.style.setProperty('--theme-sub', t.sub);
     root.style.setProperty('--theme-divider', t.divider);
-    root.style.setProperty('--body-bg',       t.bodyBg);
-
-    // BUG FIX: Force synchronous reflow so browser commits variable values
-    // BEFORE mainWrap transitions from display:none to display:flex.
-    // Reading offsetHeight forces layout recalculation — this is intentional.
-    void document.documentElement.offsetHeight;
+    root.style.setProperty('--body-bg', t.bodyBg);
   }
 
   // ════════════════════════════════════════════
@@ -608,7 +585,7 @@
         }
         var p = d.data;
         
-        // ✅ Order Status Detection
+        // ✅ DEEP KEY SCAN: Find any status key securely to prevent "Undefined" defaulting to Active
         isOrderActive = true; 
         var rawStatus = p.OrdersStatus || p.OrderStatus || p['Order Status'] || p.ordersStatus || p.orderStatus;
         
@@ -625,26 +602,13 @@
                 }
             }
         }
+        
+        document.getElementById('loader').style.display   = 'none';
+        document.getElementById('mainWrap').style.display = 'flex';
 
-        // ════════════════════════════════════════
-        // BUG FIX #3: Apply theme BEFORE showing mainWrap.
-        // Previous code called applyTheme then immediately set display:flex
-        // without waiting for the forced reflow to propagate.
-        //
-        // NEW ORDER:
-        // 1. applyTheme()          → sets CSS vars + forces reflow
-        // 2. hide loader           → removes loader overlay
-        // 3. show mainWrap         → first paint uses correct theme colours
-        // 4. buildButtons + cover  → DOM populated with correct theme already active
-        // 5. setView()             → layout classes applied to visible elements
-        // ════════════════════════════════════════
         var themeName = (p.Theme || p.theme || '').toString().trim().toLowerCase();
-        applyTheme(themeName);  // Step 1: variables committed to DOM
+        applyTheme(themeName);
 
-        document.getElementById('loader').style.display   = 'none';    // Step 2
-        document.getElementById('mainWrap').style.display = 'flex';    // Step 3: first paint = correct colours
-
-        // Step 4: Populate content
         var coverUrl = p.CoverImage || p.CoverImg || p.coverImage || p.coverImg || '';
         applyCoverImage(coverUrl);
 
@@ -671,12 +635,8 @@
           loadProducts();
           var ov = document.getElementById('viewSwitchOverlay'); if (ov) ov.style.display = 'flex';
         }
-
-        // Step 5: setView AFTER elements are in the DOM and visible
-        // BUG FIX: Previously called before mainWrap was display:flex,
-        // meaning classList changes had no visual effect on first render.
-        setView(viewMode);
-
+        
+        setView(viewMode); 
         loadPromos(p);
       })
       .catch(function(err) {
@@ -699,11 +659,12 @@
       return (cls.indexOf('svg-') === 0 && SVG_ICONS[cls]) ? SVG_ICONS[cls] : "<i class='" + cls + "'></i>";
     }
 
+    // Category Creator
     function createCategory(id, titleHtml) {
       var wrap = document.createElement('div');
       wrap.className = 'btn-category';
       wrap.id = id;
-      wrap.style.display = 'none';
+      wrap.style.display = 'none'; // hidden initially
       
       if (titleHtml) {
         var title = document.createElement('div');
@@ -720,6 +681,7 @@
       return { wrap: wrap, grid: grid, count: 0 };
     }
 
+    // Define Sections
     var catPrimary  = createCategory('catPrimary', '');
     var catServices = createCategory('catServices', '<i class="fas fa-concierge-bell"></i> Our Services');
     var catSocial   = createCategory('catSocial', '<i class="fas fa-hashtag"></i> Connect With Us');
@@ -743,17 +705,20 @@
       el.innerHTML = iconHtml + "<span>" + label + "</span>";
       cat.grid.appendChild(el);
       cat.count++;
-      cat.wrap.style.display = 'block';
+      cat.wrap.style.display = 'block'; // Show section if it has items
     }
 
+    // 1. Primary Call to Action
     if (p.GoogleReview  && p.GoogleReview.trim())
       addBtnTo(catPrimary, 'abtn-review', "<i class='fab fa-google'></i>", '⭐️⭐️⭐️⭐️⭐️ Rate Us on Google', p.GoogleReview, null);
 
+    // 2. Business Services
     if (p.StoreStatus   === 'Active') addBtnTo(catServices, 'abtn-products', ic('fas fa-box-open'),      'Our Services & Products', '', function(){ openProductsModal(); });
     if (p.MenuPDF       && p.MenuPDF.trim()) addBtnTo(catServices, 'abtn-menu',     ic('fas fa-file-pdf'),       'View Menu',               '', function(){ openMenuModal(); });
     if (p.LoyaltyStatus === 'Active') addBtnTo(catServices, 'abtn-loyalty',  ic('fas fa-gift'),          'My Loyalty Card',         '', function(){ openLoyalty();         });
     if (p.InboxStatus   === 'Active') addBtnTo(catServices, 'abtn-feedback', ic('fas fa-comment-dots'),  'Feedback & Suggestions',  '', function(){ openModal('fbModal');  });
     
+    // 3. Contact & Social Media
     if (p.WhatsApp  && p.WhatsApp.trim())   addBtnTo(catSocial, 'abtn-wa',     ic('fab fa-whatsapp'),       'WhatsApp',    p.WhatsApp,  null);
     if (p.Facebook  && p.Facebook.trim())   addBtnTo(catSocial, 'abtn-fb',     ic('fab fa-facebook-f'),     'Facebook',    p.Facebook,  null);
     if (p.Instagram && p.Instagram.trim())  addBtnTo(catSocial, 'abtn-ig',     ic('fab fa-instagram'),      'Instagram',   p.Instagram, null);
@@ -761,15 +726,18 @@
     if (p.Website   && p.Website.trim())    addBtnTo(catSocial, 'abtn-web',    ic('fas fa-globe'),          'Website',     p.Website,   null);
     if (p.Email     && p.Email.trim())      addBtnTo(catSocial, 'abtn-email',  ic('fas fa-envelope'),       'Email Us',    'mailto:' + p.Email, null);
 
+    // 4. Location & Payments
     if (p.Maps      && p.Maps.trim())       addBtnTo(catLocation, 'abtn-maps',   ic('fas fa-map-marker-alt'), 'Google Maps', p.Maps,      null);
     if (p.BankDetails && p.BankDetails.trim()) addBtnTo(catLocation, 'abtn-bank',   ic('fas fa-university'),     'Bank Details', '', function(){ openModal('bankModal'); });
 
+    // 5. External Links
     for (var n = 1; n <= 5; n++) {
       var url   = p['CustomLink' + n + 'URL'];
       var label = p['CustomLink' + n + 'Name'];
       if (!url || !url.trim()) continue;
       label = (label && label.trim()) ? label.trim() : 'Visit Link';
       
+      // Auto-correct spelling mistake if present in database
       if (label.toLowerCase().includes('bookong')) {
           label = label.replace(/bookong/i, 'Booking');
       }
@@ -788,7 +756,7 @@
   }
 
   // ════════════════════════════════════════════
-  // PROMOTIONS
+  // PROMOTIONS (BUG FIXED: Lightbox Re-enabled)
   // ════════════════════════════════════════════
   function loadPromos(p) {
     var hasVideo = p.CustomPromoVideo && p.CustomPromoVideo.trim();
@@ -861,12 +829,15 @@
   function setView(mode) {
     viewMode = mode;
     
+    // Update Modal Buttons
     var lvBtn = document.getElementById('lvBtn'); if(lvBtn) lvBtn.className = 'vtbtn' + (mode === 'lv' ? ' on' : '');
     var gvBtn = document.getElementById('gvBtn'); if(gvBtn) gvBtn.className = 'vtbtn' + (mode === 'gv' ? ' on' : '');
     
+    // Update Main UI Buttons
     var vsL = document.getElementById('vsListBtn'); if(vsL) vsL.className = 'vs-btn' + (mode==='lv'?' on':'');
     var vsG = document.getElementById('vsGridBtn'); if(vsG) vsG.className = 'vs-btn' + (mode==='gv'?' on':'');
     
+    // Update Main Action Buttons Layout (Social/Links)
     var btns = document.getElementById('btnsSection');
     if (btns) {
       if (mode === 'lv') {
@@ -899,6 +870,7 @@
       var safeNm = nm.replace(/'/g, "\\'").replace(/"/g, '"');
       var imgHtml    = img ? "<img class='pimg' src='" + img + "' onerror=\"this.style.display='none'\" alt=''>" : '';
       
+      // ✅ VISUAL LOCK: If orders are closed, entirely remove the Add button structure and replace with a static closed badge.
       var addBtnHtml = isOrderActive 
         ? "<button class='btn-add' onclick='addToCart(\"" + pid + "\",\"" + safeNm + "\"," + price + ")'><i class='fas fa-plus'></i> Add</button>" 
         : "<div style='margin-top:8px; padding:6px 12px; background:var(--theme-divider); color:var(--theme-text); font-size:12px; font-weight:800; border-radius:12px; display:inline-block; border:1px solid #ddd;'><i class='fas fa-ban' style='color:#e65100; margin-right:4px;'></i> Not Available</div>";
@@ -1118,15 +1090,23 @@
       });
   }
 
+  // FIX: Professional WhatsApp Share Link
   function sharePromoWhatsApp(mediaUrl, mediaType) {
     if (!mediaUrl) return;
+    
     var bizName = document.getElementById('bizName').innerText || "Our Shop";
+    
+    // Generating the actual profile link based on current URL
     var profileUrl = window.location.origin + window.location.pathname;
-    if (shopId) { profileUrl += "?id=" + shopId; }
+    if (shopId) {
+        profileUrl += "?id=" + shopId;
+    }
+
     var promoText = "🔥 *Special Update from " + bizName + "!*\n\n" +
                     "Check out our latest " + mediaType + " and explore our full menu, services, and offers on our Smart Profile:\n\n" +
                     "👉 " + profileUrl + "\n\n" +
                     "✨ Powered by Mapa Solutions";
+
     var waUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(promoText);
     window.open(waUrl, '_blank');
   }

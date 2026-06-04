@@ -214,7 +214,7 @@
     .msg-err { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
     .msg-ok  { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
 
-    /* FIX: Professional Powered By Badge Styles */
+    /* Professional Powered By Badge Styles */
     .powered-badge { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; padding: 30px 20px 15px; opacity: 0.7; transition: opacity 0.3s; margin-top: auto; }
     .powered-badge:hover { opacity: 1; }
     .pb-text { font-size: 11px; font-weight: 700; color: var(--theme-sub); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
@@ -756,7 +756,7 @@
   }
 
   // ════════════════════════════════════════════
-  // PROMOTIONS
+  // PROMOTIONS (BUG FIXED: Lightbox Re-enabled)
   // ════════════════════════════════════════════
   function loadPromos(p) {
     var hasVideo = p.CustomPromoVideo && p.CustomPromoVideo.trim();
@@ -778,7 +778,7 @@
       grid.style.display = 'grid';
       grid.innerHTML = '';
       imgs.forEach(function(img) {
-        grid.innerHTML += '<div class="promo-img-item"><img src="' + img + '" loading="lazy"><button class="whatsapp-share-btn" onclick="sharePromoWhatsApp(\'' + encodeURIComponent(img) + '\', \'image\')"><i class="fab fa-whatsapp"></i></button></div>';
+        grid.innerHTML += '<div class="promo-img-item"><img src="' + img + '" loading="lazy" onclick="openLb(\'' + img + '\')"><button class="whatsapp-share-btn" onclick="sharePromoWhatsApp(\'' + encodeURIComponent(img) + '\', \'image\')"><i class="fab fa-whatsapp"></i></button></div>';
       });
     }
     setupPromoObserver();

@@ -24,7 +24,7 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.3s, border-color 0.3s, transform 0.3s; }
     body { font-family: 'Segoe UI', sans-serif; background: var(--body-bg); color: var(--theme-text); display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
-    .wrap { width: 100%; max-width: 430px; background: var(--theme-bg); min-height: 100vh; position: relative; overflow-x: hidden; padding-bottom: 38px; margin: 0 auto; box-shadow: 0 0 40px rgba(0,0,0,0.05); }
+    .wrap { width: 100%; max-width: 430px; background: var(--theme-bg); min-height: 100vh; position: relative; overflow-x: hidden; padding-bottom: 20px; margin: 0 auto; box-shadow: 0 0 40px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
 
     /* ── DYNAMIC COVER ── */
     .cover-div { width: 100%; height: 180px; background: var(--theme-cover); position: relative; overflow: hidden; flex-shrink: 0; border-bottom-left-radius: var(--cover-radius); border-bottom-right-radius: var(--cover-radius); z-index: 1; }
@@ -63,10 +63,22 @@
     .vs-btn:hover { opacity: 1; background: rgba(0,0,0,0.05); }
     .vs-btn.on { background: var(--theme-primary); color: #fff; opacity: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
     
-    /* ── 3D PREMIUM BUTTONS ── */
-    .btns-section { padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; justify-items: stretch; margin-top: 10px; }
-    .btns-section.lv-mode { grid-template-columns: 1fr !important; }
-    .btns-section.gv-mode { grid-template-columns: repeat(2, 1fr) !important; }
+    /* ── 3D PREMIUM BUTTONS & CATEGORY LAYOUT ── */
+    .btns-section { padding: 0 20px; margin-top: 10px; flex: 1; }
+    
+    .btn-category { margin-bottom: 22px; width: 100%; }
+    .btn-cat-title { font-size: 12px; font-weight: 800; color: var(--theme-sub); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; padding: 0 5px; border-bottom: 1px solid var(--theme-divider); padding-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    
+    /* Grid system that respects view toggle */
+    .btn-cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; justify-items: stretch; }
+    .btns-section.lv-mode .btn-cat-grid { grid-template-columns: 1fr !important; }
+    .btns-section.gv-mode .btn-cat-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    
+    /* FIX: Force last odd button to be full width to remove unevenness */
+    .btns-section.gv-mode .btn-cat-grid > *:nth-child(odd):last-child { grid-column: 1 / -1; }
+
+    /* Force Primary and Services to always be full width for UX */
+    #catPrimary .btn-cat-grid, #catServices .btn-cat-grid { grid-template-columns: 1fr !important; }
 
     .abtn { 
       display: flex; align-items: center; justify-content: center; gap: 12px; 
@@ -95,7 +107,7 @@
     .abtn-email       { background: linear-gradient(135deg, #d93025, #991e17) !important; color: white !important; }
     .abtn-menu        { background: linear-gradient(135deg, #673AB7, #4527a0) !important; color: white !important; }
     .abtn-bank        { background: linear-gradient(135deg, #00695c, #004d40) !important; color: white !important; }
-    .abtn-review      { background: #ffffff !important; color: #333 !important; border: 2px solid #fbbc04 !important; box-shadow: 0 8px 32px rgba(251, 188, 4, 0.15) !important; }
+    .abtn-review      { background: #ffffff !important; color: #333 !important; border: 2px solid #fbbc04 !important; box-shadow: 0 8px 32px rgba(251, 188, 4, 0.15) !important; font-size: 16px; padding: 18px 20px;}
     .abtn-review i    { color: #fbbc04 !important; }
     .abtn-loyalty     { background: linear-gradient(135deg,#ff8c00,#ff5500) !important; color: white !important; animation: glow 2s ease-in-out infinite; }
     @keyframes glow   { 0%,100%{box-shadow:0 5px 15px rgba(255,140,0,0.4)} 50%{box-shadow:0 8px 25px rgba(255,85,0,0.6)} }
@@ -202,7 +214,11 @@
     .msg-err { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
     .msg-ok  { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
 
-    .powered-badge { display: none !important; }
+    /* FIX: Professional Powered By Badge Styles */
+    .powered-badge { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; padding: 30px 20px 15px; opacity: 0.7; transition: opacity 0.3s; margin-top: auto; }
+    .powered-badge:hover { opacity: 1; }
+    .pb-text { font-size: 11px; font-weight: 700; color: var(--theme-sub); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .pb-logo { font-size: 14px; font-weight: 800; color: var(--theme-primary); display: flex; align-items: center; gap: 6px; }
 
     @media (max-width: 540px) {
       body { padding-top: 0; }
@@ -440,7 +456,7 @@
     { m:['maps.google','goo.gl/maps','maps.app.goo'], cls:'abtn-maps', icon:'fas fa-map-marker-alt'    },
     { m:['youtube.com','youtu.be'],              cls:'abtn-youtube',     icon:'fab fa-youtube'           },
     { m:['tripadvisor.com'],                     cls:'abtn-tripadvisor', icon:'svg-tripadvisor'          },
-    { m:['booking.com'],                         cls:'abtn-booking',     icon:'fas fa-bed'               },
+    { m:['booking.com','bookong.com'],           cls:'abtn-booking',     icon:'fas fa-bed'               },
     { m:['airbnb.com'],                          cls:'abtn-airbnb',      icon:'fab fa-airbnb'            },
     { m:['linkedin.com'],                        cls:'abtn-linkedin',    icon:'fab fa-linkedin'          },
     { m:['twitter.com','x.com'],                 cls:'abtn-twitter',     icon:'fab fa-x-twitter'         },
@@ -576,7 +592,6 @@
         if (rawStatus) {
             isOrderActive = (String(rawStatus).trim().toLowerCase() !== 'inactive');
         } else {
-            // Scan all keys just in case Apps Script backend returns it under a strange name
             for (var k in p) {
                 var clean = k.toLowerCase().replace(/[^a-z]/g, '');
                 if (clean === 'ordersstatus' || clean === 'orderstatus') {
@@ -589,7 +604,7 @@
         }
         
         document.getElementById('loader').style.display   = 'none';
-        document.getElementById('mainWrap').style.display = 'block';
+        document.getElementById('mainWrap').style.display = 'flex';
 
         var themeName = (p.Theme || p.theme || '').toString().trim().toLowerCase();
         applyTheme(themeName);
@@ -630,7 +645,7 @@
   }
 
   // ════════════════════════════════════════════
-  // BUILD ACTION BUTTONS
+  // BUILD ACTION BUTTONS (CATEGORIZED UI)
   // ════════════════════════════════════════════
   function buildButtons(p) {
     var sec = document.getElementById('btnsSection');
@@ -644,7 +659,36 @@
       return (cls.indexOf('svg-') === 0 && SVG_ICONS[cls]) ? SVG_ICONS[cls] : "<i class='" + cls + "'></i>";
     }
 
-    function addBtn(cls, iconHtml, label, href, onclickFn) {
+    // Category Creator
+    function createCategory(id, titleHtml) {
+      var wrap = document.createElement('div');
+      wrap.className = 'btn-category';
+      wrap.id = id;
+      wrap.style.display = 'none'; // hidden initially
+      
+      if (titleHtml) {
+        var title = document.createElement('div');
+        title.className = 'btn-cat-title';
+        title.innerHTML = titleHtml;
+        wrap.appendChild(title);
+      }
+      
+      var grid = document.createElement('div');
+      grid.className = 'btn-cat-grid';
+      wrap.appendChild(grid);
+      sec.appendChild(wrap);
+      
+      return { wrap: wrap, grid: grid, count: 0 };
+    }
+
+    // Define Sections
+    var catPrimary  = createCategory('catPrimary', '');
+    var catServices = createCategory('catServices', '<i class="fas fa-concierge-bell"></i> Our Services');
+    var catSocial   = createCategory('catSocial', '<i class="fas fa-hashtag"></i> Connect With Us');
+    var catLocation = createCategory('catLocation', '<i class="fas fa-map-marked-alt"></i> Location & Payment');
+    var catExternal = createCategory('catExternal', '<i class="fas fa-external-link-alt"></i> Other Links');
+
+    function addBtnTo(cat, cls, iconHtml, label, href, onclickFn) {
       var el;
       if (href) {
         el = document.createElement('a');
@@ -659,39 +703,54 @@
         el.onclick = onclickFn;
       }
       el.innerHTML = iconHtml + "<span>" + label + "</span>";
-      sec.appendChild(el);
+      cat.grid.appendChild(el);
+      cat.count++;
+      cat.wrap.style.display = 'block'; // Show section if it has items
     }
 
-    if (p.StoreStatus   === 'Active') addBtn('abtn-products', ic('fas fa-box-open'),      'Our Services & Products', '', function(){ openProductsModal(); });
-    if (p.InboxStatus   === 'Active') addBtn('abtn-feedback', ic('fas fa-comment-dots'), 'Feedback & Suggestions',  '', function(){ openModal('fbModal');  });
-    if (p.LoyaltyStatus === 'Active') addBtn('abtn-loyalty',  ic('fas fa-gift'),         'My Loyalty Card',         '', function(){ openLoyalty();         });
+    // 1. Primary Call to Action
     if (p.GoogleReview  && p.GoogleReview.trim())
-      addBtn('abtn-review', "<i class='fab fa-google' style='color:#fbbc04'></i>", 'Rate Us on Google', p.GoogleReview, null);
-    if (p.BankDetails   && p.BankDetails.trim())
-      addBtn('abtn-bank', ic('fas fa-university'), 'Bank Details', '', function(){ openModal('bankModal'); });
-    if (p.WhatsApp  && p.WhatsApp.trim())   addBtn('abtn-wa',     ic('fab fa-whatsapp'),       'WhatsApp',    p.WhatsApp,  null);
-    if (p.Maps      && p.Maps.trim())       addBtn('abtn-maps',   ic('fas fa-map-marker-alt'), 'Google Maps', p.Maps,      null);
-    if (p.Facebook  && p.Facebook.trim())   addBtn('abtn-fb',     ic('fab fa-facebook-f'),     'Facebook',    p.Facebook,  null);
-    if (p.Instagram && p.Instagram.trim())  addBtn('abtn-ig',     ic('fab fa-instagram'),      'Instagram',   p.Instagram, null);
-    if (p.TikTok    && p.TikTok.trim())     addBtn('abtn-tiktok', ic('fab fa-tiktok'),         'TikTok',      p.TikTok,    null);
-    if (p.Website   && p.Website.trim())    addBtn('abtn-web',    ic('fas fa-globe'),          'Website',     p.Website,   null);
-    if (p.Email     && p.Email.trim())      addBtn('abtn-email',  ic('fas fa-envelope'),       'Email Us',    'mailto:' + p.Email, null);
-    if (p.MenuPDF   && p.MenuPDF.trim())    addBtn('abtn-menu',   ic('fas fa-file-pdf'),       'View Menu',   '', function(){ openMenuModal(); });
+      addBtnTo(catPrimary, 'abtn-review', "<i class='fab fa-google'></i>", '⭐️⭐️⭐️⭐️⭐️ Rate Us on Google', p.GoogleReview, null);
 
+    // 2. Business Services
+    if (p.StoreStatus   === 'Active') addBtnTo(catServices, 'abtn-products', ic('fas fa-box-open'),      'Our Services & Products', '', function(){ openProductsModal(); });
+    if (p.MenuPDF       && p.MenuPDF.trim()) addBtnTo(catServices, 'abtn-menu',     ic('fas fa-file-pdf'),       'View Menu',               '', function(){ openMenuModal(); });
+    if (p.LoyaltyStatus === 'Active') addBtnTo(catServices, 'abtn-loyalty',  ic('fas fa-gift'),          'My Loyalty Card',         '', function(){ openLoyalty();         });
+    if (p.InboxStatus   === 'Active') addBtnTo(catServices, 'abtn-feedback', ic('fas fa-comment-dots'),  'Feedback & Suggestions',  '', function(){ openModal('fbModal');  });
+    
+    // 3. Contact & Social Media
+    if (p.WhatsApp  && p.WhatsApp.trim())   addBtnTo(catSocial, 'abtn-wa',     ic('fab fa-whatsapp'),       'WhatsApp',    p.WhatsApp,  null);
+    if (p.Facebook  && p.Facebook.trim())   addBtnTo(catSocial, 'abtn-fb',     ic('fab fa-facebook-f'),     'Facebook',    p.Facebook,  null);
+    if (p.Instagram && p.Instagram.trim())  addBtnTo(catSocial, 'abtn-ig',     ic('fab fa-instagram'),      'Instagram',   p.Instagram, null);
+    if (p.TikTok    && p.TikTok.trim())     addBtnTo(catSocial, 'abtn-tiktok', ic('fab fa-tiktok'),         'TikTok',      p.TikTok,    null);
+    if (p.Website   && p.Website.trim())    addBtnTo(catSocial, 'abtn-web',    ic('fas fa-globe'),          'Website',     p.Website,   null);
+    if (p.Email     && p.Email.trim())      addBtnTo(catSocial, 'abtn-email',  ic('fas fa-envelope'),       'Email Us',    'mailto:' + p.Email, null);
+
+    // 4. Location & Payments
+    if (p.Maps      && p.Maps.trim())       addBtnTo(catLocation, 'abtn-maps',   ic('fas fa-map-marker-alt'), 'Google Maps', p.Maps,      null);
+    if (p.BankDetails && p.BankDetails.trim()) addBtnTo(catLocation, 'abtn-bank',   ic('fas fa-university'),     'Bank Details', '', function(){ openModal('bankModal'); });
+
+    // 5. External Links
     for (var n = 1; n <= 5; n++) {
       var url   = p['CustomLink' + n + 'URL'];
       var label = p['CustomLink' + n + 'Name'];
       if (!url || !url.trim()) continue;
       label = (label && label.trim()) ? label.trim() : 'Visit Link';
+      
+      // Auto-correct spelling mistake if present in database
+      if (label.toLowerCase().includes('bookong')) {
+          label = label.replace(/bookong/i, 'Booking');
+      }
+
       var plt = detectPlatform(url);
       if (plt) {
-        addBtn(plt.cls, ic(plt.icon), label, url, null);
+        addBtnTo(catExternal, plt.cls, ic(plt.icon), label, url, null);
       } else {
         var fav = getFaviconUrl(url);
         var imgHtml = fav
           ? "<img class='btn-favicon' src='" + fav + "' onerror=\"this.style.display='none'\" alt=''>"
           : ic('fas fa-link');
-        addBtn('abtn-custom', imgHtml, label, url, null);
+        addBtnTo(catExternal, 'abtn-custom', imgHtml, label, url, null);
       }
     }
   }
@@ -1031,10 +1090,25 @@
       });
   }
 
+  // FIX: Professional WhatsApp Share Link
   function sharePromoWhatsApp(mediaUrl, mediaType) {
     if (!mediaUrl) return;
-    var text = 'Check out this ' + mediaType + ' from ' + document.getElementById('bizName').innerText + ': ' + decodeURIComponent(mediaUrl);
-    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(text), '_blank');
+    
+    var bizName = document.getElementById('bizName').innerText || "Our Shop";
+    
+    // Generating the actual profile link based on current URL
+    var profileUrl = window.location.origin + window.location.pathname;
+    if (shopId) {
+        profileUrl += "?id=" + shopId;
+    }
+
+    var promoText = "🔥 *Special Update from " + bizName + "!*\n\n" +
+                    "Check out our latest " + mediaType + " and explore our full menu, services, and offers on our Smart Profile:\n\n" +
+                    "👉 " + profileUrl + "\n\n" +
+                    "✨ Powered by Mapa Solutions";
+
+    var waUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(promoText);
+    window.open(waUrl, '_blank');
   }
 
   // ════════════════════════════════════════════

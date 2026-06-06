@@ -516,6 +516,12 @@
             localStorage.setItem('storeStatus',   data.storeStatus    || 'Active');
             localStorage.setItem('inboxStatus',   data.inboxStatus    || 'Active');
             localStorage.setItem('ordersStatus',  data.ordersStatus   || 'Active');
+            // ── FIX: Save business logo URL ──
+            if (data.logoUrl && data.logoUrl.trim() !== '') {
+              localStorage.setItem('logoUrl', data.logoUrl.trim());
+            } else {
+              localStorage.removeItem('logoUrl');
+            }
             if (data.profileUrl && data.profileUrl.trim() !== '') {
               localStorage.setItem('profileUrl', data.profileUrl.trim());
             } else {
@@ -543,7 +549,29 @@
       document.getElementById('mainApp').style.display   = 'block';
       document.getElementById('shopName').innerText      = localStorage.getItem('bName');
       document.getElementById('shopIdDisplay').innerText = "ID: " + localStorage.getItem('shopId');
+      // ── FIX: Show business logo in app header ──
+      applyBusinessLogo();
       fetchLiveStatusThenInit();
+    }
+
+    // Apply saved logo to both the login screen logo and the app header avatar
+    function applyBusinessLogo() {
+      var logoUrl = localStorage.getItem('logoUrl');
+      if (!logoUrl || logoUrl.trim() === '') return;
+      var cleanUrl = convertDriveUrl(logoUrl.trim());
+
+      // App header avatar (top-left after login)
+      var avatarImg = document.getElementById('appAvatarImg');
+      var avatarInitials = document.getElementById('appAvatarInitials');
+      if (avatarImg) {
+        avatarImg.src = cleanUrl;
+        avatarImg.style.display = 'block';
+        avatarImg.onerror = function() {
+          this.style.display = 'none';
+          if (avatarInitials) avatarInitials.style.display = 'block';
+        };
+        if (avatarInitials) avatarInitials.style.display = 'none';
+      }
     }
 
     function fetchLiveStatusThenInit() {
@@ -557,6 +585,9 @@
             localStorage.setItem('storeStatus',   data.storeStatus   || 'Active');
             localStorage.setItem('inboxStatus',   data.inboxStatus   || 'Active');
             localStorage.setItem('ordersStatus',  data.ordersStatus  || 'Active');
+            if (data.logoUrl && data.logoUrl.trim() !== '') {
+              localStorage.setItem('logoUrl', data.logoUrl.trim());
+            }
             if (data.profileUrl && data.profileUrl.trim() !== '') {
               localStorage.setItem('profileUrl', data.profileUrl.trim());
             }
@@ -565,6 +596,7 @@
         .catch(function() {})
         .finally(function() {
           applyTabStyles();
+          applyBusinessLogo(); // re-apply in case logo was refreshed
           fetchAll();
           liveCheckInterval  = setInterval(checkLiveStatus, 30000);
           orderCheckInterval = setInterval(fetchOrders, 3000);

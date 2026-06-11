@@ -191,10 +191,8 @@
     </div>
   </div>
 
-  <!-- ══ LOGIN ══ -->
   <div class="container" id="loginBox">
 
-    <!-- LOGO + SKELETON -->
     <div id="loginLogoWrap">
       <div class="logo-skeleton" id="loginLogoSkeleton"></div>
       <svg id="loginLogoSvg" width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -206,7 +204,6 @@
         onerror="this.style.display='none';document.getElementById('loginLogoSvg').style.display='flex';document.getElementById('loginLogoWrap').classList.remove('has-logo');">
     </div>
 
-    <!-- Business name preview (shown after phone lookup) -->
     <div id="loginPreviewBar">
       <div id="lpbLogoMini" style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#d32f2f,#b71c1c);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;">
         <img id="lpbLogoImg" src="" alt="" style="width:36px;height:36px;object-fit:cover;display:none;" onerror="this.style.display='none';">
@@ -221,13 +218,11 @@
     <h2 id="loginTitle" style="margin:0 0 8px;color:var(--text-dark);font-weight:800;">Business Portal</h2>
     <p id="loginSubtitle" style="color:var(--text-muted);font-size:14px;margin-bottom:24px;">Secure login for Social Map partners</p>
 
-    <!-- Phone field with floating label -->
     <div class="input-group">
       <input type="tel" id="uPhone" placeholder=" " maxlength="10" oninput="onPhoneInput()" onblur="onPhoneBlur()">
       <label for="uPhone">📞 Phone Number (07XXXXXXXX)</label>
     </div>
 
-    <!-- Password field with floating label + show/hide toggle -->
     <div class="input-group" style="position:relative;">
       <input type="password" id="uPass" placeholder=" " onkeydown="if(event.key==='Enter')login()">
       <label for="uPass">🔒 Password</label>
@@ -243,7 +238,6 @@
     <p id="loginMsg" style="color:#ef4444;font-size:14px;font-weight:600;display:none;margin-top:10px;"></p>
   </div>
 
-  <!-- ══ MAIN APP ══ -->
   <div class="container" id="mainApp" style="display:none; padding-top:20px;">
 
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:15px;border-bottom:1px solid #f1f5f9;">
@@ -273,7 +267,6 @@
       <div class="tab"        id="tab-promo"    onclick="switchTab('promo')">📣 Promo</div>
     </div>
 
-    <!-- UPGRADE VIEW -->
     <div id="view-upgrade" style="display:none;">
       <div class="upgrade-box">
         <i class="fas fa-lock"></i>
@@ -286,7 +279,6 @@
       </div>
     </div>
 
-    <!-- STATS VIEW -->
     <div id="view-stats">
       <div class="stat-card"><div class="stat-label">Scans (This Month)</div><div class="stat-number" id="scans">...</div></div>
       <div id="dashScanDetails" style="display:none;">
@@ -309,13 +301,12 @@
       </button>
     </div>
 
-    <!-- POINTS VIEW -->
     <div id="view-cashier" style="display:none;">
       <div class="points-mode-info">
         <i class="fas fa-star"></i>
         <div>
           <div class="pm-title">⭐ Points System</div>
-          <div class="pm-sub">Rs. 1,500 = 1.5 Points &nbsp;|&nbsp; Rs. 1,000 = 1 Point</div>
+          <div class="pm-sub">Rs. 1,500 = 1.5 Points  |  Rs. 1,000 = 1 Point</div>
         </div>
       </div>
       <span class="input-label">Customer Phone Number</span>
@@ -361,7 +352,6 @@
       <div id="actionMsg" class="msg"></div>
     </div>
 
-    <!-- PRODUCTS VIEW -->
     <div id="view-products" style="display:none;">
       <div style="background:#f8fafc;padding:18px;border-radius:14px;margin-bottom:20px;border:1px dashed #cbd5e1;">
         <h4 style="margin:0 0 12px;color:#3b82f6;font-size:15px;font-weight:800;">➕ Add New Item</h4>
@@ -378,7 +368,6 @@
       <div id="productsList"><div style="padding:20px;color:#94a3b8;font-weight:600;"><i class="fas fa-spinner fa-spin"></i> Loading store...</div></div>
     </div>
 
-    <!-- ORDERS VIEW -->
     <div id="view-orders" style="display:none;">
       <div class="date-filter-box">
         <label style="font-size:13px;font-weight:800;color:#475569;display:flex;align-items:center;gap:6px;"><i class="fas fa-calendar-day" style="color:var(--primary);"></i> Date:</label>
@@ -394,13 +383,11 @@
       <div id="ordersList"><div style="padding:20px;color:#94a3b8;font-weight:600;"><i class="fas fa-spinner fa-spin"></i> Loading orders...</div></div>
     </div>
 
-    <!-- FEEDBACK VIEW -->
     <div id="view-feedback" style="display:none;">
       <h4 style="text-align:left;color:#334155;margin-top:0;font-size:16px;font-weight:800;">Customer Feedback</h4>
       <div id="feedbackList"><div style="padding:20px;color:#94a3b8;font-weight:600;"><i class="fas fa-spinner fa-spin"></i> Loading...</div></div>
     </div>
 
-    <!-- PROMO VIEW -->
     <div id="view-promo" style="display:none;">
       <div id="promo-loading" class="order-empty">
         <i class="fas fa-spinner fa-spin" style="font-size:28px;margin-bottom:12px;display:block;color:#cbd5e1;"></i>
@@ -425,12 +412,10 @@
       <button class="btn" style="background:#475569;padding:12px;margin-top:10px;font-size:14px;" onclick="fetchPromos()"><i class="fas fa-sync"></i> Refresh Promos</button>
     </div>
 
-  </div><!-- /mainApp -->
-
-<script>
+  </div><script>
   // ══ CONFIG ══
   var APPS_SCRIPT_URL   = "https://script.google.com/macros/s/AKfycbzbH_bZzGRsrS_gzRAin7F3voc999Jlwqq5UYO-8wLQMjUeXyjSpSSDhPAFaKT5bzJx/exec";
-  var FALLBACK_PROFILE_URL = "https://github.com/socialmap-go/test/edit/main/profile/index.html";
+  var FALLBACK_PROFILE_URL = "https://socialmap-go.github.io/test/profile/index.html";
 
   var liveCheckInterval;
   var orderCheckInterval;
@@ -724,7 +709,27 @@
     }
   }
 
-  if (localStorage.getItem('shopId')) initApp();
+  // ══ BUG FIX: Prevent auto-login to wrong shop ══
+  var storedShopId = localStorage.getItem('shopId');
+  var currentPath = window.location.pathname;
+  var intendedShopId = null;
+
+  var pathMatch = currentPath.match(/\/([A-Za-z0-9_-]+)-mgr/i);
+  if (pathMatch) {
+    intendedShopId = pathMatch[1];
+  } else {
+    var urlParams = new URLSearchParams(window.location.search);
+    intendedShopId = urlParams.get('id') || urlParams.get('shopId');
+  }
+
+  if (storedShopId) {
+    if (intendedShopId && intendedShopId.toUpperCase() !== storedShopId.toUpperCase()) {
+      localStorage.clear(); // Clear local session to force login
+    } else {
+      initApp(); // Correct shop, proceed to auto-login
+    }
+  }
+  // ═══════════════════════════════════════════════
 
   // ══ SWITCH TAB ══
   function switchTab(tab) {

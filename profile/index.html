@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Profile | Mapa Solutions</title>
+  <title>Smart Profile | Social Map </title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     /* ── THEME VARIABLES ── */
@@ -69,15 +69,11 @@
     .btn-category { margin-bottom: 22px; width: 100%; }
     .btn-cat-title { font-size: 12px; font-weight: 800; color: var(--theme-sub); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; padding: 0 5px; border-bottom: 1px solid var(--theme-divider); padding-bottom: 8px; display: flex; align-items: center; gap: 8px; }
     
-    /* Grid system that respects view toggle */
     .btn-cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; justify-items: stretch; }
     .btns-section.lv-mode .btn-cat-grid { grid-template-columns: 1fr !important; }
     .btns-section.gv-mode .btn-cat-grid { grid-template-columns: repeat(2, 1fr) !important; }
-    
-    /* FIX: Force last odd button to be full width to remove unevenness */
     .btns-section.gv-mode .btn-cat-grid > *:nth-child(odd):last-child { grid-column: 1 / -1; }
 
-    /* Force Primary and Services to always be full width for UX */
     #catPrimary .btn-cat-grid, #catServices .btn-cat-grid { grid-template-columns: 1fr !important; }
 
     .abtn { 
@@ -154,16 +150,23 @@
     .vtbtn.on { background: var(--theme-bg); color: var(--theme-primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     
     #prodContainer.lv { display: flex; flex-direction: column; gap: 14px; }
-    #prodContainer.lv .pc { display: flex; gap: 14px; align-items: center; background: var(--theme-bg); border: 1px solid var(--theme-divider); border-radius: 16px; padding: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: transform 0.2s; }
+    #prodContainer.lv .pc { display: flex; gap: 14px; align-items: flex-start; background: var(--theme-bg); border: 1px solid var(--theme-divider); border-radius: 16px; padding: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: transform 0.2s; }
     #prodContainer.lv .pc:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
-    #prodContainer.lv .pc img.pimg { width: 80px; height: 80px; object-fit: cover; border-radius: 12px; flex-shrink: 0; }
+    /* ── BUG FIX: List view main image ── */
+    #prodContainer.lv .pc .pimg-main { width: 80px; height: 80px; object-fit: cover; border-radius: 12px; flex-shrink: 0; }
     #prodContainer.lv .pc .pi { flex: 1; }
     
     #prodContainer.gv { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     #prodContainer.gv .pc { background: var(--theme-bg); border: 1px solid var(--theme-divider); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: transform 0.2s; }
     #prodContainer.gv .pc:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
-    #prodContainer.gv .pc img.pimg { width: 100%; height: 140px; object-fit: cover; }
+    /* ── BUG FIX: Grid view main image ── */
+    #prodContainer.gv .pc .pimg-main { width: 100%; height: 140px; object-fit: cover; display: block; }
     #prodContainer.gv .pc .pi { padding: 12px; }
+
+    /* ── BUG FIX: Extra images strip (shown in both views) ── */
+    .pimg-strip { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .pimg-strip img { width: 52px; height: 52px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid var(--theme-divider); transition: transform 0.2s; }
+    .pimg-strip img:hover { transform: scale(1.08); border-color: var(--theme-primary); }
 
     .pc .pname { font-weight: 800; font-size: 15px; color: var(--theme-text); margin-bottom: 4px; }
     .pc .pprice { color: var(--theme-primary); font-weight: 800; font-size: 14px; }
@@ -214,7 +217,6 @@
     .msg-err { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
     .msg-ok  { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
 
-    /* Professional Powered By Badge Styles */
     .powered-badge { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; padding: 30px 20px 15px; opacity: 0.7; transition: opacity 0.3s; margin-top: auto; }
     .powered-badge:hover { opacity: 1; }
     .pb-text { font-size: 11px; font-weight: 700; color: var(--theme-sub); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
@@ -255,8 +257,7 @@
 
 <div class="wrap" id="mainWrap" style="display:none;">
   <div class="cover-div" id="coverDiv">
-    <img class="cover-img" id="coverImg" src="" alt="" style="display:none;"
-         onerror="this.style.display='none';">
+    <img class="cover-img" id="coverImg" src="" alt="" style="display:none;" onerror="this.style.display='none';">
   </div>
   
   <div class="profile-row">
@@ -284,11 +285,8 @@
 
   <a class="powered-badge" href="https://mapabiz.com" target="_blank">
     <span class="pb-text">Powered by</span>
-    <span class="pb-logo">
-      <i class="fas fa-map-marked-alt"></i> Mapa Solutions
-    </span>
+    <span class="pb-logo"><i class="fas fa-map-marked-alt"></i> Mapa Solutions</span>
   </a>
-
 </div>
 
 <div class="modal" id="prodModal">
@@ -417,7 +415,8 @@
   // ════════════════════════════════════════════
   // CONFIG
   // ════════════════════════════════════════════
-  var API       = "https://script.google.com/macros/s/AKfycbzbH_bZzGRsrS_gzRAin7F3voc999Jlwqq5UYO-8wLQMjUeXyjSpSSDhPAFaKT5bzJx/exec";
+  var API = "https://script.google.com/macros/s/AKfycbzbH_bZzGRsrS_gzRAin7F3voc999Jlwqq5UYO-8wLQMjUeXyjSpSSDhPAFaKT5bzJx/exec";
+
   function resolveShopId() {
     var params = new URLSearchParams(window.location.search);
     var id = params.get('id') || params.get('shop') || params.get('shopId') || params.get('s') || params.get('q') || params.get('data') || params.get('code');
@@ -425,10 +424,7 @@
       try { id = new URLSearchParams(window.location.hash.replace(/^#/, '?')).get('id') || new URLSearchParams(window.location.hash.replace(/^#/, '?')).get('shop'); } catch(e){}
     }
     if (!id) {
-      try {
-        var seg = window.location.pathname.split('/').filter(Boolean).pop() || '';
-        if (seg && /^[A-Za-z0-9_-]{3,}$/.test(seg)) id = seg;
-      } catch(e){}
+      try { var seg = window.location.pathname.split('/').filter(Boolean).pop() || ''; if (seg && /^[A-Za-z0-9_-]{3,}$/.test(seg)) id = seg; } catch(e){}
     }
     if (!id && document.referrer) {
       try { id = new URL(document.referrer).searchParams.get('id') || id; } catch(e){}
@@ -437,31 +433,30 @@
     if (id) localStorage.setItem('lastShopId', id);
     return id;
   }
+
   var shopId    = resolveShopId();
   var autoTable = new URLSearchParams(window.location.search).get('table') || new URLSearchParams(window.location.hash.replace(/^#/, '?')).get('table');
   var cart = {}, orderType = 'Dine-In', stampsTarget = 10;
   var productsData = [], menuLink = "", viewMode = 'gv';
-  
-  // ✅ Global Order Status Tracker
-  var isOrderActive = true; 
+  var isOrderActive = true;
 
   // ════════════════════════════════════════════
   // PLATFORM DETECTION
   // ════════════════════════════════════════════
   var PLATFORMS = [
-    { m:['wa.me','whatsapp.com'],          cls:'abtn-wa',          icon:'fab fa-whatsapp'          },
-    { m:['facebook.com','fb.com','fb.me'],       cls:'abtn-fb',          icon:'fab fa-facebook-f'        },
-    { m:['instagram.com'],                       cls:'abtn-ig',          icon:'fab fa-instagram'         },
-    { m:['tiktok.com'],                          cls:'abtn-tiktok',      icon:'fab fa-tiktok'            },
-    { m:['maps.google','goo.gl/maps','maps.app.goo'], cls:'abtn-maps', icon:'fas fa-map-marker-alt'    },
-    { m:['youtube.com','youtu.be'],              cls:'abtn-youtube',     icon:'fab fa-youtube'           },
-    { m:['tripadvisor.com'],                     cls:'abtn-tripadvisor', icon:'svg-tripadvisor'          },
-    { m:['booking.com','bookong.com'],           cls:'abtn-booking',     icon:'fas fa-bed'               },
-    { m:['airbnb.com'],                          cls:'abtn-airbnb',      icon:'fab fa-airbnb'            },
-    { m:['linkedin.com'],                        cls:'abtn-linkedin',    icon:'fab fa-linkedin'          },
-    { m:['twitter.com','x.com'],                 cls:'abtn-twitter',     icon:'fab fa-x-twitter'         },
-    { m:['snapchat.com'],                        cls:'abtn-snapchat',    icon:'fab fa-snapchat'          },
-    { m:['pinterest.com'],                       cls:'abtn-pinterest',   icon:'fab fa-pinterest'         }
+    { m:['wa.me','whatsapp.com'],                cls:'abtn-wa',          icon:'fab fa-whatsapp'       },
+    { m:['facebook.com','fb.com','fb.me'],       cls:'abtn-fb',          icon:'fab fa-facebook-f'     },
+    { m:['instagram.com'],                       cls:'abtn-ig',          icon:'fab fa-instagram'      },
+    { m:['tiktok.com'],                          cls:'abtn-tiktok',      icon:'fab fa-tiktok'         },
+    { m:['maps.google','goo.gl/maps','maps.app.goo'], cls:'abtn-maps',  icon:'fas fa-map-marker-alt' },
+    { m:['youtube.com','youtu.be'],              cls:'abtn-youtube',     icon:'fab fa-youtube'        },
+    { m:['tripadvisor.com'],                     cls:'abtn-tripadvisor', icon:'svg-tripadvisor'       },
+    { m:['booking.com','bookong.com'],           cls:'abtn-booking',     icon:'fas fa-bed'            },
+    { m:['airbnb.com'],                          cls:'abtn-airbnb',      icon:'fab fa-airbnb'         },
+    { m:['linkedin.com'],                        cls:'abtn-linkedin',    icon:'fab fa-linkedin'       },
+    { m:['twitter.com','x.com'],                 cls:'abtn-twitter',     icon:'fab fa-x-twitter'      },
+    { m:['snapchat.com'],                        cls:'abtn-snapchat',    icon:'fab fa-snapchat'       },
+    { m:['pinterest.com'],                       cls:'abtn-pinterest',   icon:'fab fa-pinterest'      }
   ];
 
   function detectPlatform(url) {
@@ -482,16 +477,17 @@
   }
 
   function tryFallbackShopId(){
-    var v=document.getElementById('fallbackShopId'); if(!v) return; var id=v.value.trim();
-    if(!id){alert('Please enter a Shop ID.');return;} localStorage.setItem('lastShopId', id);
+    var v = document.getElementById('fallbackShopId'); if(!v) return;
+    var id = v.value.trim();
+    if(!id){ alert('Please enter a Shop ID.'); return; }
+    localStorage.setItem('lastShopId', id);
     shopId = id; document.getElementById('loader').style.display = 'none'; loadProfile();
   }
 
   function openProductsModal() {
-    if (productsData.length === 0) { 
-      // Add smooth loading text instead of sudden notification pop
-      document.getElementById('prodContainer').innerHTML = '<div style="padding:30px; text-align:center; color:var(--theme-primary); font-weight:800;"><i class="fas fa-spinner fa-spin fa-2x"></i><br><br>Loading items...</div>';
-      loadProducts(); 
+    if (productsData.length === 0) {
+      document.getElementById('prodContainer').innerHTML = '<div style="padding:30px;text-align:center;color:var(--theme-primary);font-weight:800;"><i class="fas fa-spinner fa-spin fa-2x"></i><br><br>Loading items...</div>';
+      loadProducts();
     }
     openModal('prodModal');
   }
@@ -515,15 +511,15 @@
       return;
     }
     if (autoTable) {
-      document.getElementById('fixedTable').style.display    = 'block';
-      document.getElementById('fixedTableTxt').innerText     = autoTable;
-      document.getElementById('tableInput').style.display    = 'none';
+      document.getElementById('fixedTable').style.display  = 'block';
+      document.getElementById('fixedTableTxt').innerText   = autoTable;
+      document.getElementById('tableInput').style.display  = 'none';
     }
     loadProfile();
   };
 
   // ════════════════════════════════════════════
-  // CSS VARIABLES THEME SYSTEM (IMPROVED CONTRAST)
+  // THEME SYSTEM
   // ════════════════════════════════════════════
   var THEMES = {
     'default': { primary: '#1565c0', cover: '#d32f2f', bg: '#ffffff', text: '#222222', sub: '#888888', divider: '#f4f6f8', bodyBg: '#eef2f5' },
@@ -540,16 +536,14 @@
     var key = (name || '').toString().trim().toLowerCase();
     var t   = THEMES[key] || THEMES['default'];
     var root = document.documentElement;
-    
     document.body.className = 'theme-' + key;
-
     root.style.setProperty('--theme-primary', t.primary);
-    root.style.setProperty('--theme-cover', t.cover);
-    root.style.setProperty('--theme-bg', t.bg);
-    root.style.setProperty('--theme-text', t.text);
-    root.style.setProperty('--theme-sub', t.sub);
+    root.style.setProperty('--theme-cover',   t.cover);
+    root.style.setProperty('--theme-bg',      t.bg);
+    root.style.setProperty('--theme-text',    t.text);
+    root.style.setProperty('--theme-sub',     t.sub);
     root.style.setProperty('--theme-divider', t.divider);
-    root.style.setProperty('--body-bg', t.bodyBg);
+    root.style.setProperty('--body-bg',       t.bodyBg);
   }
 
   // ════════════════════════════════════════════
@@ -584,40 +578,33 @@
           return;
         }
         var p = d.data;
-        
-        // ✅ DEEP KEY SCAN: Find any status key securely to prevent "Undefined" defaulting to Active
-        isOrderActive = true; 
+
+        isOrderActive = true;
         var rawStatus = p.OrdersStatus || p.OrderStatus || p['Order Status'] || p.ordersStatus || p.orderStatus;
-        
         if (rawStatus) {
-            isOrderActive = (String(rawStatus).trim().toLowerCase() !== 'inactive');
+          isOrderActive = (String(rawStatus).trim().toLowerCase() !== 'inactive');
         } else {
-            for (var k in p) {
-                var clean = k.toLowerCase().replace(/[^a-z]/g, '');
-                if (clean === 'ordersstatus' || clean === 'orderstatus') {
-                    if (String(p[k]).trim().toLowerCase() === 'inactive') {
-                        isOrderActive = false;
-                    }
-                    break;
-                }
+          for (var k in p) {
+            var clean = k.toLowerCase().replace(/[^a-z]/g, '');
+            if (clean === 'ordersstatus' || clean === 'orderstatus') {
+              if (String(p[k]).trim().toLowerCase() === 'inactive') isOrderActive = false;
+              break;
             }
+          }
         }
-        
+
         document.getElementById('loader').style.display   = 'none';
         document.getElementById('mainWrap').style.display = 'flex';
 
-        var themeName = (p.Theme || p.theme || '').toString().trim().toLowerCase();
-        applyTheme(themeName);
+        applyTheme(p.Theme || p.theme || '');
 
-        var coverUrl = p.CoverImage || p.CoverImg || p.coverImage || p.coverImg || '';
-        applyCoverImage(coverUrl);
+        applyCoverImage(p.CoverImage || p.CoverImg || p.coverImage || p.coverImg || '');
 
         var lw = document.getElementById('logoWrap');
         var logoUrl = p.ProfileImage || p.profileImage || '';
         var bizInitial = (p.BusinessName || '?').charAt(0).toUpperCase();
         if (logoUrl && logoUrl.trim()) {
-          lw.innerHTML = "<img src='" + sanitizeCoverUrl(logoUrl) + "' alt='' onerror=\"this.style.display='none';document.getElementById('logoInit').style.display='flex';\">";
-          document.getElementById('logoInit') && (document.getElementById('logoInit').innerText = bizInitial);
+          lw.innerHTML = "<img src='" + sanitizeCoverUrl(logoUrl) + "' alt='' onerror=\"this.style.display='none';\">";
         } else {
           document.getElementById('logoInit').innerText = bizInitial;
         }
@@ -630,22 +617,22 @@
         if (p.StampTarget)                   stampsTarget = parseInt(p.StampTarget) || 10;
 
         buildButtons(p);
-        
+
         if (p.StoreStatus === 'Active') {
           loadProducts();
           var ov = document.getElementById('viewSwitchOverlay'); if (ov) ov.style.display = 'flex';
         }
-        
-        setView(viewMode); 
+
+        setView(viewMode);
         loadPromos(p);
       })
-      .catch(function(err) {
+      .catch(function() {
         document.getElementById('loader').innerHTML = "<h2 style='color:red;text-align:center;padding:20px;'>Connection Error</h2>";
       });
   }
 
   // ════════════════════════════════════════════
-  // BUILD ACTION BUTTONS (CATEGORIZED UI)
+  // BUILD ACTION BUTTONS
   // ════════════════════════════════════════════
   function buildButtons(p) {
     var sec = document.getElementById('btnsSection');
@@ -659,32 +646,27 @@
       return (cls.indexOf('svg-') === 0 && SVG_ICONS[cls]) ? SVG_ICONS[cls] : "<i class='" + cls + "'></i>";
     }
 
-    // Category Creator
     function createCategory(id, titleHtml) {
       var wrap = document.createElement('div');
       wrap.className = 'btn-category';
       wrap.id = id;
-      wrap.style.display = 'none'; // hidden initially
-      
+      wrap.style.display = 'none';
       if (titleHtml) {
         var title = document.createElement('div');
         title.className = 'btn-cat-title';
         title.innerHTML = titleHtml;
         wrap.appendChild(title);
       }
-      
       var grid = document.createElement('div');
       grid.className = 'btn-cat-grid';
       wrap.appendChild(grid);
       sec.appendChild(wrap);
-      
       return { wrap: wrap, grid: grid, count: 0 };
     }
 
-    // Define Sections
-    var catPrimary  = createCategory('catPrimary', '');
-    var catServices = createCategory('catServices', '<i class="fas fa-concierge-bell"></i> Our Services');
-    var catSocial   = createCategory('catSocial', '<i class="fas fa-hashtag"></i> Connect With Us');
+    var catPrimary  = createCategory('catPrimary',  '');
+    var catServices = createCategory('catServices',  '<i class="fas fa-concierge-bell"></i> Our Services');
+    var catSocial   = createCategory('catSocial',   '<i class="fas fa-hashtag"></i> Connect With Us');
     var catLocation = createCategory('catLocation', '<i class="fas fa-map-marked-alt"></i> Location & Payment');
     var catExternal = createCategory('catExternal', '<i class="fas fa-external-link-alt"></i> Other Links');
 
@@ -705,58 +687,46 @@
       el.innerHTML = iconHtml + "<span>" + label + "</span>";
       cat.grid.appendChild(el);
       cat.count++;
-      cat.wrap.style.display = 'block'; // Show section if it has items
+      cat.wrap.style.display = 'block';
     }
 
-    // 1. Primary Call to Action
-    if (p.GoogleReview  && p.GoogleReview.trim())
-      addBtnTo(catPrimary, 'abtn-review', "<i class='fab fa-google'></i>", '⭐️⭐️⭐️⭐️⭐️ Rate Us on Google', p.GoogleReview, null);
+    if (p.GoogleReview && p.GoogleReview.trim())
+      addBtnTo(catPrimary, 'abtn-review', "<svg style='width:22px;height:22px;min-width:22px;' viewBox='0 0 48 48'><path fill='#EA4335' d='M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z'/><path fill='#4285F4' d='M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z'/><path fill='#FBBC05' d='M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z'/><path fill='#34A853' d='M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z'/></svg>", '⭐️⭐️⭐️⭐️⭐️ Rate Us on Google', p.GoogleReview, null);
 
-    // 2. Business Services
-    if (p.StoreStatus   === 'Active') addBtnTo(catServices, 'abtn-products', ic('fas fa-box-open'),      'Our Services & Products', '', function(){ openProductsModal(); });
-    if (p.MenuPDF       && p.MenuPDF.trim()) addBtnTo(catServices, 'abtn-menu',     ic('fas fa-file-pdf'),       'View Menu',               '', function(){ openMenuModal(); });
-    if (p.LoyaltyStatus === 'Active') addBtnTo(catServices, 'abtn-loyalty',  ic('fas fa-gift'),          'My Loyalty Card',         '', function(){ openLoyalty();         });
-    if (p.InboxStatus   === 'Active') addBtnTo(catServices, 'abtn-feedback', ic('fas fa-comment-dots'),  'Feedback & Suggestions',  '', function(){ openModal('fbModal');  });
-    
-    // 3. Contact & Social Media
-    if (p.WhatsApp  && p.WhatsApp.trim())   addBtnTo(catSocial, 'abtn-wa',     ic('fab fa-whatsapp'),       'WhatsApp',    p.WhatsApp,  null);
-    if (p.Facebook  && p.Facebook.trim())   addBtnTo(catSocial, 'abtn-fb',     ic('fab fa-facebook-f'),     'Facebook',    p.Facebook,  null);
-    if (p.Instagram && p.Instagram.trim())  addBtnTo(catSocial, 'abtn-ig',     ic('fab fa-instagram'),      'Instagram',   p.Instagram, null);
-    if (p.TikTok    && p.TikTok.trim())     addBtnTo(catSocial, 'abtn-tiktok', ic('fab fa-tiktok'),         'TikTok',      p.TikTok,    null);
-    if (p.Website   && p.Website.trim())    addBtnTo(catSocial, 'abtn-web',    ic('fas fa-globe'),          'Website',     p.Website,   null);
-    if (p.Email     && p.Email.trim())      addBtnTo(catSocial, 'abtn-email',  ic('fas fa-envelope'),       'Email Us',    'mailto:' + p.Email, null);
+    if (p.StoreStatus   === 'Active') addBtnTo(catServices, 'abtn-products', ic('fas fa-box-open'),     'Our Services & Products', '', function(){ openProductsModal(); });
+    if (p.MenuPDF       && p.MenuPDF.trim()) addBtnTo(catServices, 'abtn-menu', ic('fas fa-file-pdf'), 'View Menu', '', function(){ openMenuModal(); });
+    if (p.LoyaltyStatus === 'Active') addBtnTo(catServices, 'abtn-loyalty',  ic('fas fa-gift'),         'My Loyalty Card',         '', function(){ openLoyalty();        });
+    if (p.InboxStatus   === 'Active') addBtnTo(catServices, 'abtn-feedback', ic('fas fa-comment-dots'), 'Feedback & Suggestions',  '', function(){ openModal('fbModal'); });
 
-    // 4. Location & Payments
-    if (p.Maps      && p.Maps.trim())       addBtnTo(catLocation, 'abtn-maps',   ic('fas fa-map-marker-alt'), 'Google Maps', p.Maps,      null);
-    if (p.BankDetails && p.BankDetails.trim()) addBtnTo(catLocation, 'abtn-bank',   ic('fas fa-university'),     'Bank Details', '', function(){ openModal('bankModal'); });
+    if (p.WhatsApp  && p.WhatsApp.trim())   addBtnTo(catSocial, 'abtn-wa',     ic('fab fa-whatsapp'),   'WhatsApp',  p.WhatsApp,  null);
+    if (p.Facebook  && p.Facebook.trim())   addBtnTo(catSocial, 'abtn-fb',     ic('fab fa-facebook-f'), 'Facebook',  p.Facebook,  null);
+    if (p.Instagram && p.Instagram.trim())  addBtnTo(catSocial, 'abtn-ig',     ic('fab fa-instagram'),  'Instagram', p.Instagram, null);
+    if (p.TikTok    && p.TikTok.trim())     addBtnTo(catSocial, 'abtn-tiktok', ic('fab fa-tiktok'),     'TikTok',    p.TikTok,    null);
+    if (p.Website   && p.Website.trim())    addBtnTo(catSocial, 'abtn-web',    ic('fas fa-globe'),      'Website',   p.Website,   null);
+    if (p.Email     && p.Email.trim())      addBtnTo(catSocial, 'abtn-email',  ic('fas fa-envelope'),   'Email Us',  'mailto:' + p.Email, null);
 
-    // 5. External Links
+    if (p.Maps       && p.Maps.trim())      addBtnTo(catLocation, 'abtn-maps', ic('fas fa-map-marker-alt'), 'Google Maps',  p.Maps,  null);
+    if (p.BankDetails && p.BankDetails.trim()) addBtnTo(catLocation, 'abtn-bank', ic('fas fa-university'), 'Bank Details', '', function(){ openModal('bankModal'); });
+
     for (var n = 1; n <= 5; n++) {
       var url   = p['CustomLink' + n + 'URL'];
       var label = p['CustomLink' + n + 'Name'];
       if (!url || !url.trim()) continue;
       label = (label && label.trim()) ? label.trim() : 'Visit Link';
-      
-      // Auto-correct spelling mistake if present in database
-      if (label.toLowerCase().includes('bookong')) {
-          label = label.replace(/bookong/i, 'Booking');
-      }
-
+      if (label.toLowerCase().includes('bookong')) label = label.replace(/bookong/i, 'Booking');
       var plt = detectPlatform(url);
       if (plt) {
         addBtnTo(catExternal, plt.cls, ic(plt.icon), label, url, null);
       } else {
         var fav = getFaviconUrl(url);
-        var imgHtml = fav
-          ? "<img class='btn-favicon' src='" + fav + "' onerror=\"this.style.display='none'\" alt=''>"
-          : ic('fas fa-link');
+        var imgHtml = fav ? "<img class='btn-favicon' src='" + fav + "' onerror=\"this.style.display='none'\" alt=''>" : ic('fas fa-link');
         addBtnTo(catExternal, 'abtn-custom', imgHtml, label, url, null);
       }
     }
   }
 
   // ════════════════════════════════════════════
-  // PROMOTIONS (BUG FIXED: Lightbox Re-enabled)
+  // PROMOTIONS
   // ════════════════════════════════════════════
   function loadPromos(p) {
     var hasVideo = p.CustomPromoVideo && p.CustomPromoVideo.trim();
@@ -813,69 +783,87 @@
   function loadProducts() {
     fetch(API + "?action=getProducts&shopId=" + shopId + "&t=" + Date.now())
       .then(function(r){ return r.json(); })
-      .then(function(d){ 
-        if (d.success && d.data && d.data.length > 0) { 
-          productsData = d.data; 
+      .then(function(d){
+        if (d.success && d.data && d.data.length > 0) {
+          productsData = d.data;
           renderProds();
         } else {
-          document.getElementById('prodContainer').innerHTML = '<div style="color:var(--theme-sub);padding:20px;text-align:center;grid-column:1/-1;">No products added yet. Check back soon!</div>'; 
+          document.getElementById('prodContainer').innerHTML = '<div style="color:var(--theme-sub);padding:20px;text-align:center;grid-column:1/-1;">No products added yet. Check back soon!</div>';
         }
       })
       .catch(function(){
         document.getElementById('prodContainer').innerHTML = '<div style="color:red;padding:20px;text-align:center;grid-column:1/-1;">Error loading products.</div>';
       });
   }
-  
+
   function setView(mode) {
     viewMode = mode;
-    
-    // Update Modal Buttons
     var lvBtn = document.getElementById('lvBtn'); if(lvBtn) lvBtn.className = 'vtbtn' + (mode === 'lv' ? ' on' : '');
     var gvBtn = document.getElementById('gvBtn'); if(gvBtn) gvBtn.className = 'vtbtn' + (mode === 'gv' ? ' on' : '');
-    
-    // Update Main UI Buttons
     var vsL = document.getElementById('vsListBtn'); if(vsL) vsL.className = 'vs-btn' + (mode==='lv'?' on':'');
     var vsG = document.getElementById('vsGridBtn'); if(vsG) vsG.className = 'vs-btn' + (mode==='gv'?' on':'');
-    
-    // Update Main Action Buttons Layout (Social/Links)
     var btns = document.getElementById('btnsSection');
     if (btns) {
-      if (mode === 'lv') {
-        btns.classList.remove('gv-mode');
-        btns.classList.add('lv-mode');
-      } else {
-        btns.classList.remove('lv-mode');
-        btns.classList.add('gv-mode');
-      }
+      btns.classList.toggle('lv-mode', mode === 'lv');
+      btns.classList.toggle('gv-mode', mode === 'gv');
     }
-    
-    if (productsData.length > 0) {
-        renderProds();
-    }
+    if (productsData.length > 0) renderProds();
   }
-  
+
+  // ════════════════════════════════════════════
+  // ✅ BUG FIX: renderProds — show ALL images
+  // ════════════════════════════════════════════
   function renderProds() {
     var c = document.getElementById('prodContainer');
     if (!c) return;
     c.className = viewMode;
     if (!productsData || productsData.length === 0) return;
-    
+
     c.innerHTML = '';
     productsData.forEach(function(p) {
       var nm     = p.ProductName || p.Name || 'Item';
       var price  = parseFloat(p.Price || 0);
       var pid    = p.ProductID || Math.random().toString(36).substr(2, 5);
-      var img    = p.Image1 || p.Img1 || '';
-      var typ    = p.Type  || 'Product';
+      var typ    = p.Type || 'Product';
       var safeNm = nm.replace(/'/g, "\\'").replace(/"/g, '"');
-      var imgHtml    = img ? "<img class='pimg' src='" + img + "' onerror=\"this.style.display='none'\" alt=''>" : '';
-      
-      // ✅ VISUAL LOCK: If orders are closed, entirely remove the Add button structure and replace with a static closed badge.
-      var addBtnHtml = isOrderActive 
-        ? "<button class='btn-add' onclick='addToCart(\"" + pid + "\",\"" + safeNm + "\"," + price + ")'><i class='fas fa-plus'></i> Add</button>" 
-        : "<div style='margin-top:8px; padding:6px 12px; background:var(--theme-divider); color:var(--theme-text); font-size:12px; font-weight:800; border-radius:12px; display:inline-block; border:1px solid #ddd;'><i class='fas fa-ban' style='color:#e65100; margin-right:4px;'></i> Not Available</div>";
-        
-      c.innerHTML += "<div class='pc'>" + imgHtml + "<div class='pi'><div class='ptyp'>" + typ + "</div><div class='pname'>" + nm + "</div><div class='pprice'>රු. " + price.toFixed(2) + "</div>" + addBtnHtml + "</div></div>";
+
+      // ── COLLECT ALL IMAGES (Image1–Image5 + legacy Img1–Img5) ──
+      var allImgs = [];
+      for (var n = 1; n <= 5; n++) {
+        var src = p['Image' + n] || p['Img' + n] || '';
+        if (src && src.trim()) allImgs.push(src.trim());
+      }
+
+      // Main image (first one)
+      var mainImgHtml = allImgs.length > 0
+        ? "<img class='pimg-main' src='" + allImgs[0] + "' onerror=\"this.style.display='none'\" alt='' onclick=\"openLb('" + allImgs[0] + "')\" style='cursor:pointer;'>"
+        : '';
+
+      // Extra images strip (Image2 onwards — shown below product info)
+      var stripHtml = '';
+      if (allImgs.length > 1) {
+        stripHtml = "<div class='pimg-strip'>";
+        for (var i = 1; i < allImgs.length; i++) {
+          stripHtml += "<img src='" + allImgs[i] + "' onerror=\"this.style.display='none'\" alt='' onclick=\"openLb('" + allImgs[i] + "')\">";
+        }
+        stripHtml += "</div>";
+      }
+
+      var addBtnHtml = isOrderActive
+        ? "<button class='btn-add' onclick='addToCart(\"" + pid + "\",\"" + safeNm + "\"," + price + ")'><i class='fas fa-plus'></i> Add</button>"
+        : "<div style='margin-top:8px;padding:6px 12px;background:var(--theme-divider);color:var(--theme-text);font-size:12px;font-weight:800;border-radius:12px;display:inline-block;border:1px solid #ddd;'><i class='fas fa-ban' style='color:#e65100;margin-right:4px;'></i> Not Available</div>";
+
+      c.innerHTML +=
+        "<div class='pc'>" +
+          mainImgHtml +
+          "<div class='pi'>" +
+            "<div class='ptyp'>" + typ + "</div>" +
+            "<div class='pname'>" + nm + "</div>" +
+            "<div class='pprice'>රු. " + price.toFixed(2) + "</div>" +
+            addBtnHtml +
+            stripHtml +
+          "</div>" +
+        "</div>";
     });
   }
 
@@ -883,42 +871,38 @@
   // CART
   // ════════════════════════════════════════════
   function addToCart(id, name, price) {
-    if (!isOrderActive) { 
-        alert("Orders are currently closed for this shop."); 
-        return; 
-    } 
+    if (!isOrderActive) { alert("Orders are currently closed for this shop."); return; }
     if (cart[id]) cart[id].qty++;
     else cart[id] = { name: name, price: price, qty: 1 };
     updateCartUI();
   }
-  
+
   function changeQty(id, d) {
     if (cart[id]) { cart[id].qty += d; if (cart[id].qty <= 0) delete cart[id]; updateCartUI(); }
   }
-  
+
   function updateCartUI() {
     var qty = 0, total = 0, html = '';
     for (var id in cart) {
-      qty  += cart[id].qty;
+      qty   += cart[id].qty;
       total += cart[id].price * cart[id].qty;
       html  += "<div class='cart-item'>" +
-                 "<div style='flex:1;text-align:left;'><b>" + cart[id].name + "</b><br>" +
-                 "<span style='color:var(--theme-primary);font-weight:800;'>රු. " + (cart[id].price * cart[id].qty).toFixed(2) + "</span></div>" +
-                 "<div class='qty-ctrl'>" +
-                   "<button class='qty-btn' onclick='changeQty(\"" + id + "\",-1)'>−</button>" +
-                   "<b>" + cart[id].qty + "</b>" +
-                   "<button class='qty-btn' onclick='changeQty(\"" + id + "\",1)'>+</button>" +
-                 "</div></div>";
+               "<div style='flex:1;text-align:left;'><b>" + cart[id].name + "</b><br>" +
+               "<span style='color:var(--theme-primary);font-weight:800;'>රු. " + (cart[id].price * cart[id].qty).toFixed(2) + "</span></div>" +
+               "<div class='qty-ctrl'>" +
+               "<button class='qty-btn' onclick='changeQty(\"" + id + "\",-1)'>−</button>" +
+               "<b>" + cart[id].qty + "</b>" +
+               "<button class='qty-btn' onclick='changeQty(\"" + id + "\",1)'>+</button>" +
+               "</div></div>";
     }
-    document.getElementById('cartItems').innerHTML  = html;
-    document.getElementById('cartTotal').innerText  = "රු. " + total.toFixed(2);
-    document.getElementById('cartCount').innerText  = qty;
+    document.getElementById('cartItems').innerHTML = html;
+    document.getElementById('cartTotal').innerText = "රු. " + total.toFixed(2);
+    document.getElementById('cartCount').innerText = qty;
     var cb = document.getElementById('cartBtn');
-    
     cb.style.display = (qty > 0 && isOrderActive) ? 'flex' : 'none';
     if (qty === 0) closeModal('cartModal');
   }
-  
+
   function setOrderType(t) {
     orderType = t;
     document.getElementById('btnDI').className = 'ot-btn' + (t === 'Dine-In' ? ' on' : '');
@@ -930,14 +914,7 @@
   // PLACE ORDER
   // ════════════════════════════════════════════
   function placeOrder() {
-    if (!isOrderActive) { 
-        alert("Orders are currently closed."); 
-        cart = {}; 
-        updateCartUI(); 
-        closeModal('cartModal'); 
-        return; 
-    } 
-    
+    if (!isOrderActive) { alert("Orders are currently closed."); cart = {}; updateCartUI(); closeModal('cartModal'); return; }
     var msgEl    = document.getElementById('orderMsg');
     var itemsArr = [], total = 0;
     for (var id in cart) {
@@ -945,7 +922,6 @@
       total += cart[id].price * cart[id].qty;
     }
     if (itemsArr.length === 0) return;
-
     var customerName = document.getElementById('orderName').value.trim();
     if (!customerName) {
       msgEl.innerHTML = "කරුණාකර ඔබගේ නම ඇතුළත් කරන්න.";
@@ -953,36 +929,20 @@
       msgEl.style.display = 'block';
       return;
     }
-
     var tableNote = '';
-    if (orderType === 'Dine-In') {
-      tableNote = autoTable || document.getElementById('tableInput').value.trim() || 'Not Specified';
-    }
-
+    if (orderType === 'Dine-In') tableNote = autoTable || document.getElementById('tableInput').value.trim() || 'Not Specified';
     msgEl.innerHTML = "Processing...";
     msgEl.className = 'msg-text';
     msgEl.style.display = 'block';
     document.getElementById('placeBtn').disabled = true;
-
-    var payload = {
-      action:    'placeOrder',
-      shopId:    shopId,
-      name:      customerName,
-      phone:     document.getElementById('orderPhone').value.trim(),
-      items:     itemsArr,
-      total:     total,
-      orderType: orderType,
-      tableNote: tableNote
-    };
-
-    fetch(API, { method: 'POST', body: JSON.stringify(payload) })
+    fetch(API, { method: 'POST', body: JSON.stringify({ action:'placeOrder', shopId:shopId, name:customerName, phone:document.getElementById('orderPhone').value.trim(), items:itemsArr, total:total, orderType:orderType, tableNote:tableNote }) })
       .then(function(r) { return r.json(); })
       .then(function(d) {
         document.getElementById('placeBtn').disabled = false;
         if (d.success) {
           cart = {}; updateCartUI();
-          msgEl.innerHTML     = "✅ Order placed! #" + (d.orderId || '');
-          msgEl.className     = 'msg-text msg-ok';
+          msgEl.innerHTML = "✅ Order placed! #" + (d.orderId || '');
+          msgEl.className = 'msg-text msg-ok';
           msgEl.style.display = 'block';
           document.getElementById('orderName').value  = '';
           document.getElementById('orderPhone').value = '';
@@ -991,7 +951,6 @@
         } else {
           msgEl.innerHTML = d.error || "Error occurred. Please try again.";
           msgEl.className = 'msg-text msg-err';
-          msgEl.style.display = 'block';
         }
       })
       .catch(function() {
@@ -1090,25 +1049,13 @@
       });
   }
 
-  // FIX: Professional WhatsApp Share Link
   function sharePromoWhatsApp(mediaUrl, mediaType) {
     if (!mediaUrl) return;
-    
     var bizName = document.getElementById('bizName').innerText || "Our Shop";
-    
-    // Generating the actual profile link based on current URL
     var profileUrl = window.location.origin + window.location.pathname;
-    if (shopId) {
-        profileUrl += "?id=" + shopId;
-    }
-
-    var promoText = "🔥 *Special Update from " + bizName + "!*\n\n" +
-                    "Check out our latest " + mediaType + " and explore our full menu, services, and offers on our Smart Profile:\n\n" +
-                    "👉 " + profileUrl + "\n\n" +
-                    "✨ Powered by Mapa Solutions";
-
-    var waUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(promoText);
-    window.open(waUrl, '_blank');
+    if (shopId) profileUrl += "?id=" + shopId;
+    var promoText = "🔥 *Special Update from " + bizName + "!*\n\nCheck out our latest " + mediaType + " and explore our full menu, services, and offers on our Smart Profile:\n\n👉 " + profileUrl + "\n\n✨ Powered by Mapa Solutions";
+    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(promoText), '_blank');
   }
 
   // ════════════════════════════════════════════
